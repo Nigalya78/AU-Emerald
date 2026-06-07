@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: #FFFFFF;
+  color: #1a3a2a;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Fraunces', serif;
+}
+
+/* Modern Scrollbar Styling */
+.scrollbar-modern {
+  scrollbar-width: thin;
+  scrollbar-color: #c9a961 transparent;
+}
+
+.scrollbar-modern::-webkit-scrollbar {
+  width: 4px;
+}
+
+.scrollbar-modern::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.scrollbar-modern::-webkit-scrollbar-thumb {
+  background: #c9a961;
+  border-radius: 4px;
+}
+
+.scrollbar-modern::-webkit-scrollbar-thumb:hover {
+  background: #b89752;
+}
+
+/* Alternative: Ultra-thin modern scrollbar */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 169, 97, 0.6) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(201, 169, 97, 0.6);
+  border-radius: 10px;
+}

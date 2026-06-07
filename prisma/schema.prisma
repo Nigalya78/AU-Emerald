@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id          String       @id @default(uuid())
+  name        String
+  category    Category
+  description String       @db.Text
+  images      String[]
+  mainImage   String?
+  purity      Purity       @default(K22_GOLD)
+  stoneType   StoneType    @default(EMERALD)
+  weight      Float?
+  tags        String[]
+  featured    Boolean      @default(false)
+  status      ProductStatus @default(ACTIVE)
+  order       Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+enum Category {
+  NECKLACES
+  EARRINGS
+  BANGLES
+  RINGS
+  SETS
+  BRACELETS
+  CHAINS
+  PENDANTS
+  ANKLETS
+  CUSTOM_ORDERS
+}
+
+enum Purity {
+  K22_GOLD
+  K24_GOLD
+  K18_GOLD
+  SILVER
+  GOLD_PLATED
+  CUSTOM
+}
+
+enum StoneType {
+  EMERALD
+  RUBY
+  DIAMOND
+  PEARL
+  KUNDAN
+  NO_STONE
+  OTHER
+}
+
+enum ProductStatus {
+  ACTIVE
+  HIDDEN
+  OUT_OF_STOCK
+  COMING_SOON
+}
