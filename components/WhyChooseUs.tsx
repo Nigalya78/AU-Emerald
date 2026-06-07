@@ -51,20 +51,20 @@ export default function WhyChooseUs() {
   };
 
   return (
-    <section id="why-choose-us" className="bg-white pt-12 lg:pt-16 pb-6 lg:pb-8">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+    <section id="why-choose-us" className="bg-white pt-6 sm:pt-10 lg:pt-14 pb-3 sm:pb-5 lg:pb-7 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center mb-16"
+          className="text-center mb-6 sm:mb-10"
         >
-          <div className="w-12 h-0.5 bg-aged-gold mx-auto mb-6"></div>
-          <p className="text-aged-gold text-sm font-medium tracking-widest uppercase mb-4">
+          <div className="w-12 h-0.5 bg-aged-gold mx-auto mb-4 sm:mb-6"></div>
+          <p className="text-aged-gold text-xs sm:text-sm font-medium tracking-widest uppercase mb-3 sm:mb-4">
             WHY AU EMERALD
           </p>
-          <h2 className="font-fraunces text-4xl sm:text-5xl font-semibold text-forest-green">
+          <h2 className="font-fraunces text-2xl sm:text-4xl lg:text-5xl font-semibold text-forest-green">
             WHY CHOOSE AU EMERALD?
           </h2>
         </motion.div>
@@ -73,7 +73,7 @@ export default function WhyChooseUs() {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6"
+          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
         >
           {features.map((feature, index) => (
             <motion.div

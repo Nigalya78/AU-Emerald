@@ -29,9 +29,9 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="bg-forest-green py-20 lg:py-28">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+    <section id="contact" className="bg-forest-green py-8 sm:py-12 lg:py-16 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+        <div className="grid lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-14 items-start">
           {/* Left Side */}
           <motion.div
             ref={ref}

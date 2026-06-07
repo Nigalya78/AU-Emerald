@@ -35,28 +35,28 @@ export default function SavingsScheme() {
   ];
 
   return (
-    <section id="savings" className="bg-white py-20 lg:py-28">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+    <section id="savings" className="bg-white py-8 sm:py-12 lg:py-16 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         <motion.div
           ref={ref}
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center mb-16"
+          className="text-center mb-6 sm:mb-10"
         >
-          <div className="w-12 h-0.5 bg-aged-gold mx-auto mb-6"></div>
-          <p className="text-aged-gold text-sm font-medium tracking-widest uppercase mb-4">
+          <div className="w-12 h-0.5 bg-aged-gold mx-auto mb-4 sm:mb-6"></div>
+          <p className="text-aged-gold text-xs sm:text-sm font-medium tracking-widest uppercase mb-3 sm:mb-4">
             EXCLUSIVE OFFER
           </p>
-          <h2 className="font-fraunces text-4xl sm:text-5xl font-semibold text-forest-green mb-4">
+          <h2 className="font-fraunces text-2xl sm:text-4xl lg:text-5xl font-semibold text-forest-green mb-3 sm:mb-4">
             Gold Savings Scheme
           </h2>
-          <p className="text-forest-green/80 text-lg max-w-2xl mx-auto">
+          <p className="text-forest-green/80 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto">
             Our motto is to make everyone buy gold. Start from $100 AUD/month.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
           {plans.map((plan, index) => (
             <motion.div
               key={index}

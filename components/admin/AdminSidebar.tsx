@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import Image from 'next/image'
 
 export default function AdminSidebar() {
   const pathname = usePathname()
@@ -16,8 +17,17 @@ export default function AdminSidebar() {
   return (
     <aside className="fixed left-0 top-0 h-full w-64 bg-forest-green text-white flex flex-col">
       <div className="p-6 border-b border-white/20">
-        <h1 className="font-fraunces text-2xl font-semibold">Au Emerald</h1>
-        <p className="text-aged-gold text-xs uppercase tracking-wider mt-1">Admin Panel</p>
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/logo-removebg-preview.png"
+            alt="Au Emerald"
+            width={200}
+            height={70}
+            className="h-14 w-auto object-contain"
+            priority
+          />
+        </Link>
+        <p className="text-aged-gold text-xs uppercase tracking-wider mt-2">Admin Panel</p>
       </div>
 
       <nav className="flex-1 p-4">

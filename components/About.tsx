@@ -9,9 +9,9 @@ export default function About() {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section id="about" className="bg-forest-green py-12 lg:py-16">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+    <section id="about" className="bg-forest-green py-6 sm:py-10 lg:py-14 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+        <div className="grid lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-16 items-center">
           <motion.div
             ref={ref}
             initial={{ opacity: 0, y: 40 }}
@@ -40,7 +40,7 @@ export default function About() {
             </div>
 
             <a
-              href="#collections"
+              href="/collections"
               className="inline-flex items-center gap-2 border border-aged-gold text-aged-gold px-6 py-3 font-medium hover:bg-aged-gold hover:text-forest-green transition-all"
             >
               EXPLORE COLLECTIONS
@@ -53,7 +53,7 @@ export default function About() {
             transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
             className="relative"
           >
-            <div className="aspect-square bg-forest-green border-2 border-aged-gold overflow-hidden">
+            <div className="aspect-[4/3] sm:aspect-square bg-forest-green border-2 border-aged-gold overflow-hidden">
               <img
                 src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=800&q=80"
                 alt="Emerald Jewellery Collection"

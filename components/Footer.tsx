@@ -24,18 +24,18 @@ function InstagramIcon({ size = 18 }: { size?: number }) {
 
 export default function Footer() {
   const quickLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'Our Story', href: '#about' },
-    { name: 'Collections', href: '#collections' },
-    { name: 'Craftsmanship', href: '#craftsmanship' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', href: '/' },
+    { name: 'Our Story', href: '/about' },
+    { name: 'Collections', href: '/collections' },
+    { name: 'Craftsmanship', href: '/why-choose-us' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   const collections = [
-    { name: 'Gold Jewellery', href: '#collections' },
-    { name: 'Silver Jewellery', href: '#collections' },
-    { name: 'Diamond Collection', href: '#collections' },
-    { name: 'Custom Made', href: '#collections' },
+    { name: 'Gold Jewellery', href: '/collections?purity=K22_GOLD&purity=K24_GOLD&purity=K18_GOLD' },
+    { name: 'Silver Jewellery', href: '/collections?purity=SILVER' },
+    { name: 'Diamond Collection', href: '/collections?stone=DIAMOND' },
+    { name: 'Custom Made', href: '/collections' },
   ];
 
   return (
@@ -44,12 +44,12 @@ export default function Footer() {
       <div className="h-1 bg-gradient-to-r from-transparent via-aged-gold to-transparent"></div>
 
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-6 sm:py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           
           {/* Brand Column */}
           <div className="lg:col-span-1">
-            <a href="#home" className="inline-block mb-2">
+            <a href="/" className="inline-block mb-2">
               <Image
                 src="/logo-removebg-preview.png"
                 alt="Au Emerald"
@@ -170,19 +170,19 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 py-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-3 sm:py-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
             <p className="text-white/50 text-sm">
               © 2025 Au Emerald. All rights reserved.
             </p>
             <div className="flex items-center gap-6">
-              <a href="#" className="text-white/50 text-sm hover:text-aged-gold transition-colors">
+              <a href="/privacy" className="text-white/50 text-sm hover:text-aged-gold transition-colors">
                 Privacy Policy
               </a>
-              <a href="#" className="text-white/50 text-sm hover:text-aged-gold transition-colors">
+              <a href="/terms" className="text-white/50 text-sm hover:text-aged-gold transition-colors">
                 Terms of Service
               </a>
-              <a href="#" className="text-white/50 text-sm hover:text-aged-gold transition-colors">
+              <a href="/sitemap" className="text-white/50 text-sm hover:text-aged-gold transition-colors">
                 Sitemap
               </a>
             </div>

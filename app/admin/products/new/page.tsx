@@ -9,6 +9,30 @@ export default function NewProductPage() {
   const [images, setImages] = useState<string[]>([])
   const [newImageUrl, setNewImageUrl] = useState('')
   const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [imageInputMode, setImageInputMode] = useState<'upload' | 'url'>('upload')
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB')
+      return
+    }
+
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      const base64 = event.target?.result as string
+      if (base64) {
+        setImages([...images, base64])
+      }
+    }
+    reader.readAsDataURL(file)
+    
+    // Reset input
+    e.target.value = ''
+  }
 
   const categories = ['NECKLACES', 'EARRINGS', 'BANGLES', 'RINGS', 'SETS', 'BRACELETS', 'CHAINS', 'PENDANTS', 'ANKLETS', 'CUSTOM_ORDERS']
   const purities = [
@@ -36,37 +60,72 @@ export default function NewProductPage() {
   ]
   const availableTags = ['Bridal', 'Traditional', 'Temple Jewellery', 'Wedding', 'Party Wear', 'Daily Wear', 'South Indian', 'Emerald Collection', 'Gold', 'Silver', 'Diamond']
 
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    setError(null)
+    setSuccess(false)
+
+    // Validation
+    if (images.length === 0) {
+      setError('Please add at least one product image')
+      return
+    }
+
+    // Check if images are too large (base64 can be large)
+    const totalImageSize = images.reduce((acc, img) => acc + img.length, 0)
+    console.log('Total image data size:', totalImageSize, 'characters')
+    if (totalImageSize > 10000000) { // ~10MB of base64 data
+      setError('Total image size is too large. Please use smaller images or fewer images.')
+      return
+    }
+
     setSaving(true)
 
     const formData = new FormData(e.currentTarget)
+    
+    // Debug: Log form data
+    const payload = {
+      name: formData.get('name'),
+      category: formData.get('category'),
+      description: formData.get('description'),
+      images: images,
+      mainImage: images[0] || null,
+      purity: formData.get('purity'),
+      stoneType: formData.get('stoneType'),
+      weight: parseFloat(formData.get('weight') as string) || null,
+      tags: selectedTags,
+      featured: formData.get('featured') === 'on',
+      status: formData.get('status'),
+      order: parseInt(formData.get('order') as string) || 0,
+    }
+    console.log('Submitting product:', payload)
     
     try {
       const response = await fetch('/api/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.get('name'),
-          category: formData.get('category'),
-          description: formData.get('description'),
-          images: images,
-          mainImage: images[0] || null,
-          purity: formData.get('purity'),
-          stoneType: formData.get('stoneType'),
-          weight: parseFloat(formData.get('weight') as string) || null,
-          tags: selectedTags,
-          featured: formData.get('featured') === 'on',
-          status: formData.get('status'),
-          order: parseInt(formData.get('order') as string) || 0,
-        }),
+        body: JSON.stringify(payload),
       })
 
+      console.log('Response status:', response.status)
+      
+      const data = await response.json()
+      console.log('Response data:', data)
+
       if (response.ok) {
-        router.push('/admin/products')
+        setSuccess(true)
+        setTimeout(() => {
+          router.push('/admin/products')
+        }, 1500)
+      } else {
+        setError(data.error || `Failed to create product (Status: ${response.status})`)
       }
-    } catch (error) {
-      console.error('Error creating product:', error)
+    } catch (err: any) {
+      console.error('Error creating product:', err)
+      setError(`Network error: ${err.message || 'Please check your connection and try again.'}`)
     } finally {
       setSaving(false)
     }
@@ -96,6 +155,29 @@ export default function NewProductPage() {
       <h1 className="font-fraunces text-3xl font-semibold text-forest-green mb-8">
         Add New Product
       </h1>
+
+      {error && (
+        <div className="mb-4 p-4 bg-red-50 border-2 border-red-300 text-red-800 rounded">
+          <div className="flex items-start gap-2">
+            <svg className="w-5 h-5 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+            </svg>
+            <div>
+              <p className="font-medium">Error</p>
+              <p className="text-sm">{error}</p>
+              {error.includes('500') && (
+                <p className="text-xs mt-1 text-red-600">Please check the server console for more details.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {success && (
+        <div className="mb-4 p-4 bg-green-50 border border-green-200 text-green-700 rounded">
+          Product created successfully! Redirecting...
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="bg-white p-8 space-y-6">
         <div>
@@ -148,6 +230,79 @@ export default function NewProductPage() {
           <label className="block text-sm font-medium text-forest-green mb-2">
             Product Images *
           </label>
+          
+          {/* Image Upload Tabs */}
+          <div className="flex gap-2 mb-4">
+            <button
+              type="button"
+              onClick={() => setImageInputMode('upload')}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
+                imageInputMode === 'upload'
+                  ? 'bg-forest-green text-white'
+                  : 'bg-white text-forest-green border border-forest-green/30 hover:border-aged-gold'
+              }`}
+            >
+              Upload Image
+            </button>
+            <button
+              type="button"
+              onClick={() => setImageInputMode('url')}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
+                imageInputMode === 'url'
+                  ? 'bg-forest-green text-white'
+                  : 'bg-white text-forest-green border border-forest-green/30 hover:border-aged-gold'
+              }`}
+            >
+              Image URL
+            </button>
+          </div>
+
+          {/* File Upload */}
+          {imageInputMode === 'upload' && (
+            <div className="mb-4">
+              <div className="relative">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  id="image-upload"
+                />
+                <label
+                  htmlFor="image-upload"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 border-2 border-dashed border-forest-green/30 hover:border-aged-gold cursor-pointer transition-colors"
+                >
+                  <svg className="w-5 h-5 text-forest-green/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <span className="text-forest-green/70">Click to upload image</span>
+                </label>
+              </div>
+              <p className="text-xs text-forest-green/50 mt-2">Supports JPG, PNG, WebP (max 5MB)</p>
+            </div>
+          )}
+
+          {/* URL Input */}
+          {imageInputMode === 'url' && (
+            <div className="flex gap-2 mb-4">
+              <input
+                type="url"
+                value={newImageUrl}
+                onChange={(e) => setNewImageUrl(e.target.value)}
+                placeholder="Enter image URL..."
+                className="flex-1 px-4 py-3 border border-forest-green/30 focus:border-aged-gold focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={addImage}
+                className="px-6 py-3 bg-forest-green text-white hover:bg-opacity-90"
+              >
+                Add
+              </button>
+            </div>
+          )}
+
+          {/* Uploaded Images Preview */}
           {images.length > 0 && (
             <div className="mb-4">
               <p className="text-sm text-forest-green/70 mb-2">Main Image</p>
@@ -156,26 +311,10 @@ export default function NewProductPage() {
               </div>
             </div>
           )}
-          <div className="flex gap-2 mb-4">
-            <input
-              type="url"
-              value={newImageUrl}
-              onChange={(e) => setNewImageUrl(e.target.value)}
-              placeholder="Enter image URL..."
-              className="flex-1 px-4 py-3 border border-forest-green/30 focus:border-aged-gold focus:outline-none"
-            />
-            <button
-              type="button"
-              onClick={addImage}
-              className="px-6 py-3 bg-forest-green text-white hover:bg-opacity-90"
-            >
-              Add
-            </button>
-          </div>
 
-          {images.length > 0 && (
+          {images.length > 1 && (
             <div>
-              <p className="text-sm text-forest-green/70 mb-2">Additional Images</p>
+              <p className="text-sm text-forest-green/70 mb-2">Additional Images ({images.length - 1})</p>
               <div className="grid grid-cols-4 gap-4">
                 {images.slice(1).map((image, index) => (
                   <div key={index + 1} className="relative group">

@@ -139,14 +139,26 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  
+  // Applied filters (used for filtering products)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [selectedPurities, setSelectedPurities] = useState<string[]>([])
   const [selectedStones, setSelectedStones] = useState<string[]>([])
   const [selectedWeightRanges, setSelectedWeightRanges] = useState<string[]>([])
   const [searchQuery, setSearchQuery] = useState('')
+  
+  // Pending filters (used for UI before Apply is clicked)
+  const [pendingCategories, setPendingCategories] = useState<string[]>([])
+  const [pendingPurities, setPendingPurities] = useState<string[]>([])
+  const [pendingStones, setPendingStones] = useState<string[]>([])
+  const [pendingWeightRanges, setPendingWeightRanges] = useState<string[]>([])
+  const [pendingSearchQuery, setPendingSearchQuery] = useState('')
+  
   const [showFilters, setShowFilters] = useState(false)
+  const [filtersApplied, setFiltersApplied] = useState(false)
 
   const hasFiltersApplied = selectedCategories.length > 0 || selectedPurities.length > 0 || selectedStones.length > 0 || selectedWeightRanges.length > 0 || searchQuery !== ''
+  const hasPendingFilters = pendingCategories.length > 0 || pendingPurities.length > 0 || pendingStones.length > 0 || pendingWeightRanges.length > 0 || pendingSearchQuery !== ''
 
   // Initialize filters from URL query parameters
   useEffect(() => {
@@ -156,12 +168,15 @@ export default function ProductsPage() {
 
     if (category) {
       setSelectedCategories([category])
+      setPendingCategories([category])
     }
     if (purities.length > 0) {
       setSelectedPurities(purities)
+      setPendingPurities(purities)
     }
     if (stones.length > 0) {
       setSelectedStones(stones)
+      setPendingStones(stones)
     }
   }, [searchParams])
 
@@ -236,27 +251,36 @@ export default function ProductsPage() {
   }
 
   const toggleCategory = (value: string) => {
-    setSelectedCategories(prev =>
+    setPendingCategories(prev =>
       prev.includes(value) ? prev.filter(c => c !== value) : [...prev, value]
     )
   }
 
   const togglePurity = (value: string) => {
-    setSelectedPurities(prev =>
+    setPendingPurities(prev =>
       prev.includes(value) ? prev.filter(p => p !== value) : [...prev, value]
     )
   }
 
   const toggleStone = (value: string) => {
-    setSelectedStones(prev =>
+    setPendingStones(prev =>
       prev.includes(value) ? prev.filter(s => s !== value) : [...prev, value]
     )
   }
 
   const toggleWeight = (value: string) => {
-    setSelectedWeightRanges(prev =>
+    setPendingWeightRanges(prev =>
       prev.includes(value) ? prev.filter(w => w !== value) : [...prev, value]
     )
+  }
+
+  const applyFilters = () => {
+    setSelectedCategories(pendingCategories)
+    setSelectedPurities(pendingPurities)
+    setSelectedStones(pendingStones)
+    setSelectedWeightRanges(pendingWeightRanges)
+    setSearchQuery(pendingSearchQuery)
+    setFiltersApplied(true)
   }
 
   const clearAllFilters = () => {
@@ -265,6 +289,12 @@ export default function ProductsPage() {
     setSelectedStones([])
     setSelectedWeightRanges([])
     setSearchQuery('')
+    setPendingCategories([])
+    setPendingPurities([])
+    setPendingStones([])
+    setPendingWeightRanges([])
+    setPendingSearchQuery('')
+    setFiltersApplied(false)
   }
 
   if (loading) {
@@ -278,8 +308,8 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="bg-white pt-12 pb-8">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+      <section className="bg-white pt-8 sm:pt-12 pb-4 sm:pb-8 overflow-x-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -312,15 +342,15 @@ export default function ProductsPage() {
               <input
                 type="text"
                 placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={pendingSearchQuery}
+                onChange={(e) => setPendingSearchQuery(e.target.value)}
                 className="w-full h-9 px-3 pl-9 bg-white/10 border border-white/20 text-white placeholder:text-white/50 focus:border-aged-gold focus:outline-none text-sm"
               />
               <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              {searchQuery && (
-                <button onClick={() => setSearchQuery('')} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/50 hover:text-white">
+              {pendingSearchQuery && (
+                <button onClick={() => setPendingSearchQuery('')} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/50 hover:text-white">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
@@ -331,19 +361,19 @@ export default function ProductsPage() {
             {/* Multi-Select Dropdowns */}
             <div className="flex flex-wrap items-center gap-2">
               {/* Type Multi-Select */}
-              <div className="relative group">
+              <div className="relative group pb-2">
                 <button className="h-9 px-3 bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition-all flex items-center gap-2 min-w-[130px]">
-                  <span className="truncate">{selectedCategories.length > 0 ? `${selectedCategories.length} Type${selectedCategories.length > 1 ? 's' : ''}` : 'All Types'}</span>
+                  <span className="truncate">{pendingCategories.length > 0 ? `${pendingCategories.length} Type${pendingCategories.length > 1 ? 's' : ''}` : 'All Types'}</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div className="absolute top-full left-0 mt-1 w-48 bg-forest-green border border-aged-gold shadow-lg py-2 hidden group-hover:block z-50 max-h-60 overflow-y-auto scrollbar-modern">
+                <div className="absolute top-full left-0 w-48 bg-forest-green border border-aged-gold shadow-lg py-2 hidden group-hover:block z-50 max-h-60 overflow-y-auto scrollbar-modern">
                   {categories.filter(c => c.value !== 'ALL').map((cat) => (
                     <label key={cat.value} className="flex items-center gap-2 px-3 py-2 hover:bg-white/10 cursor-pointer">
                       <input
                         type="checkbox"
-                        checked={selectedCategories.includes(cat.value)}
+                        checked={pendingCategories.includes(cat.value)}
                         onChange={() => toggleCategory(cat.value)}
                         className="w-4 h-4 accent-aged-gold"
                       />
@@ -354,19 +384,19 @@ export default function ProductsPage() {
               </div>
 
               {/* Material Multi-Select */}
-              <div className="relative group">
+              <div className="relative group pb-2">
                 <button className="h-9 px-3 bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition-all flex items-center gap-2 min-w-[130px]">
-                  <span className="truncate">{selectedPurities.length > 0 ? `${selectedPurities.length} Material${selectedPurities.length > 1 ? 's' : ''}` : 'All Materials'}</span>
+                  <span className="truncate">{pendingPurities.length > 0 ? `${pendingPurities.length} Material${pendingPurities.length > 1 ? 's' : ''}` : 'All Materials'}</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div className="absolute top-full left-0 mt-1 w-48 bg-forest-green border border-aged-gold shadow-lg py-2 hidden group-hover:block z-50">
+                <div className="absolute top-full left-0 w-48 bg-forest-green border border-aged-gold shadow-lg py-2 hidden group-hover:block z-50">
                   {purities.filter(p => p.value !== 'ALL').map((purity) => (
                     <label key={purity.value} className="flex items-center gap-2 px-3 py-2 hover:bg-white/10 cursor-pointer">
                       <input
                         type="checkbox"
-                        checked={selectedPurities.includes(purity.value)}
+                        checked={pendingPurities.includes(purity.value)}
                         onChange={() => togglePurity(purity.value)}
                         className="w-4 h-4 accent-aged-gold"
                       />
@@ -377,19 +407,19 @@ export default function ProductsPage() {
               </div>
 
               {/* Stone Multi-Select */}
-              <div className="relative group">
+              <div className="relative group pb-2">
                 <button className="h-9 px-3 bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition-all flex items-center gap-2 min-w-[130px]">
-                  <span className="truncate">{selectedStones.length > 0 ? `${selectedStones.length} Stone${selectedStones.length > 1 ? 's' : ''}` : 'All Stones'}</span>
+                  <span className="truncate">{pendingStones.length > 0 ? `${pendingStones.length} Stone${pendingStones.length > 1 ? 's' : ''}` : 'All Stones'}</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div className="absolute top-full left-0 mt-1 w-48 bg-forest-green border border-aged-gold shadow-lg py-2 hidden group-hover:block z-50 max-h-60 overflow-y-auto scrollbar-modern">
+                <div className="absolute top-full left-0 w-48 bg-forest-green border border-aged-gold shadow-lg py-2 hidden group-hover:block z-50 max-h-60 overflow-y-auto scrollbar-modern">
                   {stones.filter(s => s.value !== 'ALL').map((stone) => (
                     <label key={stone.value} className="flex items-center gap-2 px-3 py-2 hover:bg-white/10 cursor-pointer">
                       <input
                         type="checkbox"
-                        checked={selectedStones.includes(stone.value)}
+                        checked={pendingStones.includes(stone.value)}
                         onChange={() => toggleStone(stone.value)}
                         className="w-4 h-4 accent-aged-gold"
                       />
@@ -400,19 +430,19 @@ export default function ProductsPage() {
               </div>
 
               {/* Weight Multi-Select */}
-              <div className="relative group">
+              <div className="relative group pb-2">
                 <button className="h-9 px-3 bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition-all flex items-center gap-2 min-w-[130px]">
-                  <span className="truncate">{selectedWeightRanges.length > 0 ? `${selectedWeightRanges.length} Weight Range${selectedWeightRanges.length > 1 ? 's' : ''}` : 'All Weights'}</span>
+                  <span className="truncate">{pendingWeightRanges.length > 0 ? `${pendingWeightRanges.length} Weight Range${pendingWeightRanges.length > 1 ? 's' : ''}` : 'All Weights'}</span>
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
-                <div className="absolute top-full left-0 mt-1 w-48 bg-forest-green border border-aged-gold shadow-lg py-2 hidden group-hover:block z-50">
+                <div className="absolute top-full left-0 w-48 bg-forest-green border border-aged-gold shadow-lg py-2 hidden group-hover:block z-50">
                   {weightRanges.map((range) => (
                     <label key={range.value} className="flex items-center gap-2 px-3 py-2 hover:bg-white/10 cursor-pointer">
                       <input
                         type="checkbox"
-                        checked={selectedWeightRanges.includes(range.value)}
+                        checked={pendingWeightRanges.includes(range.value)}
                         onChange={() => toggleWeight(range.value)}
                         className="w-4 h-4 accent-aged-gold"
                       />
@@ -422,11 +452,16 @@ export default function ProductsPage() {
                 </div>
               </div>
 
-              {hasFiltersApplied && (
-                <button onClick={clearAllFilters} className="h-9 px-4 border border-aged-gold text-aged-gold text-sm hover:bg-aged-gold hover:text-forest-green transition-all">
-                  Clear All
+              {/* Apply / Clear Filters Button */}
+              {filtersApplied || hasFiltersApplied ? (
+                <button onClick={clearAllFilters} className="h-9 px-4 bg-aged-gold text-forest-green font-medium text-sm hover:bg-white transition-all">
+                  Clear Filters
                 </button>
-              )}
+              ) : hasPendingFilters ? (
+                <button onClick={applyFilters} className="h-9 px-4 bg-aged-gold text-forest-green font-medium text-sm hover:bg-white transition-all">
+                  Apply
+                </button>
+              ) : null}
             </div>
           </div>
 
