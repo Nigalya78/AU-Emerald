@@ -56,14 +56,14 @@ export default function SavingsScheme() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
+        <div className="md:grid md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto justify-center max-h-[500px] overflow-y-auto scrollbar-hide snap-y snap-mandatory md:max-h-none md:overflow-visible">
           {plans.map((plan, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.15, ease: 'easeOut' }}
-              className="bg-white border-2 border-aged-gold p-8 lg:p-10 hover:shadow-lg transition-all duration-300"
+              className="bg-white border-2 border-aged-gold p-8 lg:p-10 hover:shadow-lg transition-all duration-300 snap-start"
             >
               <h3 className="font-fraunces text-2xl font-semibold text-forest-green mb-2">
                 {plan.duration}

@@ -17,7 +17,7 @@ export default function Hero() {
             className="order-1"
           >
             {/* Main Heading - Stacked All Caps Style */}
-            <h1 className="font-fraunces text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal text-forest-green leading-[1.15] tracking-wide uppercase">
+            <h1 className="font-fraunces text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-forest-green leading-[1.15] tracking-wide uppercase">
               Premium<br />
               Gold & Emerald<br />
               Jewellery

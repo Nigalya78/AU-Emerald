@@ -308,7 +308,7 @@ export default function ProductsPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="bg-white pt-8 sm:pt-12 pb-4 sm:pb-8 overflow-x-hidden">
+      <section className="bg-white pt-24 sm:pt-28 pb-4 sm:pb-8 overflow-x-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -316,13 +316,10 @@ export default function ProductsPage() {
             transition={{ duration: 0.6 }}
             className="text-center"
           >
-            <div className="flex items-center justify-center gap-4 mb-4">
-              <div className="w-16 h-px bg-aged-gold"></div>
-              <p className="text-aged-gold text-xs font-medium tracking-[0.3em] uppercase">
-                Our Collections
-              </p>
-              <div className="w-16 h-px bg-aged-gold"></div>
-            </div>
+            <div className="w-12 h-0.5 bg-aged-gold mx-auto mb-4 sm:mb-6"></div>
+            <p className="text-aged-gold text-xs sm:text-sm font-medium tracking-widest uppercase mb-3 sm:mb-4">
+              Our Collections
+            </p>
             <h1 className="font-fraunces text-4xl md:text-5xl lg:text-6xl font-bold text-forest-green mb-4 tracking-wide">
               Antiquity. Elegance. Emeralds.
             </h1>

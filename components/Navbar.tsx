@@ -13,7 +13,12 @@ export default function Navbar() {
   const [collectionsOpen, setCollectionsOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Close on ESC and lock body scroll when mobile menu is open
   useEffect(() => {
@@ -40,7 +45,10 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const isActive = (path: string) => pathname === path;
+  const isActive = (path: string) => {
+    if (!mounted) return false;
+    return pathname === path;
+  };
 
   const collectionCategories = [
     { name: 'All Collections', href: '/collections', type: 'header' },
@@ -55,23 +63,25 @@ export default function Navbar() {
       animate={{ y: 0 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
       className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-300 ${
-        scrolled ? 'border-b border-aged-gold' : ''
+        scrolled ? 'shadow-md' : ''
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center shrink-0">
+        <div className="flex items-center h-20 gap-8" suppressHydrationWarning>
+          {/* Logo */}
+          <Link href="/" className="flex items-center shrink-0 -my-8">
             <Image
               src="/logo-removebg-preview.png"
               alt="Au Emerald"
-              width={240}
-              height={85}
-              className="h-12 md:h-16 w-auto object-contain"
+              width={400}
+              height={145}
+              className="h-[88px] md:h-24 w-auto object-contain"
               priority
             />
           </Link>
 
-          <div className="hidden lg:flex items-center gap-6 flex-1 justify-center">
+          {/* Nav Links - Left Side */}
+          <div className="hidden lg:flex items-center gap-6">
             <Link 
               href="/" 
               className={`text-sm font-medium uppercase tracking-wider relative group ${
@@ -109,17 +119,48 @@ export default function Navbar() {
               </Link>
               
               {collectionsOpen && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2">
-                  <div className="bg-forest-green border border-aged-gold shadow-lg py-2 min-w-[160px]">
-                    {collectionCategories.map((cat) => (
+                <div className="absolute top-full left-1/2 -translate-x-1/2 pt-4">
+                  <div className="bg-white rounded-xl shadow-xl border border-gray-100 py-5 px-5 w-[280px]">
+                    {/* Header */}
+                    <p className="text-aged-gold text-xs font-semibold tracking-widest uppercase mb-4">
+                      Browse by Category
+                    </p>
+                    
+                    {/* Category List */}
+                    <div className="space-y-1 mb-4">
+                      {/* Gold */}
                       <Link
-                        key={cat.name}
-                        href={cat.href}
-                        className="block px-4 py-2 text-sm text-white hover:text-aged-gold hover:bg-white/10 transition-colors"
+                        href="/collections?purity=K22_GOLD"
+                        className="block py-2 px-3 text-forest-green font-medium text-sm hover:text-aged-gold hover:bg-gray-50 rounded-lg transition-colors"
                       >
-                        {cat.name}
+                        Gold
                       </Link>
-                    ))}
+                      
+                      {/* Silver */}
+                      <Link
+                        href="/collections?purity=SILVER"
+                        className="block py-2 px-3 text-forest-green font-medium text-sm hover:text-aged-gold hover:bg-gray-50 rounded-lg transition-colors"
+                      >
+                        Silver
+                      </Link>
+                      
+                      {/* Diamond */}
+                      <Link
+                        href="/collections?stone=DIAMOND"
+                        className="block py-2 px-3 text-forest-green font-medium text-sm hover:text-aged-gold hover:bg-gray-50 rounded-lg transition-colors"
+                      >
+                        Diamond
+                      </Link>
+                    </div>
+                    
+                    {/* View All Link */}
+                    <Link
+                      href="/collections"
+                      className="flex items-center justify-center gap-2 pt-4 border-t border-gray-100 text-aged-gold font-medium text-sm hover:text-forest-green transition-colors"
+                    >
+                      View All Products
+                      <ChevronDown size={16} className="-rotate-90" />
+                    </Link>
                   </div>
                 </div>
               )}
@@ -131,7 +172,7 @@ export default function Navbar() {
                 isActive('/savings') ? 'text-aged-gold' : 'text-forest-green'
               }`}
             >
-              Savings Scheme
+              Savings
               <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-aged-gold transition-all duration-300 ease-out ${isActive('/savings') ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
             </Link>
             <Link 
@@ -145,25 +186,42 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Enquire button for lg+ screens (hidden on smaller screens) */}
-          <a
-            href={`https://wa.me/610402399925?text=${encodeURIComponent("Hi Au Emerald team,\n\nI'm interested in your South Indian jewellery collection.\n\nPlease share details about your products, pricing, and current offers.\n\nThank you!")}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden lg:inline-flex items-center gap-2 bg-forest-green text-white px-4 py-2 text-sm font-medium hover:bg-transparent hover:text-forest-green hover:border-2 hover:border-forest-green transition-all"
-          >
-            <WhatsAppIcon size={16} />
-            ENQUIRE ON WHATSAPP
-          </a>
+          {/* Right Side - Search and Enquiry */}
+          <div className="hidden lg:flex items-center gap-4 ml-auto">
+            {/* Search Icon */}
+            <Link 
+              href="/collections"
+              className="p-2 text-forest-green hover:text-aged-gold transition-colors"
+              aria-label="Search"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </Link>
 
-          {/* Mobile hamburger */}
-          <div className="lg:hidden flex items-center">
+            {/* Enquire button */}
+            <a
+              href={`https://wa.me/610402399925?text=${encodeURIComponent("Hi Au Emerald team, I'm interested in your South Indian jewellery collection.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-forest-green text-white px-4 py-2 text-sm font-medium hover:bg-transparent hover:text-forest-green border-2 border-forest-green transition-all"
+            >
+              <WhatsAppIcon size={16} />
+              Enquire
+            </a>
+          </div>
+
+          {/* Mobile hamburger - pushed to right */}
+          <div className="lg:hidden flex items-center ml-auto">
             <button
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               onClick={() => setMobileOpen((s) => !s)}
-              className="p-2 rounded-md border border-forest-green text-forest-green bg-white hover:bg-forest-green hover:text-white transition"
+              className="relative w-10 h-10 flex flex-col items-center justify-center gap-1.5 p-2"
             >
-              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+              {/* Animated hamburger lines */}
+              <span className={`block w-6 h-0.5 bg-forest-green transition-all duration-300 ease-out ${mobileOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+              <span className={`block w-6 h-0.5 bg-forest-green transition-all duration-300 ease-out ${mobileOpen ? 'opacity-0' : ''}`}></span>
+              <span className={`block w-6 h-0.5 bg-forest-green transition-all duration-300 ease-out ${mobileOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
             </button>
           </div>
 
@@ -193,62 +251,66 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'tween', duration: 0.28 }}
-              className="fixed top-0 right-0 z-50 h-full w-[320px] bg-white shadow-lg border-l border-aged-gold"
+              className="fixed top-0 right-0 z-50 h-full w-[320px] bg-white shadow-xl"
             >
-              <div className="h-20 flex items-center justify-between px-4 border-b border-gray-100">
+              {/* Header with Logo and Close */}
+              <div className="h-16 flex items-center justify-between px-4 border-b border-gray-100">
                 <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center">
-                  <Image src="/logo-removebg-preview.png" alt="Au Emerald" width={140} height={50} className="h-10 w-auto object-contain" />
+                  <Image src="/logo-removebg-preview.png" alt="Au Emerald" width={160} height={55} className="h-11 w-auto object-contain" />
                 </Link>
                 <button
                   aria-label="Close menu"
                   onClick={() => setMobileOpen(false)}
-                  className="p-2 rounded-md text-forest-green"
+                  className="p-2 text-forest-green hover:text-aged-gold transition-colors"
                 >
-                  <X size={20} />
+                  <X size={24} />
                 </button>
               </div>
 
-              <div className="px-4 py-4 overflow-y-auto h-[calc(100vh-80px)] scrollbar-modern space-y-3">
+              {/* Search Bar */}
+              <div className="px-4 py-4 border-b border-gray-100">
+                <div className="relative">
+                  <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search products..."
+                    className="w-full pl-10 pr-4 py-2.5 bg-gray-50 rounded-lg text-sm text-forest-green placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-aged-gold/50"
+                  />
+                </div>
+              </div>
+
+              {/* Menu Links */}
+              <div className="px-4 py-2 overflow-y-auto h-[calc(100vh-280px)] scrollbar-modern">
+                {/* Home */}
                 <Link
                   href="/"
                   onClick={() => setMobileOpen(false)}
-                  className={`block text-sm font-medium uppercase tracking-wider ${isActive('/') ? 'text-aged-gold' : 'text-forest-green hover:text-aged-gold'}`}
+                  className={`flex items-center justify-between py-3 border-b border-gray-50 ${isActive('/') ? 'text-aged-gold' : 'text-forest-green'}`}
                 >
-                  Home
-                </Link>
-                <Link
-                  href="/about"
-                  onClick={() => setMobileOpen(false)}
-                  className={`block text-sm font-medium uppercase tracking-wider ${isActive('/about') ? 'text-aged-gold' : 'text-forest-green hover:text-aged-gold'}`}
-                >
-                  About
-                </Link>
-                <Link
-                  href="/why-choose-us"
-                  onClick={() => setMobileOpen(false)}
-                  className={`block text-sm font-medium uppercase tracking-wider ${isActive('/why-choose-us') ? 'text-aged-gold' : 'text-forest-green hover:text-aged-gold'}`}
-                >
-                  Why Choose Us?
+                  <span className="font-medium">Home</span>
+                  <ChevronDown size={16} className="-rotate-90 text-gray-400" />
                 </Link>
 
-                {/* Collections - tap to expand */}
-                <div>
+                {/* Collections Dropdown */}
+                <div className="border-b border-gray-50">
                   <button
-                    className="w-full flex items-center justify-between text-sm font-medium uppercase tracking-wider text-forest-green"
+                    className="w-full flex items-center justify-between py-3 text-forest-green"
                     onClick={() => setMobileCollectionsOpen((s) => !s)}
                     aria-expanded={mobileCollectionsOpen}
                   >
-                    <span>Collections</span>
-                    <ChevronDown size={14} className={`${mobileCollectionsOpen ? 'rotate-180' : ''} transition-transform`} />
+                    <span className="font-medium">Collections</span>
+                    <ChevronDown size={16} className={`text-gray-400 transition-transform ${mobileCollectionsOpen ? 'rotate-180' : ''}`} />
                   </button>
                   {mobileCollectionsOpen && (
-                    <div className="mt-2 space-y-1 pl-3">
+                    <div className="pb-3 pl-4 space-y-2">
                       {collectionCategories.map((cat) => (
                         <Link
                           key={cat.name}
                           href={cat.href}
                           onClick={() => setMobileOpen(false)}
-                          className="block text-sm text-forest-green hover:text-aged-gold"
+                          className="block text-sm text-forest-green/70 hover:text-aged-gold py-1"
                         >
                           {cat.name}
                         </Link>
@@ -257,30 +319,58 @@ export default function Navbar() {
                   )}
                 </div>
 
+                {/* About */}
+                <Link
+                  href="/about"
+                  onClick={() => setMobileOpen(false)}
+                  className={`flex items-center justify-between py-3 border-b border-gray-50 ${isActive('/about') ? 'text-aged-gold' : 'text-forest-green'}`}
+                >
+                  <span className="font-medium">About</span>
+                  <ChevronDown size={16} className="-rotate-90 text-gray-400" />
+                </Link>
+
+                {/* Why Choose Us */}
+                <Link
+                  href="/why-choose-us"
+                  onClick={() => setMobileOpen(false)}
+                  className={`flex items-center justify-between py-3 border-b border-gray-50 ${isActive('/why-choose-us') ? 'text-aged-gold' : 'text-forest-green'}`}
+                >
+                  <span className="font-medium">Why Choose Us</span>
+                  <ChevronDown size={16} className="-rotate-90 text-gray-400" />
+                </Link>
+
+                {/* Savings Scheme */}
                 <Link
                   href="/savings"
                   onClick={() => setMobileOpen(false)}
-                  className={`block text-sm font-medium uppercase tracking-wider ${isActive('/savings') ? 'text-aged-gold' : 'text-forest-green hover:text-aged-gold'}`}
+                  className={`flex items-center justify-between py-3 border-b border-gray-50 ${isActive('/savings') ? 'text-aged-gold' : 'text-forest-green'}`}
                 >
-                  Savings Scheme
+                  <span className="font-medium">Savings Scheme</span>
+                  <ChevronDown size={16} className="-rotate-90 text-gray-400" />
                 </Link>
+
+                {/* Contact */}
                 <Link
                   href="/contact"
                   onClick={() => setMobileOpen(false)}
-                  className={`block text-sm font-medium uppercase tracking-wider ${isActive('/contact') ? 'text-aged-gold' : 'text-forest-green hover:text-aged-gold'}`}
+                  className={`flex items-center justify-between py-3 border-b border-gray-50 ${isActive('/contact') ? 'text-aged-gold' : 'text-forest-green'}`}
                 >
-                  Contact
+                  <span className="font-medium">Contact</span>
+                  <ChevronDown size={16} className="-rotate-90 text-gray-400" />
                 </Link>
+              </div>
 
+              {/* Footer CTA */}
+              <div className="absolute bottom-0 left-0 right-0 px-4 py-4 bg-white border-t border-gray-100">
                 <a
-                  href={`https://wa.me/610402399925?text=${encodeURIComponent("Hi Au Emerald team,\n\nI'm interested in your South Indian jewellery collection.\n\nPlease share details about your products, pricing, and current offers.\n\nThank you!")}`}
+                  href={`https://wa.me/610402399925?text=${encodeURIComponent("Hi Au Emerald team, I'm interested in your jewellery collection.")}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-2 inline-flex items-center gap-2 bg-white text-forest-green px-4 py-2 text-sm font-medium hover:bg-forest-green hover:text-white transition-all border border-forest-green"
+                  className="flex items-center justify-center gap-2 w-full bg-aged-gold text-forest-green py-3 rounded-lg font-medium text-sm hover:bg-forest-green hover:text-white transition-all"
                   onClick={() => setMobileOpen(false)}
                 >
-                  <WhatsAppIcon size={16} />
-                  ENQUIRE
+                  <WhatsAppIcon size={18} />
+                  Enquire on WhatsApp
                 </a>
               </div>
             </motion.aside>

@@ -122,13 +122,13 @@ export default function Collections() {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'visible'}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6"
+          className="flex md:grid md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0"
         >
           {products.map((product) => (
             <motion.div
               key={product.id}
               variants={itemVariants}
-              className="group bg-white overflow-hidden hover:shadow-xl transition-all duration-300"
+              className="group bg-white overflow-hidden hover:shadow-xl transition-all duration-300 min-w-[160px] sm:min-w-[200px] md:min-w-0 snap-start flex-shrink-0"
             >
               <div className="aspect-[4/5] overflow-hidden border-2 border-aged-gold">
                 <img
@@ -156,7 +156,7 @@ export default function Collections() {
         </motion.div>
 
         {/* View All Button */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-6">
           <Link
             href="/collections"
             className="inline-flex items-center gap-2 border border-forest-green text-forest-green px-8 py-3 font-medium hover:bg-forest-green hover:text-white transition-all"

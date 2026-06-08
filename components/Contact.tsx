@@ -29,7 +29,7 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="bg-forest-green py-8 sm:py-12 lg:py-16 overflow-x-hidden">
+    <section id="contact" className="bg-white py-8 sm:py-12 lg:py-16 overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         <div className="grid lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-14 items-start">
           {/* Left Side */}
@@ -39,7 +39,7 @@ export default function Contact() {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
-            <h2 className="font-fraunces text-4xl sm:text-5xl font-semibold text-white leading-tight mb-6">
+            <h2 className="font-fraunces text-4xl sm:text-5xl font-semibold text-forest-green leading-tight mb-6">
               INTERESTED IN
               <br />
               A PIECE?
@@ -47,7 +47,7 @@ export default function Contact() {
             
             <div className="w-16 h-0.5 bg-aged-gold mb-6"></div>
 
-            <p className="text-white/80 text-base leading-relaxed max-w-md mb-8">
+            <p className="text-forest-green/80 text-base leading-relaxed max-w-md mb-8">
               We don&apos;t sell online. Each piece is private, personal, and available only upon enquiry.
             </p>
 
@@ -77,10 +77,10 @@ export default function Contact() {
                 </div>
                 
                 <div>
-                  <h3 className="text-aged-gold font-semibold text-sm uppercase tracking-wider mb-1">
+                  <h3 className="text-forest-green font-semibold text-sm uppercase tracking-wider mb-1">
                     {feature.title}
                   </h3>
-                  <p className="text-white/70 text-sm leading-relaxed">
+                  <p className="text-forest-green/70 text-sm leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
