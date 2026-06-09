@@ -12,10 +12,12 @@ function AdminContent({ children }: { children: React.ReactNode }) {
   const isLoginPage = pathname === '/admin/login' || pathname === '/admin/login/';
 
   useEffect(() => {
-    // Check localStorage for auth
+    // Check localStorage for auth (browser only)
     const checkAuth = () => {
-      const auth = localStorage.getItem('adminAuth');
-      setIsAuthenticated(auth === 'true');
+      if (typeof window !== 'undefined') {
+        const auth = localStorage.getItem('adminAuth');
+        setIsAuthenticated(auth === 'true');
+      }
       setLoading(false);
     };
     

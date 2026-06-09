@@ -52,7 +52,9 @@ export default function AdminSidebar() {
       <div className="p-4 border-t border-white/20">
         <button
           onClick={() => {
-            localStorage.removeItem('adminAuth')
+            if (typeof window !== 'undefined') {
+              localStorage.removeItem('adminAuth')
+            }
             router.push('/admin/login')
           }}
           className="w-full px-4 py-3 text-left hover:bg-white/10 rounded transition-colors text-red-300"
