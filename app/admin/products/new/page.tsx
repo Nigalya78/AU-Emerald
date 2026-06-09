@@ -99,7 +99,6 @@ export default function NewProductPage() {
       tags: selectedTags,
       featured: formData.get('featured') === 'on',
       status: formData.get('status'),
-      order: parseInt(formData.get('order') as string) || 0,
     }
     console.log('Submitting product:', payload)
     
@@ -418,20 +417,7 @@ export default function NewProductPage() {
         <div className="border-t border-forest-green/20 pt-6">
           <h3 className="font-fraunces text-lg font-semibold text-forest-green mb-4">Product Settings</h3>
           
-          <div className="grid grid-cols-2 gap-6 mb-6">
-            <div>
-              <label htmlFor="order" className="block text-sm font-medium text-forest-green mb-2">
-                Display Order
-              </label>
-              <input
-                id="order"
-                name="order"
-                type="number"
-                defaultValue="0"
-                className="w-full px-4 py-3 border border-forest-green/30 focus:border-aged-gold focus:outline-none"
-              />
-            </div>
-
+          <div className="grid grid-cols-1 gap-6 mb-6">
             <div>
               <label htmlFor="status" className="block text-sm font-medium text-forest-green mb-2">
                 Product Status

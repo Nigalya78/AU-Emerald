@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, X, Search } from 'lucide-react';
 import Image from 'next/image';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 
@@ -14,7 +14,11 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     setMounted(true);
@@ -50,6 +54,26 @@ export default function Navbar() {
     return pathname === path;
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/collections?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+      setSearchFocused(false);
+    }
+  };
+
+  const handleSearchIconClick = () => {
+    if (searchFocused && searchQuery.trim()) {
+      router.push(`/collections?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+      setSearchFocused(false);
+    } else {
+      setSearchFocused(true);
+      searchInputRef.current?.focus();
+    }
+  };
+
   const collectionCategories = [
     { name: 'All Collections', href: '/collections', type: 'header' },
     { name: 'Gold', href: '/collections?purity=K22_GOLD&purity=K24_GOLD&purity=K18_GOLD', type: 'item' },
@@ -69,13 +93,13 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex items-center h-20 gap-8" suppressHydrationWarning>
           {/* Logo */}
-          <Link href="/" className="flex items-center shrink-0 -my-8">
+          <Link href="/" className="flex items-center shrink-0 -my-10">
             <Image
               src="/logo-removebg-preview.png"
               alt="Au Emerald"
               width={400}
               height={145}
-              className="h-[88px] md:h-24 w-auto object-contain"
+              className="h-[100px] md:h-28 w-auto object-contain"
               priority
             />
           </Link>
@@ -188,16 +212,29 @@ export default function Navbar() {
 
           {/* Right Side - Search and Enquiry */}
           <div className="hidden lg:flex items-center gap-4 ml-auto">
-            {/* Search Icon */}
-            <Link 
-              href="/collections"
-              className="p-2 text-forest-green hover:text-aged-gold transition-colors"
-              aria-label="Search"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </Link>
+            {/* Search Box */}
+            <form onSubmit={handleSearch} className="relative flex items-center">
+              <div className={`flex items-center bg-gray-100 rounded-full overflow-hidden transition-all duration-300 ${searchFocused ? 'w-64 ring-2 ring-aged-gold/30' : 'w-40'}`}>
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => setSearchFocused(true)}
+                  onBlur={() => !searchQuery && setSearchFocused(false)}
+                  className="w-full h-9 px-4 text-sm text-forest-green placeholder:text-gray-400 bg-transparent focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  onClick={handleSearchIconClick}
+                  className="p-2 text-forest-green hover:text-aged-gold transition-colors"
+                  aria-label="Search"
+                >
+                  <Search className="w-4 h-4" />
+                </button>
+              </div>
+            </form>
 
             {/* Enquire button */}
             <a

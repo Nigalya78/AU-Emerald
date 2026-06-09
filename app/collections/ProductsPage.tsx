@@ -165,6 +165,7 @@ export default function ProductsPage() {
     const category = searchParams.get('category')
     const purities = searchParams.getAll('purity')
     const stones = searchParams.getAll('stone')
+    const search = searchParams.get('search')
 
     if (category) {
       setSelectedCategories([category])
@@ -177,6 +178,10 @@ export default function ProductsPage() {
     if (stones.length > 0) {
       setSelectedStones(stones)
       setPendingStones(stones)
+    }
+    if (search) {
+      setSearchQuery(search)
+      setPendingSearchQuery(search)
     }
   }, [searchParams])
 
@@ -216,7 +221,9 @@ export default function ProductsPage() {
       filtered = filtered.filter(p =>
         p.name.toLowerCase().includes(query) ||
         p.description.toLowerCase().includes(query) ||
-        p.category.toLowerCase().includes(query)
+        p.category.toLowerCase().includes(query) ||
+        (p.purity && p.purity.toLowerCase().includes(query)) ||
+        (p.stoneType && p.stoneType.toLowerCase().includes(query))
       )
     }
 
@@ -475,13 +482,16 @@ export default function ProductsPage() {
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-12">
         {filteredProducts.length === 0 ? (
           <div className="text-center py-16">
-            <p className="text-forest-green/60 text-lg mb-4">No products found</p>
-            <button
-              onClick={clearAllFilters}
-              className="px-6 py-2 border border-forest-green text-forest-green hover:bg-forest-green hover:text-white transition-all"
+            <p className="text-forest-green/60 text-lg mb-4">No results found</p>
+            <p className="text-forest-green/40 text-sm mb-6">
+              {searchQuery ? `No products matching "${searchQuery}"` : 'Try adjusting your filters'}
+            </p>
+            <a
+              href="/collections"
+              className="inline-block px-6 py-2 bg-forest-green text-white hover:bg-forest-green/90 transition-all"
             >
-              Clear Filters
-            </button>
+              Back to Collections
+            </a>
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

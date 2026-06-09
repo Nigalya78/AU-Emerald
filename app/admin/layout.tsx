@@ -13,10 +13,16 @@ function AdminContent({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     // Check localStorage for auth
-    const auth = localStorage.getItem('adminAuth');
-    setIsAuthenticated(auth === 'true');
-    setLoading(false);
-  }, []);
+    const checkAuth = () => {
+      const auth = localStorage.getItem('adminAuth');
+      setIsAuthenticated(auth === 'true');
+      setLoading(false);
+    };
+    
+    // Small delay to ensure localStorage is updated from login page
+    const timer = setTimeout(checkAuth, 100);
+    return () => clearTimeout(timer);
+  }, [pathname]);
 
   useEffect(() => {
     if (!loading && !isAuthenticated && !isLoginPage) {

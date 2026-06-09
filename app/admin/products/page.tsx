@@ -8,7 +8,7 @@ interface Product {
   name: string
   category: string
   featured: boolean
-  visible: boolean
+  status: 'ACTIVE' | 'HIDDEN' | 'OUT_OF_STOCK'
   order: number
   createdAt: string
 }
@@ -63,12 +63,27 @@ export default function ProductsPage() {
     }
   }
 
-  const toggleVisible = async (product: Product) => {
+  const removeFromFeatured = async (product: Product) => {
+    if (!confirm(`Remove "${product.name}" from featured products?`)) return
     try {
       await fetch('/api/products', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...product, visible: !product.visible }),
+        body: JSON.stringify({ ...product, featured: false }),
+      })
+      fetchProducts()
+    } catch (error) {
+      console.error('Error removing from featured:', error)
+    }
+  }
+
+  const toggleVisible = async (product: Product) => {
+    try {
+      const newStatus = product.status === 'ACTIVE' ? 'HIDDEN' : 'ACTIVE'
+      await fetch('/api/products', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...product, status: newStatus }),
       })
       fetchProducts()
     } catch (error) {
@@ -77,6 +92,8 @@ export default function ProductsPage() {
   }
 
   const categories = ['NECKLACES', 'EARRINGS', 'BANGLES', 'RINGS', 'SETS', 'CUSTOM_ORDERS']
+
+  const featuredProducts = products.filter(p => p.featured)
 
   if (loading) {
     return (
@@ -127,11 +144,52 @@ export default function ProductsPage() {
         </div>
       </div>
 
+      {/* Featured Products Section */}
+      {featuredProducts.length > 0 && (
+        <div className="mb-8">
+          <h2 className="font-fraunces text-xl font-semibold text-forest-green mb-4">
+            Featured Products ({featuredProducts.length}/4)
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {featuredProducts.slice(0, 4).map((product, index) => (
+              <div key={product.id} className="bg-white border border-forest-green/20 p-4 hover:shadow-md transition-shadow">
+                <div className="flex items-start justify-between mb-3">
+                  <span className="text-sm text-gray-500">#{index + 1}</span>
+                  <button
+                    onClick={() => removeFromFeatured(product)}
+                    className="text-xs px-2 py-1 bg-red-100 text-red-600 hover:bg-red-200 rounded transition-colors"
+                  >
+                    Remove
+                  </button>
+                </div>
+                <h3 className="font-medium text-forest-green text-sm mb-1 truncate">
+                  {product.name}
+                </h3>
+                <p className="text-xs text-forest-green/60 mb-2">
+                  {product.category.replace('_', ' ')}
+                </p>
+                <Link
+                  href={`/admin/products/${product.id}/edit`}
+                  className="text-xs text-aged-gold hover:text-dark-gold"
+                >
+                  Edit Product →
+                </Link>
+              </div>
+            ))}
+          </div>
+          {featuredProducts.length >= 4 && (
+            <p className="text-sm text-forest-green/60 mt-3">
+              Maximum 4 featured products reached. Remove one to add another.
+            </p>
+          )}
+        </div>
+      )}
+
       <div className="bg-white overflow-hidden">
         <table className="w-full">
           <thead className="bg-forest-green text-white">
             <tr>
-              <th className="px-6 py-4 text-left text-sm font-medium">Order</th>
+              <th className="px-4 py-4 text-left text-sm font-medium w-16">ID</th>
               <th className="px-6 py-4 text-left text-sm font-medium">Name</th>
               <th className="px-6 py-4 text-left text-sm font-medium">Category</th>
               <th className="px-6 py-4 text-center text-sm font-medium">Featured</th>
@@ -140,9 +198,9 @@ export default function ProductsPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
-            {products.map((product) => (
+            {products.map((product, index) => (
               <tr key={product.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 text-sm text-forest-green">{product.order}</td>
+                <td className="px-4 py-4 text-sm text-gray-500">{index + 1}</td>
                 <td className="px-6 py-4">
                   <Link
                     href={`/admin/products/${product.id}/edit`}
@@ -170,12 +228,12 @@ export default function ProductsPage() {
                   <button
                     onClick={() => toggleVisible(product)}
                     className={`px-3 py-1 text-xs font-medium rounded ${
-                      product.visible
+                      product.status === 'ACTIVE'
                         ? 'bg-green-100 text-green-800'
                         : 'bg-gray-200 text-gray-600'
                     }`}
                   >
-                    {product.visible ? 'Yes' : 'No'}
+                    {product.status === 'ACTIVE' ? 'Yes' : 'No'}
                   </button>
                 </td>
                 <td className="px-6 py-4 text-right">

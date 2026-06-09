@@ -21,7 +21,7 @@ export default function AdminDashboard() {
         setStats([
           { label: 'Total Products', value: products.length },
           { label: 'Featured Products', value: products.filter((p: any) => p.featured).length },
-          { label: 'Visible Products', value: products.filter((p: any) => p.visible).length },
+          { label: 'Visible Products', value: products.filter((p: any) => p.status === 'ACTIVE').length },
         ]);
       }
     } catch (err) {

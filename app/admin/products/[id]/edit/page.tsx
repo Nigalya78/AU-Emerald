@@ -10,7 +10,7 @@ interface Product {
   description: string
   images: string[]
   featured: boolean
-  visible: boolean
+  status: 'ACTIVE' | 'HIDDEN' | 'OUT_OF_STOCK'
   order: number
 }
 
@@ -58,8 +58,7 @@ export default function EditProductPage() {
           description: formData.get('description'),
           images: product.images,
           featured: formData.get('featured') === 'on',
-          visible: formData.get('visible') === 'on',
-          order: parseInt(formData.get('order') as string) || 0,
+          status: formData.get('status') === 'on' ? 'ACTIVE' : 'HIDDEN',
         }),
       })
 
@@ -206,20 +205,6 @@ export default function EditProductPage() {
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
-          <div>
-            <label htmlFor="order" className="block text-sm font-medium text-forest-green mb-2">
-              Display Order
-            </label>
-            <input
-              id="order"
-              name="order"
-              type="number"
-              defaultValue={product.order}
-              className="w-full px-4 py-3 border border-forest-green/30 focus:border-aged-gold focus:outline-none"
-            />
-          </div>
-        </div>
 
         <div className="flex gap-6">
           <label className="flex items-center gap-2 cursor-pointer">
@@ -235,8 +220,8 @@ export default function EditProductPage() {
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
-              name="visible"
-              defaultChecked={product.visible}
+              name="status"
+              defaultChecked={product.status === 'ACTIVE'}
               className="w-5 h-5 border-forest-green/30 text-aged-gold focus:ring-aged-gold"
             />
             <span className="text-sm text-forest-green">Visible on Website</span>

@@ -18,43 +18,6 @@ interface Product {
   weight?: number
 }
 
-// Default fallback products
-const fallbackProducts: Product[] = [
-  {
-    id: '1',
-    name: 'Gold Emerald Necklace',
-    category: 'NECKLACES',
-    description: 'Statement pieces that rest close to your heart.',
-    images: ['https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&q=80'],
-    mainImage: 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?w=600&q=80',
-    purity: 'K22_GOLD',
-    stoneType: 'EMERALD',
-    weight: 25.5,
-  },
-  {
-    id: '2',
-    name: 'Gold Emerald Earrings',
-    category: 'EARRINGS',
-    description: 'Crafted to frame your legacy with grace.',
-    images: ['https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80'],
-    mainImage: 'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=600&q=80',
-    purity: 'K22_GOLD',
-    stoneType: 'EMERALD',
-    weight: 12.3,
-  },
-  {
-    id: '3',
-    name: 'Gold Emerald Bracelet',
-    category: 'BRACELETS',
-    description: 'Heirlooms for your wrist, stories for generations.',
-    images: ['https://images.unsplash.com/photo-1611591437281-460bfbe1220b?w=600&q=80'],
-    mainImage: 'https://images.unsplash.com/photo-1611591437281-460bfbe1220b?w=600&q=80',
-    purity: 'K22_GOLD',
-    stoneType: 'EMERALD',
-    weight: 18.7,
-  },
-];
-
 const containerVariants = {
   hidden: {},
   visible: {
@@ -76,7 +39,7 @@ const itemVariants = {
 export default function Collections() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
-  const [products, setProducts] = useState<Product[]>(fallbackProducts);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -90,7 +53,7 @@ export default function Collections() {
         }
       } catch (error) {
         console.error('Error fetching products:', error);
-        // Keep fallback products on error
+        // No fallback - only show database products
       } finally {
         setLoading(false);
       }
@@ -122,15 +85,15 @@ export default function Collections() {
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'visible'}
-          className="flex md:grid md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0"
+          className="grid md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 max-h-[500px] md:max-h-none overflow-y-auto snap-y snap-mandatory scrollbar-hide pb-4 md:pb-0 md:overflow-visible"
         >
           {products.map((product) => (
             <motion.div
               key={product.id}
               variants={itemVariants}
-              className="group bg-white overflow-hidden hover:shadow-xl transition-all duration-300 min-w-[160px] sm:min-w-[200px] md:min-w-0 snap-start flex-shrink-0"
+              className="group bg-white overflow-hidden hover:shadow-xl transition-all duration-300 snap-start"
             >
-              <div className="aspect-[4/5] overflow-hidden border-2 border-aged-gold">
+              <div className="aspect-[4/3] sm:aspect-[4/5] md:aspect-[4/5] overflow-hidden border-2 border-aged-gold">
                 <img
                   src={product.mainImage || product.images[0]}
                   alt={product.name}

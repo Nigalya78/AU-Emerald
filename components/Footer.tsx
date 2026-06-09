@@ -2,7 +2,7 @@
 
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 import Image from 'next/image';
-import { MapPin, Phone, Clock, Mail } from 'lucide-react';
+import { MapPin, Phone, Mail } from 'lucide-react';
 
 // Facebook icon component
 function FacebookIcon({ size = 18 }: { size?: number }) {
@@ -145,12 +145,6 @@ export default function Footer() {
                 <Phone className="w-5 h-5 text-aged-gold flex-shrink-0" strokeWidth={1.5} />
                 <span className="text-white/70 text-sm">
                   0402 399 925 / 0430 464 545
-                </span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Clock className="w-5 h-5 text-aged-gold flex-shrink-0" strokeWidth={1.5} />
-                <span className="text-white/70 text-sm">
-                  Open 24 Hours
                 </span>
               </li>
             </ul>
