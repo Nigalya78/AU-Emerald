@@ -11,7 +11,42 @@ export default function NewProductPage() {
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [imageInputMode, setImageInputMode] = useState<'upload' | 'url'>('upload')
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Compress image before converting to base64
+  const compressImage = (file: File, maxWidth: number = 1200, quality: number = 0.7): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      img.onload = () => {
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        
+        // Calculate new dimensions
+        let width = img.width
+        let height = img.height
+        
+        if (width > maxWidth) {
+          height = (height * maxWidth) / width
+          width = maxWidth
+        }
+        
+        canvas.width = width
+        canvas.height = height
+        ctx?.drawImage(img, 0, 0, width, height)
+        
+        // Convert to compressed base64
+        const compressedBase64 = canvas.toDataURL('image/jpeg', quality)
+        resolve(compressedBase64)
+      }
+      img.onerror = reject
+      
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        img.src = e.target?.result as string
+      }
+      reader.readAsDataURL(file)
+    })
+  }
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
@@ -21,14 +56,13 @@ export default function NewProductPage() {
       return
     }
 
-    const reader = new FileReader()
-    reader.onload = (event) => {
-      const base64 = event.target?.result as string
-      if (base64) {
-        setImages([...images, base64])
-      }
+    try {
+      // Compress image before adding
+      const compressedBase64 = await compressImage(file, 1200, 0.7)
+      setImages([...images, compressedBase64])
+    } catch (err) {
+      alert('Error processing image. Please try another image.')
     }
-    reader.readAsDataURL(file)
     
     // Reset input
     e.target.value = ''
