@@ -8,7 +8,6 @@ export default function NewProductPage() {
   const [saving, setSaving] = useState(false)
   const [images, setImages] = useState<string[]>([])
   const [newImageUrl, setNewImageUrl] = useState('')
-  const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [imageInputMode, setImageInputMode] = useState<'upload' | 'url'>('upload')
 
   // Compress image before converting to base64
@@ -92,7 +91,6 @@ export default function NewProductPage() {
     { value: 'OUT_OF_STOCK', label: 'Out of Stock' },
     { value: 'COMING_SOON', label: 'Coming Soon' }
   ]
-  const availableTags = ['Bridal', 'Traditional', 'Temple Jewellery', 'Wedding', 'Party Wear', 'Daily Wear', 'South Indian', 'Emerald Collection', 'Gold', 'Silver', 'Diamond']
 
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
@@ -108,6 +106,26 @@ export default function NewProductPage() {
       return
     }
 
+    const formData = new FormData(e.currentTarget)
+    const name = formData.get('name') as string
+    const category = formData.get('category') as string
+    const description = formData.get('description') as string
+
+    if (!name || name.trim() === '') {
+      setError('Product name is required')
+      return
+    }
+
+    if (!category || category === '') {
+      setError('Please select a category')
+      return
+    }
+
+    if (!description || description.trim() === '') {
+      setError('Product description is required')
+      return
+    }
+
     // Check if images are too large (base64 can be large)
     const totalImageSize = images.reduce((acc, img) => acc + img.length, 0)
     console.log('Total image data size:', totalImageSize, 'characters')
@@ -117,8 +135,6 @@ export default function NewProductPage() {
     }
 
     setSaving(true)
-
-    const formData = new FormData(e.currentTarget)
     
     // Debug: Log form data
     const payload = {
@@ -130,7 +146,6 @@ export default function NewProductPage() {
       purity: formData.get('purity'),
       stoneType: formData.get('stoneType'),
       weight: parseFloat(formData.get('weight') as string) || null,
-      tags: selectedTags,
       featured: formData.get('featured') === 'on',
       status: formData.get('status'),
     }
@@ -175,13 +190,6 @@ export default function NewProductPage() {
     setImages(images.filter((_, i) => i !== index))
   }
 
-  const toggleTag = (tag: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
-    )
-  }
 
   return (
     <div className="p-8 max-w-4xl">
@@ -424,28 +432,6 @@ export default function NewProductPage() {
             placeholder="35.5"
             className="w-full px-4 py-3 border border-forest-green/30 focus:border-aged-gold focus:outline-none"
           />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-forest-green mb-3">
-            Product Tags
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {availableTags.map((tag) => (
-              <button
-                key={tag}
-                type="button"
-                onClick={() => toggleTag(tag)}
-                className={`px-3 py-1.5 text-sm rounded-full border transition-all ${
-                  selectedTags.includes(tag)
-                    ? 'bg-forest-green text-white border-forest-green'
-                    : 'bg-white text-forest-green border-forest-green/30 hover:border-aged-gold'
-                }`}
-              >
-                {tag}
-              </button>
-            ))}
-          </div>
         </div>
 
         <div className="border-t border-forest-green/20 pt-6">
