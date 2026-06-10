@@ -9,7 +9,6 @@ interface Product {
   category: string
   description: string
   images: string[]
-  featured: boolean
   status: 'ACTIVE' | 'HIDDEN' | 'OUT_OF_STOCK'
   order: number
 }
@@ -57,7 +56,6 @@ export default function EditProductPage() {
           category: formData.get('category'),
           description: formData.get('description'),
           images: product.images,
-          featured: formData.get('featured') === 'on',
           status: formData.get('status') === 'on' ? 'ACTIVE' : 'HIDDEN',
         }),
       })
@@ -207,16 +205,6 @@ export default function EditProductPage() {
 
 
         <div className="flex gap-6">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              name="featured"
-              defaultChecked={product.featured}
-              className="w-5 h-5 border-forest-green/30 text-aged-gold focus:ring-aged-gold"
-            />
-            <span className="text-sm text-forest-green">Featured Product</span>
-          </label>
-
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"

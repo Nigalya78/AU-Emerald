@@ -146,7 +146,6 @@ export default function NewProductPage() {
       purity: formData.get('purity'),
       stoneType: formData.get('stoneType'),
       weight: parseFloat(formData.get('weight') as string) || null,
-      featured: formData.get('featured') === 'on',
       status: formData.get('status'),
     }
     console.log('Submitting product:', payload)
@@ -457,14 +456,6 @@ export default function NewProductPage() {
             </div>
           </div>
 
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              name="featured"
-              className="w-5 h-5 border-forest-green/30 text-aged-gold focus:ring-aged-gold"
-            />
-            <span className="text-sm text-forest-green">Featured Product - appears on homepage</span>
-          </label>
         </div>
 
         <div className="flex gap-4 pt-4">

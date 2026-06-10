@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 export default function AdminDashboard() {
   const [stats, setStats] = useState([
     { label: 'Total Products', value: 0 },
-    { label: 'Featured Products', value: 0 },
     { label: 'Visible Products', value: 0 },
   ]);
 
@@ -20,7 +19,6 @@ export default function AdminDashboard() {
         const products = await res.json();
         setStats([
           { label: 'Total Products', value: products.length },
-          { label: 'Featured Products', value: products.filter((p: any) => p.featured).length },
           { label: 'Visible Products', value: products.filter((p: any) => p.status === 'ACTIVE').length },
         ]);
       }
