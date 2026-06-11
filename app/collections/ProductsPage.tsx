@@ -1,9 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 interface Product {
   id: string
@@ -134,11 +135,21 @@ const fallbackProducts: Product[] = [
   },
 ]
 
-export default function ProductsPage() {
+interface ProductsPageProps {
+  initialProducts: Product[];
+}
+
+export default function ProductsPage({ initialProducts }: ProductsPageProps) {
+  console.log('ProductsPage component mounted');
   const searchParams = useSearchParams()
-  const [products, setProducts] = useState<Product[]>([])
+  const { ref: heroRef, isVisible: heroVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.1, rootMargin: '-50px' });
+  const { ref: filterRef, isVisible: filterVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.1, rootMargin: '-50px', delay: 200 });
+  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.1, rootMargin: '-50px', delay: 400 });
+  
+  const [products] = useState<Product[]>(initialProducts)
+  console.log('ProductsPage products state:', products);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading] = useState(false)
   
   // Applied filters (used for filtering products)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
@@ -157,6 +168,7 @@ export default function ProductsPage() {
   const [showFilters, setShowFilters] = useState(false)
   const [filtersApplied, setFiltersApplied] = useState(false)
 
+  
   const hasFiltersApplied = selectedCategories.length > 0 || selectedPurities.length > 0 || selectedStones.length > 0 || selectedWeightRanges.length > 0 || searchQuery !== ''
   const hasPendingFilters = pendingCategories.length > 0 || pendingPurities.length > 0 || pendingStones.length > 0 || pendingWeightRanges.length > 0 || pendingSearchQuery !== ''
 
@@ -186,31 +198,8 @@ export default function ProductsPage() {
   }, [searchParams])
 
   useEffect(() => {
-    fetchProducts()
-  }, [])
-
-  useEffect(() => {
     filterProducts()
   }, [products, selectedCategories, selectedPurities, selectedStones, selectedWeightRanges, searchQuery])
-
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch('/api/products?visible=true')
-      const data = await response.json()
-      // Use API data if available, otherwise use fallback products
-      if (data && data.length > 0) {
-        setProducts(data)
-      } else {
-        setProducts(fallbackProducts)
-      }
-    } catch (error) {
-      console.error('Error fetching products:', error)
-      // Use fallback products on error
-      setProducts(fallbackProducts)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const filterProducts = () => {
     let filtered = [...products]
@@ -324,11 +313,15 @@ export default function ProductsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f0ebe0] flex items-center justify-center" style={{ paddingTop: '60px' }}>
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-8 h-px bg-[#c9a84c]" />
-          <p className="font-fraunces text-[#1a3a2a] text-sm italic">Loading collection…</p>
-          <div className="w-8 h-px bg-[#c9a84c]" />
-        </div>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          className="flex flex-col items-center gap-4"
+        >
+          <div className="w-12 h-12 border-2 border-[#c9a84c] border-t-transparent rounded-full animate-spin"></div>
+          <p className="font-fraunces text-[#1a3a2a] text-lg italic">Loading Collection...</p>
+        </motion.div>
       </div>
     )
   }
@@ -337,67 +330,110 @@ export default function ProductsPage() {
     <div className="min-h-screen bg-[#f0ebe0]">
 
       {/* ── PAGE HERO ── */}
-      <section className="bg-[#f0ebe0] pt-[88px] pb-10 overflow-hidden">
+      <section ref={heroRef} className="bg-[#f0ebe0] pt-[88px] pb-10 overflow-hidden">
         <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, ease: 'easeOut' }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={heroVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
             className="text-center"
           >
             {/* top ornament */}
-            <div className="flex items-center justify-center gap-[6px] mb-5">
+            <motion.div 
+              className="flex items-center justify-center gap-[6px] mb-5"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={heroVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
+            >
               <span className="block h-px w-8 bg-[#c9a84c]" />
               <svg width="30" height="10" viewBox="0 0 60 16" fill="none">
                 <path d="M2 8 Q12 1 22 8 Q30 14 38 8 Q48 1 58 8" stroke="#c9a84c" strokeWidth="1.3" fill="none" strokeLinecap="round"/>
                 <circle cx="30" cy="8" r="2" fill="#c9a84c"/>
               </svg>
               <span className="block h-px w-8 bg-[#c9a84c]" />
-            </div>
-            <p className="text-[#c9a84c] text-[11px] font-bold uppercase tracking-[0.28em] mb-3">
+            </motion.div>
+            <motion.p 
+              className="text-[#c9a84c] text-[11px] font-bold uppercase tracking-[0.28em] mb-3"
+              initial={{ opacity: 0, y: 15 }}
+              animate={heroVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.3 }}
+            >
               Our Collections
-            </p>
-            <h1
-            className="font-fraunces font-semibold text-[#1a3a2a] italic mb-4"
-            style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)' }}
-          >
-            Where Legacy Meets Luxury.
-          </h1>
-            <p className="text-[#1a3a2a]/55 text-[13.5px] leading-[1.7] max-w-[400px] mx-auto">
+            </motion.p>
+            <motion.h1
+              className="font-fraunces font-semibold text-[#1a3a2a] italic mb-4"
+              style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)' }}
+              initial={{ opacity: 0, y: 25 }}
+              animate={heroVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 25 }}
+              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.4 }}
+            >
+              Where Legacy Meets Luxury.
+            </motion.h1>
+            <motion.p 
+              className="text-[#1a3a2a]/55 text-[13.5px] leading-[1.7] max-w-[400px] mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={heroVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.5 }}
+            >
               Discover our exquisite range of handcrafted South Indian jewellery
-            </p>
+            </motion.p>
           </motion.div>
         </div>
       </section>
 
       {/* ── FILTER BAR ── */}
-      <section className="bg-[#1a3a2a] border-y border-[#c9a84c]/20 py-4">
+      <motion.section 
+        ref={filterRef}
+        className="bg-[#1a3a2a] border-y border-[#c9a84c]/20 py-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={filterVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+      >
         <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
 
             {/* Search */}
-            <div className="relative w-full sm:w-52">
+            <motion.div 
+              className="relative w-full sm:w-52"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={filterVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
+            >
               <input
                 type="text"
                 placeholder="Search designs…"
                 value={pendingSearchQuery}
                 onChange={(e) => setPendingSearchQuery(e.target.value)}
-                className="w-full h-9 px-3 pl-9 bg-white/[0.07] border border-[#c9a84c]/30 text-white placeholder:text-white/35 focus:border-[#c9a84c]/70 focus:outline-none text-[12px] tracking-wide"
+                className="w-full h-9 px-3 pl-9 bg-white/[0.07] border border-[#c9a84c]/30 text-white placeholder:text-white/35 focus:border-[#c9a84c]/70 focus:outline-none text-[12px] tracking-wide transition-all duration-300 focus:bg-white/[0.1]"
               />
               <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
-              {pendingSearchQuery && (
-                <button onClick={() => setPendingSearchQuery('')} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white">
-                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              )}
-            </div>
+              <AnimatePresence>
+                {pendingSearchQuery && (
+                  <motion.button 
+                    onClick={() => setPendingSearchQuery('')} 
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </motion.button>
+                )}
+              </AnimatePresence>
+            </motion.div>
 
             {/* Dropdowns */}
-            <div className="flex flex-wrap items-center gap-2">
+            <motion.div 
+              className="flex flex-wrap items-center gap-2"
+              initial={{ opacity: 0, x: -20 }}
+              animate={filterVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+              transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
+            >
               <FilterDropdown label="Type" count={pendingCategories.length}>
                 {categories.filter(c => c.value !== 'ALL').map((cat) => (
                   <label key={cat.value} className="flex items-center gap-2.5 px-3 py-2 hover:bg-white/10 cursor-pointer">
@@ -435,124 +471,241 @@ export default function ProductsPage() {
               </FilterDropdown>
 
               {/* Apply / Clear */}
-              {filtersApplied || hasFiltersApplied ? (
-                <button onClick={clearAllFilters} className="h-9 px-5 bg-[#c9a84c] text-[#1a3a2a] text-[11px] font-bold uppercase tracking-[0.15em] hover:bg-[#d4b55e] transition-colors">
-                  Clear Filters
-                </button>
-              ) : hasPendingFilters ? (
-                <button onClick={applyFilters} className="h-9 px-5 bg-[#c9a84c] text-[#1a3a2a] text-[11px] font-bold uppercase tracking-[0.15em] hover:bg-[#d4b55e] transition-colors">
-                  Apply
-                </button>
-              ) : null}
-            </div>
+              <AnimatePresence>
+                {(filtersApplied || hasPendingFilters) && (
+                  <motion.button 
+                    onClick={filtersApplied || hasPendingFilters ? clearAllFilters : applyFilters} 
+                    className="h-9 px-5 bg-[#c9a84c] text-[#1a3a2a] text-[11px] font-bold uppercase tracking-[0.15em] hover:bg-[#d4b55e] transition-all duration-300 shadow-elegant hover:shadow-elegant-lg"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    {filtersApplied ? 'Clear Filters' : 'Apply'}
+                  </motion.button>
+                )}
+              </AnimatePresence>
+            </motion.div>
           </div>
 
           {/* Results count */}
-          {hasFiltersApplied && (
-            <p className="text-white/40 text-[11px] uppercase tracking-[0.14em] mt-3">
-              Showing {filteredProducts.length} of {products.length} pieces
-            </p>
-          )}
+          <AnimatePresence>
+            {hasFiltersApplied && (
+              <motion.p 
+                className="text-white/40 text-[11px] uppercase tracking-[0.14em] mt-3"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
+              >
+                Showing {filteredProducts.length} of {products.length} pieces
+              </motion.p>
+            )}
+          </AnimatePresence>
         </div>
-      </section>
+      </motion.section>
 
       {/* ── PRODUCT GRID ── */}
-      <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 py-12">
-        {filteredProducts.length === 0 ? (
-          <div className="text-center py-20">
-            {/* ornament */}
-            <div className="flex items-center justify-center gap-[6px] mb-6">
-              <span className="block h-px w-8 bg-[#c9a84c]/50" />
-              <span className="block w-[6px] h-[6px] rounded-full bg-[#c9a84c]/60" />
-              <span className="block h-px w-8 bg-[#c9a84c]/50" />
-            </div>
-            <p className="font-fraunces text-[#1a3a2a] text-xl italic mb-2">No pieces found</p>
-            <p className="text-[#1a3a2a]/45 text-[13px] mb-7">
-              {searchQuery ? `No results for "${searchQuery}"` : 'Try adjusting your filters'}
-            </p>
-            <a
-              href="/collections"
-              className="inline-flex items-center gap-2 border border-[#1a3a2a] text-[#1a3a2a] text-[11px] font-semibold uppercase tracking-[0.16em] px-7 py-[10px] hover:bg-[#1a3a2a] hover:text-white transition-all"
+      <motion.div 
+        ref={gridRef}
+        className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 py-12"
+        initial={{ opacity: 0, y: 30 }}
+        animate={gridVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+      >
+        <AnimatePresence mode="wait">
+          {filteredProducts.length === 0 ? (
+            <motion.div 
+              key="no-results"
+              className="text-center py-20"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
             >
-              View All Collections
-            </a>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6">
-            {filteredProducts.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 18 }}
+              {/* ornament */}
+              <motion.div 
+                className="flex items-center justify-center gap-[6px] mb-6"
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: Math.min(index * 0.07, 0.5), ease: 'easeOut' }}
-                className="group bg-white"
-                style={{ boxShadow: '0 1px 4px rgba(26,58,42,0.07)' }}
+                transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
               >
-                {/* ── Image ── */}
-                <div className="aspect-[4/5] overflow-hidden relative">
-                  {/* outer gold border frame */}
-                  <div className="absolute inset-[6px] border border-[#c9a84c]/35 z-10 pointer-events-none" />
-                  <img
-                    src={product.mainImage || product.images[0]}
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
-                    style={{ transformOrigin: 'center center' }}
-                  />
-                  {/* category badge top-left */}
-                  <span className="absolute top-3 left-3 z-20 bg-[#1a3a2a]/80 text-[#c9a84c] text-[7.5px] font-bold uppercase tracking-[0.22em] px-2 py-[3px]">
-                    {product.category.replace(/_/g, ' ')}
-                  </span>
-                </div>
-
-                {/* ── Info ── */}
-                <div className="px-4 pt-4 pb-5 text-center border-x border-b border-[#c9a84c]/20">
-                  <h3 className="font-fraunces text-[15px] sm:text-[16px] font-semibold text-[#1a3a2a] leading-snug mb-2">
-                    {product.name}
-                  </h3>
-                  <p className="text-[#1a3a2a]/45 text-[11px] leading-[1.6] mb-4 line-clamp-2">
-                    {product.description}
-                  </p>
-
-                  {/* meta pills */}
-                  <div className="flex items-center justify-center gap-2 flex-wrap mb-4">
-                    {product.purity && (
-                      <span className="text-[#1a3a2a]/50 text-[9.5px] uppercase tracking-[0.16em] border border-[#c9a84c]/30 px-2 py-[2px]">
-                        {product.purity.replace(/_/g, ' ')}
-                      </span>
-                    )}
-                    {product.stoneType && product.stoneType !== 'NO_STONE' && (
-                      <span className="text-[#1a3a2a]/50 text-[9.5px] uppercase tracking-[0.16em] border border-[#c9a84c]/30 px-2 py-[2px]">
-                        {product.stoneType.replace(/_/g, ' ')}
-                      </span>
-                    )}
-                    {product.weight && (
-                      <span className="text-[#1a3a2a]/50 text-[9.5px] uppercase tracking-[0.16em] border border-[#c9a84c]/30 px-2 py-[2px]">
-                        {product.weight}g
-                      </span>
-                    )}
-                  </div>
-
-                  {/* ornament + CTA */}
-                  <div className="flex items-center justify-center gap-[5px] mb-3">
-                    <span className="block h-px w-6 bg-[#c9a84c]/40" />
-                    <span className="block w-[4px] h-[4px] rotate-45 bg-[#c9a84c]/55" />
-                    <span className="block h-px w-6 bg-[#c9a84c]/40" />
-                  </div>
-                  <Link
-                    href={`/products/${product.id}`}
-                    className="inline-flex items-center gap-[6px] text-[#1a3a2a] text-[9.5px] font-bold uppercase tracking-[0.22em] hover:text-[#c9a84c] transition-colors duration-200"
-                  >
-                    Enquire Now
-                    <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                      <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </Link>
-                </div>
+                <span className="block h-px w-8 bg-[#c9a84c]/50" />
+                <span className="block w-[6px] h-[6px] rounded-full bg-[#c9a84c]/60" />
+                <span className="block h-px w-8 bg-[#c9a84c]/50" />
               </motion.div>
-            ))}
-          </div>
-        )}
-      </div>
+              <motion.p 
+                className="font-fraunces text-[#1a3a2a] text-xl italic mb-2"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: 'easeOut', delay: 0.3 }}
+              >
+                No pieces found
+              </motion.p>
+              <motion.p 
+                className="text-[#1a3a2a]/45 text-[13px] mb-7"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: 'easeOut', delay: 0.4 }}
+              >
+                {searchQuery ? `No results for "${searchQuery}"` : 'Try adjusting your filters'}
+              </motion.p>
+              <motion.a
+                href="/collections"
+                className="inline-flex items-center gap-2 border border-[#1a3a2a] text-[#1a3a2a] text-[11px] font-semibold uppercase tracking-[0.16em] px-7 py-[10px] hover:bg-[#1a3a2a] hover:text-white transition-all duration-300 shadow-elegant hover:shadow-elegant-lg"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: 'easeOut', delay: 0.5 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                View All Collections
+              </motion.a>
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="product-grid"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, staggerChildren: 0.1 }}
+            >
+              {filteredProducts.map((product, index) => (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.6, delay: index * 0.08, ease: 'easeOut' }}
+                  className="group bg-white rounded-sm overflow-hidden shadow-elegant hover:shadow-elegant-xl transition-all duration-500"
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  layout
+                >
+                  {/* ── Image ── */}
+                  <div className="aspect-[4/5] overflow-hidden relative bg-gradient-to-br from-[#f8f6f0] to-[#f0ebe0]">
+                    {/* outer gold border frame */}
+                    <motion.div 
+                      className="absolute inset-[6px] border border-[#c9a84c]/35 z-10 pointer-events-none"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.4, delay: 0.3 }}
+                    />
+                    <motion.img
+                      src={product.mainImage || product.images[0] || 'https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=800'}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                      initial={{ scale: 1.1 }}
+                      animate={{ scale: 1 }}
+                      transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
+                      whileHover={{ scale: 1.08 }}
+                      style={{ transformOrigin: 'center center' }}
+                      onError={(e) => {
+                        e.currentTarget.src = 'https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=800';
+                      }}
+                    />
+                    {/* category badge top-left */}
+                    <motion.span 
+                      className="absolute top-3 left-3 z-20 bg-[#1a3a2a]/90 backdrop-blur-sm text-[#c9a84c] text-[7.5px] font-bold uppercase tracking-[0.22em] px-2 py-[3px] rounded-sm"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.4, delay: 0.4 }}
+                    >
+                      {product.category.replace(/_/g, ' ')}
+                    </motion.span>
+                  </div>
+
+                  {/* ── Info ── */}
+                  <div className="px-4 pt-4 pb-5 text-center border-x border-b border-[#c9a84c]/20 bg-white">
+                    <motion.h3 
+                      className="font-fraunces text-[15px] sm:text-[16px] font-semibold text-[#1a3a2a] leading-snug mb-2"
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.5 }}
+                    >
+                      {product.name}
+                    </motion.h3>
+                    <motion.p 
+                      className="text-[#1a3a2a]/45 text-[11px] leading-[1.6] mb-4 line-clamp-2"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.6 }}
+                    >
+                      {product.description}
+                    </motion.p>
+
+                    {/* meta pills */}
+                    <motion.div 
+                      className="flex items-center justify-center gap-2 flex-wrap mb-4"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.7 }}
+                    >
+                      {product.purity && (
+                        <span className="text-[#1a3a2a]/50 text-[9.5px] uppercase tracking-[0.16em] border border-[#c9a84c]/30 px-2 py-[2px] bg-[#f8f6f0] rounded-sm">
+                          {product.purity.replace(/_/g, ' ')}
+                        </span>
+                      )}
+                      {product.stoneType && product.stoneType !== 'NO_STONE' && (
+                        <span className="text-[#1a3a2a]/50 text-[9.5px] uppercase tracking-[0.16em] border border-[#c9a84c]/30 px-2 py-[2px] bg-[#f8f6f0] rounded-sm">
+                          {product.stoneType.replace(/_/g, ' ')}
+                        </span>
+                      )}
+                      {product.weight && (
+                        <span className="text-[#1a3a2a]/50 text-[9.5px] uppercase tracking-[0.16em] border border-[#c9a84c]/30 px-2 py-[2px] bg-[#f8f6f0] rounded-sm">
+                          {product.weight}g
+                        </span>
+                      )}
+                    </motion.div>
+
+                    {/* ornament + CTA */}
+                    <motion.div 
+                      className="flex items-center justify-center gap-[5px] mb-3"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.4, delay: 0.8 }}
+                    >
+                      <span className="block h-px w-6 bg-[#c9a84c]/40" />
+                      <span className="block w-[4px] h-[4px] rotate-45 bg-[#c9a84c]/55" />
+                      <span className="block h-px w-6 bg-[#c9a84c]/40" />
+                    </motion.div>
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.9 }}
+                    >
+                      <Link
+                        href={`/products/${product.id}`}
+                        className="inline-flex items-center gap-[6px] text-[#1a3a2a] text-[9.5px] font-bold uppercase tracking-[0.22em] hover:text-[#c9a84c] transition-all duration-300 group-hover:scale-105"
+                      >
+                        <motion.span
+                          initial={{ x: 0 }}
+                          whileHover={{ x: 2 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          Enquire Now
+                        </motion.span>
+                        <motion.svg 
+                          width="10" 
+                          height="10" 
+                          viewBox="0 0 12 12" 
+                          fill="none"
+                          initial={{ x: 0 }}
+                          whileHover={{ x: 3 }}
+                          transition={{ duration: 0.2 }}
+                        >
+                          <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                        </motion.svg>
+                      </Link>
+                    </motion.div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </div>
   )
 }

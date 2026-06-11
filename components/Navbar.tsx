@@ -53,62 +53,121 @@ export default function Navbar() {
   const active = (href: string) => mounted && pathname === href;
 
   return (
-    <nav className={`fixed top-0 inset-x-0 z-50 bg-white border-b border-[#c9a84c]/25 transition-shadow duration-300 ${scrolled ? 'shadow-md' : ''}`}>
+    <motion.nav 
+      className={`fixed top-0 inset-x-0 z-50 bg-white border-b border-[#c9a84c]/25 transition-all duration-300 ${scrolled ? 'shadow-md backdrop-blur-sm bg-white/95' : ''}`}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+    >
       <div className="max-w-[1200px] mx-auto px-6 lg:px-10 h-[60px] flex items-center gap-6">
 
         {/* ── Logo ── */}
-        <Link href="/" className="flex items-center shrink-0 mr-4 relative" style={{ zIndex: 1 }}>
-          <Image src="/logo-removebg-preview.png" alt="Au Emerald" width={96} height={96} className="object-contain lg:w-[76px] lg:h-[76px] xl:w-[96px] xl:h-[96px]" priority />
-        </Link>
+        <motion.div 
+          className="flex items-center shrink-0 mr-4 relative" 
+          style={{ zIndex: 1 }}
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
+        >
+          <Link href="/" className="flex items-center">
+            <Image 
+              src="/logo-removebg-preview.png" 
+              alt="Au Emerald" 
+              width={96} 
+              height={96} 
+              className="object-contain lg:w-[76px] lg:h-[76px] xl:w-[96px] xl:h-[96px] transition-transform duration-300" 
+              priority 
+            />
+          </Link>
+        </motion.div>
 
         {/* ── Desktop Nav ── */}
         <div className="hidden lg:flex items-center gap-[14px] xl:gap-[22px] mx-auto">
-          {NAV_LINKS.map((l) =>
+          {NAV_LINKS.map((l, i) =>
             l.scrollTo ? (
-              <button
+              <motion.button
                 key={l.label}
                 onClick={() => handleScrollLink(l.scrollTo!)}
                 className="text-[9.5px] xl:text-[10.5px] font-semibold uppercase tracking-[0.10em] xl:tracking-[0.13em] transition-colors relative group text-[#1a3a2a] hover:text-[#c9a84c]"
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.08, ease: 'easeOut' }}
+                whileHover={{ y: -2 }}
               >
                 {l.label}
-                <span className="absolute -bottom-[2px] left-0 h-[1.5px] bg-[#c9a84c] transition-all duration-200 w-0 group-hover:w-full" />
-              </button>
+                <motion.span 
+                  className="absolute -bottom-[2px] left-0 h-[1.5px] bg-[#c9a84c] transition-all duration-300 w-0 group-hover:w-full"
+                  layoutId="navbar-underline"
+                />
+              </motion.button>
             ) : (
-              <Link
+              <motion.div
                 key={l.label}
-                href={l.href}
-                className={`text-[9.5px] xl:text-[10.5px] font-semibold uppercase tracking-[0.10em] xl:tracking-[0.13em] transition-colors relative group ${
-                  active(l.href) ? 'text-[#c9a84c]' : 'text-[#1a3a2a] hover:text-[#c9a84c]'
-                }`}
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: i * 0.08, ease: 'easeOut' }}
               >
-                {l.label}
-                <span className={`absolute -bottom-[2px] left-0 h-[1.5px] bg-[#c9a84c] transition-all duration-200 ${active(l.href) ? 'w-full' : 'w-0 group-hover:w-full'}`} />
-              </Link>
+                <motion.div
+                  whileHover={{ y: -2 }}
+                >
+                  <Link
+                    href={l.href}
+                    className={`text-[9.5px] xl:text-[10.5px] font-semibold uppercase tracking-[0.10em] xl:tracking-[0.13em] transition-colors relative group ${
+                      active(l.href) ? 'text-[#c9a84c]' : 'text-[#1a3a2a] hover:text-[#c9a84c]'
+                    }`}
+                  >
+                    {l.label}
+                    <motion.span 
+                      className={`absolute -bottom-[2px] left-0 h-[1.5px] bg-[#c9a84c] transition-all duration-300 ${active(l.href) ? 'w-full' : 'w-0 group-hover:w-full'}`}
+                      layoutId={active(l.href) ? 'navbar-underline' : undefined}
+                    />
+                  </Link>
+                </motion.div>
+              </motion.div>
             )
           )}
         </div>
 
         {/* ── Desktop CTA ── */}
-        <a
-          href={WA_HREF}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="hidden lg:inline-flex items-center gap-[7px] bg-[#1a3a2a] text-white text-[9px] xl:text-[10px] font-bold uppercase tracking-[0.12em] xl:tracking-[0.14em] px-3 xl:px-4 py-[9px] rounded-[3px] hover:bg-[#152d21] transition-colors shrink-0 ml-2 whitespace-nowrap"
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.6, ease: 'easeOut' }}
+          className="hidden lg:block"
         >
-          <WhatsAppIcon size={13} />
-          Inquire via WhatsApp
-        </a>
+          <motion.a
+            href={WA_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-[7px] bg-[#1a3a2a] text-white text-[9px] xl:text-[10px] font-bold uppercase tracking-[0.12em] xl:tracking-[0.14em] px-3 xl:px-4 py-[9px] rounded-[3px] hover:bg-[#152d21] transition-all duration-300 shrink-0 ml-2 whitespace-nowrap hover:shadow-lg hover:shadow-[#1a3a2a]/25"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <WhatsAppIcon size={13} />
+            Inquire via WhatsApp
+          </motion.a>
+        </motion.div>
 
         {/* ── Mobile hamburger ── */}
-        <button
+        <motion.button
           aria-label="Toggle menu"
           onClick={() => setMobileOpen((v) => !v)}
           className="lg:hidden ml-auto flex flex-col gap-[5px] p-1"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
         >
-          <span className={`block w-[22px] h-[1.5px] bg-[#1a3a2a] transition-all duration-200 ${mobileOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`} />
-          <span className={`block w-[22px] h-[1.5px] bg-[#1a3a2a] transition-all duration-200 ${mobileOpen ? 'opacity-0' : ''}`} />
-          <span className={`block w-[22px] h-[1.5px] bg-[#1a3a2a] transition-all duration-200 ${mobileOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`} />
-        </button>
+          <motion.span 
+            className={`block w-[22px] h-[1.5px] bg-[#1a3a2a] transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`}
+            animate={mobileOpen ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }}
+          />
+          <motion.span 
+            className={`block w-[22px] h-[1.5px] bg-[#1a3a2a] transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`}
+            animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
+          />
+          <motion.span 
+            className={`block w-[22px] h-[1.5px] bg-[#1a3a2a] transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`}
+            animate={mobileOpen ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }}
+          />
+        </motion.button>
       </div>
 
       {/* ── Mobile drawer ── */}
@@ -153,6 +212,6 @@ export default function Navbar() {
           </>
         )}
       </AnimatePresence>
-    </nav>
+    </motion.nav>
   );
 }

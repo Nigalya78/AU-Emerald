@@ -1,6 +1,7 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 import { useRef } from 'react';
 
 /* ── Gold corner ornament ── */
@@ -27,89 +28,130 @@ function GoldCorner({ pos }: { pos: 'tl' | 'tr' | 'bl' | 'br' }) {
 }
 
 export default function About() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-60px' });
+  const { ref, isVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.1, rootMargin: '-60px' });
+  const { ref: textRef, isVisible: textVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.1, rootMargin: '-60px', delay: 200 });
+  const { ref: imageRef, isVisible: imageVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.1, rootMargin: '-60px', delay: 400 });
 
   return (
     <section id="about" className="relative bg-white overflow-hidden">
       {/* Section-level gold corner ornaments */}
-      <GoldCorner pos="tl" />
-      <GoldCorner pos="tr" />
-      <GoldCorner pos="bl" />
-      <GoldCorner pos="br" />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={isVisible ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 1, ease: 'easeOut' }}
+      >
+        <GoldCorner pos="tl" />
+        <GoldCorner pos="tr" />
+        <GoldCorner pos="bl" />
+        <GoldCorner pos="br" />
+      </motion.div>
 
       <div ref={ref} className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-20 py-12 sm:py-16 lg:py-[72px]">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
 
           {/* ── Left: Text ── */}
           <motion.div
-            initial={{ opacity: 0, y: 28 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.75, ease: 'easeOut' }}
+            ref={textRef}
+            initial={{ opacity: 0, y: 40 }}
+            animate={textVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+            transition={{ duration: 0.9, ease: 'easeOut' }}
           >
-            <p className="text-[#c9a84c] text-[11px] font-bold uppercase tracking-[0.28em] mb-3">
+            <motion.p 
+              className="text-[#c9a84c] text-[11px] font-bold uppercase tracking-[0.28em] mb-3"
+              initial={{ opacity: 0, y: 20 }}
+              animate={textVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
+            >
               Our Legacy
-            </p>
-            <h2
+            </motion.p>
+            <motion.h2
               className="font-fraunces font-semibold text-[#1a3a2a] leading-[1.18] mb-4"
               style={{ fontSize: 'clamp(1.9rem, 3.2vw, 2.75rem)' }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={textVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
             >
               A Legacy Inherited.<br />
               A Story Continued.
-            </h2>
+            </motion.h2>
 
             {/* ornament */}
-            <div className="flex items-center gap-[6px] mb-5">
+            <motion.div 
+              className="flex items-center gap-[6px] mb-5"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={textVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.4 }}
+            >
               <span className="block h-px w-7 bg-[#c9a84c]" />
               <svg width="30" height="10" viewBox="0 0 60 16" fill="none">
                 <path d="M2 8 Q12 1 22 8 Q30 14 38 8 Q48 1 58 8" stroke="#c9a84c" strokeWidth="1.3" fill="none" strokeLinecap="round"/>
                 <circle cx="30" cy="8" r="2" fill="#c9a84c"/>
               </svg>
               <span className="block h-px w-7 bg-[#c9a84c]" />
-            </div>
+            </motion.div>
 
-            <p className="text-[#1a3a2a]/60 text-[13.5px] leading-[1.8] max-w-[380px]">
+            <motion.p 
+              className="text-[#1a3a2a]/60 text-[13.5px] leading-[1.8] max-w-[380px]"
+              initial={{ opacity: 0, y: 20 }}
+              animate={textVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.8, ease: 'easeOut', delay: 0.5 }}
+            >
               Rooted in tradition and nourished by love,
               Au Emerald brings forth rare antique jewellery
               that carries memories, blessings, and history.
               Each piece is a link between the past and the future.
-            </p>
+            </motion.p>
           </motion.div>
 
           {/* ── Right: Antique picture frame ── */}
           <motion.div
-            initial={{ opacity: 0, x: 28 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.75, delay: 0.18, ease: 'easeOut' }}
+            ref={imageRef}
+            initial={{ opacity: 0, x: 40, scale: 0.95 }}
+            animate={imageVisible ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: 40, scale: 0.95 }}
+            transition={{ duration: 1, delay: 0.2, ease: 'easeOut' }}
             className="flex justify-center"
+            whileHover={{ scale: 1.02, transition: { duration: 0.4, ease: 'easeOut' } }}
           >
             <div className="relative">
               {/* Outer gold frame band */}
-              <div
+              <motion.div
                 className="p-[10px]"
                 style={{
                   background: 'linear-gradient(135deg, #7a5a10 0%, #d4aa50 30%, #9a7a20 55%, #d4aa50 80%, #7a5a10 100%)',
                 }}
+                initial={{ opacity: 0 }}
+                animate={imageVisible ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ duration: 1.2, delay: 0.4 }}
               >
                 {/* Inner dark-brown mat */}
-                <div className="p-[5px] bg-[#3d2a06]">
+                <motion.div 
+                  className="p-[5px] bg-[#3d2a06]"
+                  initial={{ opacity: 0 }}
+                  animate={imageVisible ? { opacity: 1 } : { opacity: 0 }}
+                  transition={{ duration: 1.2, delay: 0.5 }}
+                >
                   {/* Inner gold hairline */}
                   <div className="p-[3px] border border-[#c9a84c]/50">
-                    <div className="w-[min(260px,70vw)] sm:w-[290px] lg:w-[310px] aspect-[9/10] overflow-hidden">
+                    <motion.div 
+                      className="w-[min(260px,70vw)] sm:w-[290px] lg:w-[310px] aspect-[9/10] overflow-hidden"
+                      initial={{ scale: 1.1 }}
+                      animate={imageVisible ? { scale: 1 } : { scale: 1.1 }}
+                      transition={{ duration: 1.4, delay: 0.6, ease: 'easeOut' }}
+                    >
                       <img
                         src="/about.png"
                         alt="Heritage jewellery craftsmanship"
                         className="w-full h-full object-cover"
                         style={{ filter: 'sepia(15%) contrast(1.08) brightness(0.92)' }}
                       />
-                    </div>
+                    </motion.div>
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
 
               {/* Outer corner brackets */}
-              {(['tl','tr','bl','br'] as const).map((p) => (
-                <div
+              {(['tl','tr','bl','br'] as const).map((p, i) => (
+                <motion.div
                   key={p}
                   className="absolute w-6 h-6"
                   style={{
@@ -118,13 +160,16 @@ export default function About() {
                     left: p.endsWith('l') ? '-8px' : 'auto',
                     right: p.endsWith('r') ? '-8px' : 'auto',
                   }}
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={imageVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0 }}
+                  transition={{ duration: 0.5, delay: 0.8 + i * 0.1, ease: 'easeOut' }}
                 >
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
                     style={{ transform: `rotate(${{'tl':0,'tr':90,'bl':-90,'br':180}[p]}deg)` }}>
                     <path d="M2 2 L2 10 M2 2 L10 2" stroke="#c9a84c" strokeWidth="1.8" strokeLinecap="round"/>
                     <circle cx="2" cy="2" r="1.5" fill="#c9a84c"/>
                   </svg>
-                </div>
+                </motion.div>
               ))}
             </div>
           </motion.div>

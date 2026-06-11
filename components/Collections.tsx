@@ -1,7 +1,8 @@
 'use client';
 
-import { motion, useInView } from 'framer-motion';
-import { useRef, useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import React from 'react';
+import { useScrollAnimation, useStaggeredAnimation } from '@/hooks/useScrollAnimation';
 import Link from 'next/link';
 
 interface Product {
@@ -16,47 +17,59 @@ interface Product {
   images: string[];
 }
 
-export default function Collections() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
-  const [products, setProducts] = useState<Product[]>([]);
+interface CollectionsProps {
+  products: Product[];
+}
 
-  useEffect(() => {
-    fetch('/api/products?limit=4')
-      .then((r) => r.json())
-      .then((data) => setProducts(Array.isArray(data) ? data.slice(0, 4) : []))
-      .catch(() => setProducts([]));
-  }, []);
+export default function Collections({ products }: CollectionsProps) {
+  console.log('Collections component mounted');
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.1, rootMargin: '-50px' });
+  console.log('Current products state:', products);
+  const { ref: sectionRef, isVisible: sectionVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.05, rootMargin: '-100px' });
+  const { ref: staggerRef, visibleItems } = useStaggeredAnimation<HTMLDivElement>(products.length, { threshold: 0.1, rootMargin: '-50px' });
 
   return (
-    <section id="collections" className="bg-white py-14 lg:py-[72px] overflow-hidden">
+    <section id="collections" ref={sectionRef} className="bg-white py-14 lg:py-[72px] overflow-hidden">
       <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
 
         {/* ── Header ── */}
         <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 18 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
+          ref={headerRef}
+          initial={{ opacity: 0, y: 30 }}
+          animate={headerVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
           className="text-center mb-10 lg:mb-12"
         >
-          <p className="text-[#c9a84c] text-[11px] font-bold uppercase tracking-[0.28em] mb-3">
+          <motion.p 
+            className="text-[#c9a84c] text-[11px] font-bold uppercase tracking-[0.28em] mb-3"
+            initial={{ opacity: 0, y: 15 }}
+            animate={headerVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
+          >
             Our Collections
-          </p>
-          <h2
+          </motion.p>
+          <motion.h2
             className="font-fraunces font-semibold text-[#1a3a2a] italic mb-4"
             style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)' }}
+            initial={{ opacity: 0, y: 25 }}
+            animate={headerVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 25 }}
+            transition={{ duration: 0.7, ease: 'easeOut', delay: 0.3 }}
           >
             Where Legacy Meets Luxury.
-          </h2>
-          <div className="flex items-center justify-center gap-[6px]">
+          </motion.h2>
+          <motion.div 
+            className="flex items-center justify-center gap-[6px]"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={headerVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.4 }}
+          >
             <span className="block h-px w-7 bg-[#c9a84c]" />
             <svg width="30" height="10" viewBox="0 0 60 16" fill="none">
               <path d="M2 8 Q12 1 22 8 Q30 14 38 8 Q48 1 58 8" stroke="#c9a84c" strokeWidth="1.3" fill="none" strokeLinecap="round"/>
               <circle cx="30" cy="8" r="2" fill="#c9a84c"/>
             </svg>
             <span className="block h-px w-7 bg-[#c9a84c]" />
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* ── Product cards ── */}
@@ -74,27 +87,49 @@ export default function Collections() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 mb-10">
+          <div ref={staggerRef} className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 mb-10">
             {products.map((product, i) => (
               <motion.div
                 key={product.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.5, delay: i * 0.09, ease: 'easeOut' }}
+                initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                animate={visibleItems.has(i) ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 30, scale: 0.95 }}
+                transition={{ duration: 0.6, delay: i * 0.12, ease: 'easeOut' }}
                 className="group bg-white"
-                style={{ boxShadow: '0 1px 4px rgba(26,58,42,0.07)' }}
+                style={{ boxShadow: '0 2px 8px rgba(26,58,42,0.08)' }}
+                whileHover={{ 
+                  y: -8, 
+                  boxShadow: '0 12px 24px rgba(26,58,42,0.15)',
+                  transition: { duration: 0.3, ease: 'easeOut' }
+                }}
               >
                 {/* Image */}
                 <div className="aspect-[4/5] overflow-hidden relative">
-                  <div className="absolute inset-[6px] border border-[#c9a84c]/35 z-10 pointer-events-none" />
-                  <img
-                    src={product.mainImage || product.images?.[0] || 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=500&q=85'}
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
+                  <motion.div 
+                    className="absolute inset-[6px] border border-[#c9a84c]/35 z-10 pointer-events-none"
+                    initial={{ opacity: 0 }}
+                    animate={visibleItems.has(i) ? { opacity: 1 } : { opacity: 0 }}
+                    transition={{ duration: 0.4, delay: i * 0.12 + 0.2 }}
                   />
-                  <span className="absolute top-3 left-3 z-20 bg-[#1a3a2a]/80 text-[#c9a84c] text-[7.5px] font-bold uppercase tracking-[0.22em] px-2 py-[3px]">
+                  <motion.img
+                    src={product.mainImage || product.images?.[0] || 'https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=800'}
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                    initial={{ scale: 1.2 }}
+                    animate={visibleItems.has(i) ? { scale: 1 } : { scale: 1.2 }}
+                    transition={{ duration: 0.8, delay: i * 0.12 + 0.1, ease: 'easeOut' }}
+                    whileHover={{ scale: 1.08, transition: { duration: 0.5, ease: 'easeOut' } }}
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=800';
+                    }}
+                  />
+                  <motion.span 
+                    className="absolute top-3 left-3 z-20 bg-[#1a3a2a]/80 text-[#c9a84c] text-[7.5px] font-bold uppercase tracking-[0.22em] px-2 py-[3px]"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={visibleItems.has(i) ? { opacity: 1, x: 0 } : { opacity: 0, x: -10 }}
+                    transition={{ duration: 0.5, delay: i * 0.12 + 0.3 }}
+                  >
                     {product.category.replace(/_/g, ' ')}
-                  </span>
+                  </motion.span>
                 </div>
 
                 {/* Info */}
@@ -105,20 +140,39 @@ export default function Collections() {
                   <p className="text-[#1a3a2a]/45 text-[11px] leading-[1.55] mb-3 line-clamp-2">
                     {product.description}
                   </p>
-                  <div className="flex items-center justify-center gap-[5px] mb-3">
+                  <motion.div 
+                    className="flex items-center justify-center gap-[5px] mb-3"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={visibleItems.has(i) ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.4, delay: i * 0.12 + 0.5 }}
+                  >
                     <span className="block h-px w-5 bg-[#c9a84c]/40" />
                     <span className="block w-[4px] h-[4px] rotate-45 bg-[#c9a84c]/55" />
                     <span className="block h-px w-5 bg-[#c9a84c]/40" />
-                  </div>
-                  <Link
-                    href={`/products/${product.id}`}
-                    className="inline-flex items-center gap-[5px] text-[#1a3a2a] text-[9.5px] font-bold uppercase tracking-[0.2em] hover:text-[#c9a84c] transition-colors"
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={visibleItems.has(i) ? { opacity: 1 } : { opacity: 0 }}
+                    transition={{ duration: 0.5, delay: i * 0.12 + 0.6 }}
                   >
-                    Enquire Now
-                    <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
-                      <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </Link>
+                    <Link
+                      href={`/products/${product.id}`}
+                      className="inline-flex items-center gap-[5px] text-[#1a3a2a] text-[9.5px] font-bold uppercase tracking-[0.2em] hover:text-[#c9a84c] transition-colors group-hover:gap-2"
+                    >
+                      Enquire Now
+                      <motion.svg 
+                        width="9" 
+                        height="9" 
+                        viewBox="0 0 12 12" 
+                        fill="none"
+                        initial={{ x: 0 }}
+                        whileHover={{ x: 2 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                      </motion.svg>
+                    </Link>
+                  </motion.div>
                 </div>
               </motion.div>
             ))}
@@ -126,17 +180,35 @@ export default function Collections() {
         )}
 
         {/* ── View All button ── */}
-        <div className="text-center">
-          <Link
-            href="/collections"
-            className="inline-flex items-center gap-2 border border-[#1a3a2a] text-[#1a3a2a] text-[11px] font-semibold uppercase tracking-[0.17em] px-8 py-[10px] hover:bg-[#1a3a2a] hover:text-white transition-all duration-250"
+        <motion.div 
+          className="text-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={sectionVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.8, delay: 0.8, ease: 'easeOut' }}
+        >
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
           >
-            View All Collections
-            <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-              <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </Link>
-        </div>
+            <Link
+              href="/collections"
+              className="inline-flex items-center gap-2 border border-[#1a3a2a] text-[#1a3a2a] text-[11px] font-semibold uppercase tracking-[0.17em] px-8 py-[10px] hover:bg-[#1a3a2a] hover:text-white transition-all duration-300 hover:shadow-lg hover:shadow-[#1a3a2a]/25"
+            >
+              View All Collections
+              <motion.svg 
+                width="10" 
+                height="10" 
+                viewBox="0 0 12 12" 
+                fill="none"
+                initial={{ x: 0 }}
+                whileHover={{ x: 2 }}
+                transition={{ duration: 0.2 }}
+              >
+                <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </motion.svg>
+            </Link>
+          </motion.div>
+        </motion.div>
 
       </div>
     </section>
