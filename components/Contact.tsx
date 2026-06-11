@@ -65,7 +65,7 @@ export default function Contact() {
             className="lg:w-[40%] shrink-0"
           >
             <h2
-              className="font-fraunces font-bold text-forest-green uppercase leading-[1.12] mb-4"
+              className="font-fraunces font-semibold text-forest-green uppercase leading-[1.12] mb-4"
               style={{ fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)' }}
             >
               Interested in<br />a Piece?
