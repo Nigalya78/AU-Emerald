@@ -17,6 +17,9 @@ module.exports = {
         'fraunces': ['Fraunces', 'serif'],
         'dm-sans': ['DM Sans', 'sans-serif'],
       },
+      scale: {
+        '108': '1.08',
+      },
     },
   },
   plugins: [],

@@ -48,10 +48,10 @@ h1, h2, h3, h4, h5, h6 {
   background: #b89752;
 }
 
-/* Alternative: Ultra-thin modern scrollbar */
+/* Ultra-thin modern scrollbar */
 .scrollbar-thin {
   scrollbar-width: thin;
-  scrollbar-color: rgba(201, 169, 97, 0.6) transparent;
+  scrollbar-color: rgba(201, 168, 76, 0.45) transparent;
 }
 
 .scrollbar-thin::-webkit-scrollbar {
@@ -63,6 +63,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .scrollbar-thin::-webkit-scrollbar-thumb {
-  background: rgba(201, 169, 97, 0.6);
-  border-radius: 10px;
+  background: rgba(201, 168, 76, 0.45);
+  border-radius: 99px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(201, 168, 76, 0.75);
 }

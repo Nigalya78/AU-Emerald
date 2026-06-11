@@ -1,0 +1,237 @@
+{
+  "E:\\work\\au-emerald\\next-env.d.ts": {
+    "mtime": 1781106090.552482,
+    "ast_hash": "b698cdd97fe8e3bd16dcd74899ad7cef",
+    "semantic_hash": "b698cdd97fe8e3bd16dcd74899ad7cef"
+  },
+  "E:\\work\\au-emerald\\next.config.js": {
+    "mtime": 1780760259.5790422,
+    "ast_hash": "4eacf87d099a998f0432b6b679f12c3c",
+    "semantic_hash": "4eacf87d099a998f0432b6b679f12c3c"
+  },
+  "E:\\work\\au-emerald\\package.json": {
+    "mtime": 1780896176.5693357,
+    "ast_hash": "e78130d83f6cc73583795920283fe3d4",
+    "semantic_hash": "e78130d83f6cc73583795920283fe3d4"
+  },
+  "E:\\work\\au-emerald\\postcss.config.js": {
+    "mtime": 1780750312.8762617,
+    "ast_hash": "854b38759e7a8b4b82306ae2d9a3a833",
+    "semantic_hash": "854b38759e7a8b4b82306ae2d9a3a833"
+  },
+  "E:\\work\\au-emerald\\tailwind.config.js": {
+    "mtime": 1781176238.6593006,
+    "ast_hash": "f744ed66681a722006f15a50cdb2cc30",
+    "semantic_hash": "f744ed66681a722006f15a50cdb2cc30"
+  },
+  "E:\\work\\au-emerald\\tsconfig.json": {
+    "mtime": 1780845485.6621008,
+    "ast_hash": "ab074bf1dc8b0c57cc6f6cc5283986a3",
+    "semantic_hash": "ab074bf1dc8b0c57cc6f6cc5283986a3"
+  },
+  "E:\\work\\au-emerald\\app\\layout.tsx": {
+    "mtime": 1780812642.8783054,
+    "ast_hash": "6111269d16475210d68ffdba47c206c8",
+    "semantic_hash": "6111269d16475210d68ffdba47c206c8"
+  },
+  "E:\\work\\au-emerald\\app\\page.tsx": {
+    "mtime": 1781180129.9651039,
+    "ast_hash": "308dd7ff25b9f89aab38be00cf176f42",
+    "semantic_hash": "308dd7ff25b9f89aab38be00cf176f42"
+  },
+  "E:\\work\\au-emerald\\app\\about\\page.tsx": {
+    "mtime": 1780758201.751783,
+    "ast_hash": "44e6625e61744ea8d14e76870d29a470",
+    "semantic_hash": "44e6625e61744ea8d14e76870d29a470"
+  },
+  "E:\\work\\au-emerald\\app\\admin\\layout.tsx": {
+    "mtime": 1781016394.3387744,
+    "ast_hash": "2e15f753b81cdfddfd560403b7df5bcd",
+    "semantic_hash": "2e15f753b81cdfddfd560403b7df5bcd"
+  },
+  "E:\\work\\au-emerald\\app\\admin\\page.tsx": {
+    "mtime": 1781062898.5007665,
+    "ast_hash": "77f5d8bf5c602c59678baca0ed7ed3bd",
+    "semantic_hash": "77f5d8bf5c602c59678baca0ed7ed3bd"
+  },
+  "E:\\work\\au-emerald\\app\\admin\\login\\page.tsx": {
+    "mtime": 1780762253.328276,
+    "ast_hash": "da7902eecd309c210e36df93663551a9",
+    "semantic_hash": "da7902eecd309c210e36df93663551a9"
+  },
+  "E:\\work\\au-emerald\\app\\admin\\products\\page.tsx": {
+    "mtime": 1781062862.4739988,
+    "ast_hash": "7c9d656e8bf75c4e5d63f5c4d17b5b31",
+    "semantic_hash": "7c9d656e8bf75c4e5d63f5c4d17b5b31"
+  },
+  "E:\\work\\au-emerald\\app\\admin\\products\\new\\page.tsx": {
+    "mtime": 1781062759.5099657,
+    "ast_hash": "20d9cbcf754a349df8039b352b404670",
+    "semantic_hash": "20d9cbcf754a349df8039b352b404670"
+  },
+  "E:\\work\\au-emerald\\app\\admin\\products\\[id]\\edit\\page.tsx": {
+    "mtime": 1781062775.7534244,
+    "ast_hash": "d1f954a133fecc9eb8b65d2ee4d7b838",
+    "semantic_hash": "d1f954a133fecc9eb8b65d2ee4d7b838"
+  },
+  "E:\\work\\au-emerald\\app\\api\\auth\\[...nextauth]\\route.ts": {
+    "mtime": 1780754033.4428644,
+    "ast_hash": "3faecfd503f523a1b067d915a0d0a7b8",
+    "semantic_hash": "3faecfd503f523a1b067d915a0d0a7b8"
+  },
+  "E:\\work\\au-emerald\\app\\api\\products\\route.ts": {
+    "mtime": 1781010878.468446,
+    "ast_hash": "6d8f79aba486274fa2fd68aaa4bf4600",
+    "semantic_hash": "6d8f79aba486274fa2fd68aaa4bf4600"
+  },
+  "E:\\work\\au-emerald\\app\\api\\products\\[id]\\route.ts": {
+    "mtime": 1780757022.0859318,
+    "ast_hash": "72f4ec3092499d36c509b734cbcaf07b",
+    "semantic_hash": "72f4ec3092499d36c509b734cbcaf07b"
+  },
+  "E:\\work\\au-emerald\\app\\collections\\page.tsx": {
+    "mtime": 1780846054.568138,
+    "ast_hash": "bae1fd8e20e69f056a90cb288f829800",
+    "semantic_hash": "bae1fd8e20e69f056a90cb288f829800"
+  },
+  "E:\\work\\au-emerald\\app\\collections\\ProductsPage.tsx": {
+    "mtime": 1781181064.1315677,
+    "ast_hash": "030cc1b916cc2861677d40e806345288",
+    "semantic_hash": "030cc1b916cc2861677d40e806345288"
+  },
+  "E:\\work\\au-emerald\\app\\contact\\page.tsx": {
+    "mtime": 1780758209.9110637,
+    "ast_hash": "5b57150696029a4482def1b6edadb8bc",
+    "semantic_hash": "5b57150696029a4482def1b6edadb8bc"
+  },
+  "E:\\work\\au-emerald\\app\\products\\[id]\\page.tsx": {
+    "mtime": 1781181337.5151303,
+    "ast_hash": "7a88bb70afa2ecd38c12f6ce75c4d137",
+    "semantic_hash": "7a88bb70afa2ecd38c12f6ce75c4d137"
+  },
+  "E:\\work\\au-emerald\\app\\savings\\page.tsx": {
+    "mtime": 1781181110.5190468,
+    "ast_hash": "1cf773edb095fecf2ed9919c0d877dd2",
+    "semantic_hash": "1cf773edb095fecf2ed9919c0d877dd2"
+  },
+  "E:\\work\\au-emerald\\app\\why-choose-us\\page.tsx": {
+    "mtime": 1781181543.9594264,
+    "ast_hash": "efbad1dca35e1f0ebe70481cd7a924e9",
+    "semantic_hash": "efbad1dca35e1f0ebe70481cd7a924e9"
+  },
+  "E:\\work\\au-emerald\\components\\About.tsx": {
+    "mtime": 1781181048.8124723,
+    "ast_hash": "59211cd0ed661486423467b0b2fb61b7",
+    "semantic_hash": "59211cd0ed661486423467b0b2fb61b7"
+  },
+  "E:\\work\\au-emerald\\components\\Collections.tsx": {
+    "mtime": 1781181074.3444073,
+    "ast_hash": "3988327c3e2ac2096200db24591b4628",
+    "semantic_hash": "3988327c3e2ac2096200db24591b4628"
+  },
+  "E:\\work\\au-emerald\\components\\Contact.tsx": {
+    "mtime": 1781181613.8812604,
+    "ast_hash": "a5253696c0b03158ea69a44e82cf97fb",
+    "semantic_hash": "a5253696c0b03158ea69a44e82cf97fb"
+  },
+  "E:\\work\\au-emerald\\components\\Footer.tsx": {
+    "mtime": 1781181974.1653576,
+    "ast_hash": "c3c05d2cd30456a4e74cd4f997fb8173",
+    "semantic_hash": "c3c05d2cd30456a4e74cd4f997fb8173"
+  },
+  "E:\\work\\au-emerald\\components\\Hero.tsx": {
+    "mtime": 1781182299.8754256,
+    "ast_hash": "d185f2a2a7ec607e1e513e7ad5bb8c1e",
+    "semantic_hash": "d185f2a2a7ec607e1e513e7ad5bb8c1e"
+  },
+  "E:\\work\\au-emerald\\components\\HomeSavings.tsx": {
+    "mtime": 1781181813.0647438,
+    "ast_hash": "3dee51838b3e52d95ab719e57fc0619c",
+    "semantic_hash": "3dee51838b3e52d95ab719e57fc0619c"
+  },
+  "E:\\work\\au-emerald\\components\\Motto.tsx": {
+    "mtime": 1780838337.8155289,
+    "ast_hash": "51589873a07f9ecc7fc3dec8b6177cd4",
+    "semantic_hash": "51589873a07f9ecc7fc3dec8b6177cd4"
+  },
+  "E:\\work\\au-emerald\\components\\Navbar.tsx": {
+    "mtime": 1781181947.2160304,
+    "ast_hash": "3ab138e84c021e930a8d56e7c676ab3f",
+    "semantic_hash": "3ab138e84c021e930a8d56e7c676ab3f"
+  },
+  "E:\\work\\au-emerald\\components\\SavingsScheme.tsx": {
+    "mtime": 1780901651.2859204,
+    "ast_hash": "3efac79a8c6de7737096306485ae816c",
+    "semantic_hash": "3efac79a8c6de7737096306485ae816c"
+  },
+  "E:\\work\\au-emerald\\components\\WhatsAppIcon.tsx": {
+    "mtime": 1780755252.604438,
+    "ast_hash": "914249397d486c7eb8b1f91d65c18b40",
+    "semantic_hash": "914249397d486c7eb8b1f91d65c18b40"
+  },
+  "E:\\work\\au-emerald\\components\\WhyChooseUs.tsx": {
+    "mtime": 1781183411.9580061,
+    "ast_hash": "d4dd8df33852c475d1fd57fe1a275c3a",
+    "semantic_hash": "d4dd8df33852c475d1fd57fe1a275c3a"
+  },
+  "E:\\work\\au-emerald\\components\\admin\\AdminSidebar.tsx": {
+    "mtime": 1781016378.0506563,
+    "ast_hash": "941324afc8aaaeeee0c19e3dd4c35944",
+    "semantic_hash": "941324afc8aaaeeee0c19e3dd4c35944"
+  },
+  "E:\\work\\au-emerald\\lib\\prisma.ts": {
+    "mtime": 1780754030.8365781,
+    "ast_hash": "d655e942742ace0dc9cc2303a2b27731",
+    "semantic_hash": "d655e942742ace0dc9cc2303a2b27731"
+  },
+  "E:\\work\\au-emerald\\scripts\\seed-admin.ts": {
+    "mtime": 1780754230.0409453,
+    "ast_hash": "791974d892e0632017cee0cf51178c31",
+    "semantic_hash": "791974d892e0632017cee0cf51178c31"
+  },
+  "E:\\work\\au-emerald\\types\\next-auth.d.ts": {
+    "mtime": 1780754050.5027015,
+    "ast_hash": "5d2e9d9197ce6289949fe8b92157afc7",
+    "semantic_hash": "5d2e9d9197ce6289949fe8b92157afc7"
+  },
+  "E:\\work\\au-emerald\\public\\about.png": {
+    "mtime": 1781175881.7540283,
+    "ast_hash": "805f92a2580d3d42d6d1ecbac18e967e",
+    "semantic_hash": "805f92a2580d3d42d6d1ecbac18e967e"
+  },
+  "E:\\work\\au-emerald\\public\\bangle.png": {
+    "mtime": 1781178242.9112487,
+    "ast_hash": "635d5f8d2c4dd217eaffaa59c3b1e281",
+    "semantic_hash": "635d5f8d2c4dd217eaffaa59c3b1e281"
+  },
+  "E:\\work\\au-emerald\\public\\craftsmanship.png": {
+    "mtime": 1781181622.302189,
+    "ast_hash": "e04b71f4e573ef60cf73d165369365b3",
+    "semantic_hash": "e04b71f4e573ef60cf73d165369365b3"
+  },
+  "E:\\work\\au-emerald\\public\\hero-section.png": {
+    "mtime": 1781175570.2236576,
+    "ast_hash": "d1c503afeec0a7fa00c30066c59c97cb",
+    "semantic_hash": "d1c503afeec0a7fa00c30066c59c97cb"
+  },
+  "E:\\work\\au-emerald\\public\\image-removebg-preview.png": {
+    "mtime": 1780809148.6888988,
+    "ast_hash": "00a1aaab4ddba6965298ea5284e2b6bf",
+    "semantic_hash": "00a1aaab4ddba6965298ea5284e2b6bf"
+  },
+  "E:\\work\\au-emerald\\public\\logo-removebg-preview.png": {
+    "mtime": 1780809723.179794,
+    "ast_hash": "c516eee4f87e9c5d5e8b5aecf3c7feb5",
+    "semantic_hash": "c516eee4f87e9c5d5e8b5aecf3c7feb5"
+  },
+  "E:\\work\\au-emerald\\public\\logo.jpeg": {
+    "mtime": 1780808073.1976485,
+    "ast_hash": "669deecc61faafc4ede0a3a9bb7f4e02",
+    "semantic_hash": "669deecc61faafc4ede0a3a9bb7f4e02"
+  },
+  "E:\\work\\au-emerald\\public\\savings.png": {
+    "mtime": 1781179068.4306116,
+    "ast_hash": "5de3ee9fa6dfcc932d08146cfa744775",
+    "semantic_hash": "5de3ee9fa6dfcc932d08146cfa744775"
+  }
+}

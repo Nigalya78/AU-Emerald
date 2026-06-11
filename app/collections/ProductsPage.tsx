@@ -304,227 +304,248 @@ export default function ProductsPage() {
     setFiltersApplied(false)
   }
 
+  /* ── Shared dropdown component ── */
+  const FilterDropdown = ({
+    label, count, children,
+  }: { label: string; count: number; children: React.ReactNode }) => (
+    <div className="relative group pb-2">
+      <button className="h-9 px-4 bg-white/8 border border-[#c9a84c]/30 text-white/85 text-[11px] font-semibold uppercase tracking-[0.14em] hover:border-[#c9a84c]/70 hover:text-white transition-all flex items-center gap-2 min-w-[130px]">
+        <span className="truncate">{count > 0 ? `${count} ${label}${count > 1 ? 's' : ''}` : `All ${label}s`}</span>
+        <svg className="w-3 h-3 ml-auto shrink-0 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div className="absolute top-full left-0 w-52 bg-[#152d21] border border-[#c9a84c]/35 shadow-2xl py-2 hidden group-hover:block z-50 max-h-60 overflow-y-auto scrollbar-thin">
+        {children}
+      </div>
+    </div>
+  )
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-forest-green">Loading...</div>
+      <div className="min-h-screen bg-[#f0ebe0] flex items-center justify-center" style={{ paddingTop: '60px' }}>
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-px bg-[#c9a84c]" />
+          <p className="font-fraunces text-[#1a3a2a] text-sm italic">Loading collection…</p>
+          <div className="w-8 h-px bg-[#c9a84c]" />
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="bg-white pt-24 sm:pt-28 pb-4 sm:pb-8 overflow-x-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+    <div className="min-h-screen bg-[#f0ebe0]">
+
+      {/* ── PAGE HERO ── */}
+      <section className="bg-[#f0ebe0] pt-[88px] pb-10 overflow-hidden">
+        <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.65, ease: 'easeOut' }}
             className="text-center"
           >
-            <div className="w-12 h-0.5 bg-aged-gold mx-auto mb-4 sm:mb-6"></div>
-            <p className="text-aged-gold text-xs sm:text-sm font-medium tracking-widest uppercase mb-3 sm:mb-4">
+            {/* top ornament */}
+            <div className="flex items-center justify-center gap-[6px] mb-5">
+              <span className="block h-px w-8 bg-[#c9a84c]" />
+              <svg width="30" height="10" viewBox="0 0 60 16" fill="none">
+                <path d="M2 8 Q12 1 22 8 Q30 14 38 8 Q48 1 58 8" stroke="#c9a84c" strokeWidth="1.3" fill="none" strokeLinecap="round"/>
+                <circle cx="30" cy="8" r="2" fill="#c9a84c"/>
+              </svg>
+              <span className="block h-px w-8 bg-[#c9a84c]" />
+            </div>
+            <p className="text-[#c9a84c] text-[11px] font-bold uppercase tracking-[0.28em] mb-3">
               Our Collections
             </p>
-            <h1 className="font-fraunces text-4xl md:text-5xl lg:text-6xl font-bold text-forest-green mb-4 tracking-wide">
-              Antiquity. Elegance. Emeralds.
-            </h1>
-            <p className="text-forest-green/60 max-w-lg mx-auto">
+            <h1
+            className="font-fraunces font-semibold text-[#1a3a2a] italic mb-4"
+            style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)' }}
+          >
+            Where Legacy Meets Luxury.
+          </h1>
+            <p className="text-[#1a3a2a]/55 text-[13.5px] leading-[1.7] max-w-[400px] mx-auto">
               Discover our exquisite range of handcrafted South Indian jewellery
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Search & Filters Bar */}
-      <section className="bg-forest-green py-6">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <div className="flex flex-col md:flex-row items-center gap-4">
-            {/* Search - Reduced width */}
-            <div className="relative w-full md:w-48 lg:w-56">
+      {/* ── FILTER BAR ── */}
+      <section className="bg-[#1a3a2a] border-y border-[#c9a84c]/20 py-4">
+        <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
+
+            {/* Search */}
+            <div className="relative w-full sm:w-52">
               <input
                 type="text"
-                placeholder="Search products..."
+                placeholder="Search designs…"
                 value={pendingSearchQuery}
                 onChange={(e) => setPendingSearchQuery(e.target.value)}
-                className="w-full h-9 px-3 pl-9 bg-white/10 border border-white/20 text-white placeholder:text-white/50 focus:border-aged-gold focus:outline-none text-sm"
+                className="w-full h-9 px-3 pl-9 bg-white/[0.07] border border-[#c9a84c]/30 text-white placeholder:text-white/35 focus:border-[#c9a84c]/70 focus:outline-none text-[12px] tracking-wide"
               />
-              <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
               {pendingSearchQuery && (
-                <button onClick={() => setPendingSearchQuery('')} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/50 hover:text-white">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button onClick={() => setPendingSearchQuery('')} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-white/40 hover:text-white">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               )}
             </div>
 
-            {/* Multi-Select Dropdowns */}
+            {/* Dropdowns */}
             <div className="flex flex-wrap items-center gap-2">
-              {/* Type Multi-Select */}
-              <div className="relative group pb-2">
-                <button className="h-9 px-3 bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition-all flex items-center gap-2 min-w-[130px]">
-                  <span className="truncate">{pendingCategories.length > 0 ? `${pendingCategories.length} Type${pendingCategories.length > 1 ? 's' : ''}` : 'All Types'}</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div className="absolute top-full left-0 w-48 bg-forest-green border border-aged-gold shadow-lg py-2 hidden group-hover:block z-50 max-h-60 overflow-y-auto scrollbar-modern">
-                  {categories.filter(c => c.value !== 'ALL').map((cat) => (
-                    <label key={cat.value} className="flex items-center gap-2 px-3 py-2 hover:bg-white/10 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={pendingCategories.includes(cat.value)}
-                        onChange={() => toggleCategory(cat.value)}
-                        className="w-4 h-4 accent-aged-gold"
-                      />
-                      <span className="text-white text-sm">{cat.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+              <FilterDropdown label="Type" count={pendingCategories.length}>
+                {categories.filter(c => c.value !== 'ALL').map((cat) => (
+                  <label key={cat.value} className="flex items-center gap-2.5 px-3 py-2 hover:bg-white/10 cursor-pointer">
+                    <input type="checkbox" checked={pendingCategories.includes(cat.value)} onChange={() => toggleCategory(cat.value)} className="w-3.5 h-3.5 accent-[#c9a84c]" />
+                    <span className="text-white/75 text-[12px]">{cat.label}</span>
+                  </label>
+                ))}
+              </FilterDropdown>
 
-              {/* Material Multi-Select */}
-              <div className="relative group pb-2">
-                <button className="h-9 px-3 bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition-all flex items-center gap-2 min-w-[130px]">
-                  <span className="truncate">{pendingPurities.length > 0 ? `${pendingPurities.length} Material${pendingPurities.length > 1 ? 's' : ''}` : 'All Materials'}</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div className="absolute top-full left-0 w-48 bg-forest-green border border-aged-gold shadow-lg py-2 hidden group-hover:block z-50">
-                  {purities.filter(p => p.value !== 'ALL').map((purity) => (
-                    <label key={purity.value} className="flex items-center gap-2 px-3 py-2 hover:bg-white/10 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={pendingPurities.includes(purity.value)}
-                        onChange={() => togglePurity(purity.value)}
-                        className="w-4 h-4 accent-aged-gold"
-                      />
-                      <span className="text-white text-sm">{purity.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+              <FilterDropdown label="Material" count={pendingPurities.length}>
+                {purities.filter(p => p.value !== 'ALL').map((purity) => (
+                  <label key={purity.value} className="flex items-center gap-2.5 px-3 py-2 hover:bg-white/10 cursor-pointer">
+                    <input type="checkbox" checked={pendingPurities.includes(purity.value)} onChange={() => togglePurity(purity.value)} className="w-3.5 h-3.5 accent-[#c9a84c]" />
+                    <span className="text-white/75 text-[12px]">{purity.label}</span>
+                  </label>
+                ))}
+              </FilterDropdown>
 
-              {/* Stone Multi-Select */}
-              <div className="relative group pb-2">
-                <button className="h-9 px-3 bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition-all flex items-center gap-2 min-w-[130px]">
-                  <span className="truncate">{pendingStones.length > 0 ? `${pendingStones.length} Stone${pendingStones.length > 1 ? 's' : ''}` : 'All Stones'}</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div className="absolute top-full left-0 w-48 bg-forest-green border border-aged-gold shadow-lg py-2 hidden group-hover:block z-50 max-h-60 overflow-y-auto scrollbar-modern">
-                  {stones.filter(s => s.value !== 'ALL').map((stone) => (
-                    <label key={stone.value} className="flex items-center gap-2 px-3 py-2 hover:bg-white/10 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={pendingStones.includes(stone.value)}
-                        onChange={() => toggleStone(stone.value)}
-                        className="w-4 h-4 accent-aged-gold"
-                      />
-                      <span className="text-white text-sm">{stone.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+              <FilterDropdown label="Stone" count={pendingStones.length}>
+                {stones.filter(s => s.value !== 'ALL').map((stone) => (
+                  <label key={stone.value} className="flex items-center gap-2.5 px-3 py-2 hover:bg-white/10 cursor-pointer">
+                    <input type="checkbox" checked={pendingStones.includes(stone.value)} onChange={() => toggleStone(stone.value)} className="w-3.5 h-3.5 accent-[#c9a84c]" />
+                    <span className="text-white/75 text-[12px]">{stone.label}</span>
+                  </label>
+                ))}
+              </FilterDropdown>
 
-              {/* Weight Multi-Select */}
-              <div className="relative group pb-2">
-                <button className="h-9 px-3 bg-white/10 border border-white/20 text-white text-sm hover:bg-white/20 transition-all flex items-center gap-2 min-w-[130px]">
-                  <span className="truncate">{pendingWeightRanges.length > 0 ? `${pendingWeightRanges.length} Weight Range${pendingWeightRanges.length > 1 ? 's' : ''}` : 'All Weights'}</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-                <div className="absolute top-full left-0 w-48 bg-forest-green border border-aged-gold shadow-lg py-2 hidden group-hover:block z-50">
-                  {weightRanges.map((range) => (
-                    <label key={range.value} className="flex items-center gap-2 px-3 py-2 hover:bg-white/10 cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={pendingWeightRanges.includes(range.value)}
-                        onChange={() => toggleWeight(range.value)}
-                        className="w-4 h-4 accent-aged-gold"
-                      />
-                      <span className="text-white text-sm">{range.label}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
+              <FilterDropdown label="Weight" count={pendingWeightRanges.length}>
+                {weightRanges.map((range) => (
+                  <label key={range.value} className="flex items-center gap-2.5 px-3 py-2 hover:bg-white/10 cursor-pointer">
+                    <input type="checkbox" checked={pendingWeightRanges.includes(range.value)} onChange={() => toggleWeight(range.value)} className="w-3.5 h-3.5 accent-[#c9a84c]" />
+                    <span className="text-white/75 text-[12px]">{range.label}</span>
+                  </label>
+                ))}
+              </FilterDropdown>
 
-              {/* Apply / Clear Filters Button */}
+              {/* Apply / Clear */}
               {filtersApplied || hasFiltersApplied ? (
-                <button onClick={clearAllFilters} className="h-9 px-4 bg-aged-gold text-forest-green font-medium text-sm hover:bg-white transition-all">
+                <button onClick={clearAllFilters} className="h-9 px-5 bg-[#c9a84c] text-[#1a3a2a] text-[11px] font-bold uppercase tracking-[0.15em] hover:bg-[#d4b55e] transition-colors">
                   Clear Filters
                 </button>
               ) : hasPendingFilters ? (
-                <button onClick={applyFilters} className="h-9 px-4 bg-aged-gold text-forest-green font-medium text-sm hover:bg-white transition-all">
+                <button onClick={applyFilters} className="h-9 px-5 bg-[#c9a84c] text-[#1a3a2a] text-[11px] font-bold uppercase tracking-[0.15em] hover:bg-[#d4b55e] transition-colors">
                   Apply
                 </button>
               ) : null}
             </div>
           </div>
 
-          {/* Results Count */}
+          {/* Results count */}
           {hasFiltersApplied && (
-            <p className="text-white/60 text-sm mt-4">
-              Showing {filteredProducts.length} of {products.length} products
+            <p className="text-white/40 text-[11px] uppercase tracking-[0.14em] mt-3">
+              Showing {filteredProducts.length} of {products.length} pieces
             </p>
           )}
         </div>
       </section>
 
-      {/* Products Grid */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-12">
+      {/* ── PRODUCT GRID ── */}
+      <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16 py-12">
         {filteredProducts.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-forest-green/60 text-lg mb-4">No results found</p>
-            <p className="text-forest-green/40 text-sm mb-6">
-              {searchQuery ? `No products matching "${searchQuery}"` : 'Try adjusting your filters'}
+          <div className="text-center py-20">
+            {/* ornament */}
+            <div className="flex items-center justify-center gap-[6px] mb-6">
+              <span className="block h-px w-8 bg-[#c9a84c]/50" />
+              <span className="block w-[6px] h-[6px] rounded-full bg-[#c9a84c]/60" />
+              <span className="block h-px w-8 bg-[#c9a84c]/50" />
+            </div>
+            <p className="font-fraunces text-[#1a3a2a] text-xl italic mb-2">No pieces found</p>
+            <p className="text-[#1a3a2a]/45 text-[13px] mb-7">
+              {searchQuery ? `No results for "${searchQuery}"` : 'Try adjusting your filters'}
             </p>
             <a
               href="/collections"
-              className="inline-block px-6 py-2 bg-forest-green text-white hover:bg-forest-green/90 transition-all"
+              className="inline-flex items-center gap-2 border border-[#1a3a2a] text-[#1a3a2a] text-[11px] font-semibold uppercase tracking-[0.16em] px-7 py-[10px] hover:bg-[#1a3a2a] hover:text-white transition-all"
             >
-              Back to Collections
+              View All Collections
             </a>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 sm:gap-6">
             {filteredProducts.map((product, index) => (
               <motion.div
                 key={product.id}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group bg-white overflow-hidden hover:shadow-xl transition-all duration-300"
+                transition={{ duration: 0.5, delay: Math.min(index * 0.07, 0.5), ease: 'easeOut' }}
+                className="group bg-white"
+                style={{ boxShadow: '0 1px 4px rgba(26,58,42,0.07)' }}
               >
-                <div className="aspect-[4/5] overflow-hidden border-2 border-aged-gold">
+                {/* ── Image ── */}
+                <div className="aspect-[4/5] overflow-hidden relative">
+                  {/* outer gold border frame */}
+                  <div className="absolute inset-[6px] border border-[#c9a84c]/35 z-10 pointer-events-none" />
                   <img
                     src={product.mainImage || product.images[0]}
                     alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
+                    style={{ transformOrigin: 'center center' }}
                   />
+                  {/* category badge top-left */}
+                  <span className="absolute top-3 left-3 z-20 bg-[#1a3a2a]/80 text-[#c9a84c] text-[7.5px] font-bold uppercase tracking-[0.22em] px-2 py-[3px]">
+                    {product.category.replace(/_/g, ' ')}
+                  </span>
                 </div>
-                <div className="p-4 text-center">
-                  <p className="text-aged-gold text-xs font-medium tracking-widest uppercase mb-1">
-                    {product.category.replace('_', ' ')}
-                  </p>
-                  <h3 className="font-fraunces text-lg font-semibold text-forest-green mb-1">
+
+                {/* ── Info ── */}
+                <div className="px-4 pt-4 pb-5 text-center border-x border-b border-[#c9a84c]/20">
+                  <h3 className="font-fraunces text-[15px] sm:text-[16px] font-semibold text-[#1a3a2a] leading-snug mb-2">
                     {product.name}
                   </h3>
-                  <p className="text-forest-green/70 text-xs mb-3 line-clamp-2">
+                  <p className="text-[#1a3a2a]/45 text-[11px] leading-[1.6] mb-4 line-clamp-2">
                     {product.description}
                   </p>
+
+                  {/* meta pills */}
+                  <div className="flex items-center justify-center gap-2 flex-wrap mb-4">
+                    {product.purity && (
+                      <span className="text-[#1a3a2a]/50 text-[9.5px] uppercase tracking-[0.16em] border border-[#c9a84c]/30 px-2 py-[2px]">
+                        {product.purity.replace(/_/g, ' ')}
+                      </span>
+                    )}
+                    {product.stoneType && product.stoneType !== 'NO_STONE' && (
+                      <span className="text-[#1a3a2a]/50 text-[9.5px] uppercase tracking-[0.16em] border border-[#c9a84c]/30 px-2 py-[2px]">
+                        {product.stoneType.replace(/_/g, ' ')}
+                      </span>
+                    )}
+                    {product.weight && (
+                      <span className="text-[#1a3a2a]/50 text-[9.5px] uppercase tracking-[0.16em] border border-[#c9a84c]/30 px-2 py-[2px]">
+                        {product.weight}g
+                      </span>
+                    )}
+                  </div>
+
+                  {/* ornament + CTA */}
+                  <div className="flex items-center justify-center gap-[5px] mb-3">
+                    <span className="block h-px w-6 bg-[#c9a84c]/40" />
+                    <span className="block w-[4px] h-[4px] rotate-45 bg-[#c9a84c]/55" />
+                    <span className="block h-px w-6 bg-[#c9a84c]/40" />
+                  </div>
                   <Link
                     href={`/products/${product.id}`}
-                    className="text-aged-gold text-sm font-medium hover:text-dark-gold transition-colors uppercase tracking-wider"
+                    className="inline-flex items-center gap-[6px] text-[#1a3a2a] text-[9.5px] font-bold uppercase tracking-[0.22em] hover:text-[#c9a84c] transition-colors duration-200"
                   >
-                    EXPLORE
+                    Enquire Now
+                    <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+                      <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
                   </Link>
                 </div>
               </motion.div>

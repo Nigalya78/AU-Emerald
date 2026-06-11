@@ -1,133 +1,143 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
 
 interface Product {
-  id: string
-  name: string
-  category: string
-  description: string
-  images: string[]
-  mainImage?: string
-  purity?: string
-  stoneType?: string
-  weight?: number
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  purity?: string;
+  stoneType?: string;
+  weight?: number;
+  mainImage?: string;
+  images: string[];
 }
-
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: 'easeOut' },
-  },
-};
 
 export default function Collections() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
   const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('/api/products?visible=true');
-        const data = await response.json();
-        // Use API data if available, limit to 4 most recent products for homepage
-        if (data && Array.isArray(data) && data.length > 0) {
-          setProducts(data.slice(0, 4));
-        }
-      } catch (error) {
-        console.error('Error fetching products:', error);
-        // No fallback - only show database products
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+    fetch('/api/products?limit=4')
+      .then((r) => r.json())
+      .then((data) => setProducts(Array.isArray(data) ? data.slice(0, 4) : []))
+      .catch(() => setProducts([]));
   }, []);
 
   return (
-    <section id="collections" className="bg-white py-6 sm:py-10 lg:py-14 overflow-x-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+    <section id="collections" className="bg-white py-14 lg:py-[72px] overflow-hidden">
+      <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
+
+        {/* ── Header ── */}
         <motion.div
           ref={ref}
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 18 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center mb-6 sm:mb-10"
+          className="text-center mb-10 lg:mb-12"
         >
-          <div className="w-12 h-0.5 bg-aged-gold mx-auto mb-4 sm:mb-6"></div>
-          <p className="text-aged-gold text-xs sm:text-sm font-medium tracking-widest uppercase mb-3 sm:mb-4">
-            OUR COLLECTIONS
+          <p className="text-[#c9a84c] text-[11px] font-bold uppercase tracking-[0.28em] mb-3">
+            Our Collections
           </p>
-          <h2 className="font-fraunces text-2xl sm:text-4xl lg:text-5xl font-semibold text-forest-green tracking-wide">
-            ANTIQUITY. ELEGANCE. EMERALDS.
+          <h2
+            className="font-fraunces font-semibold text-[#1a3a2a] italic mb-4"
+            style={{ fontSize: 'clamp(1.8rem, 3vw, 2.5rem)' }}
+          >
+            Where Legacy Meets Luxury.
           </h2>
+          <div className="flex items-center justify-center gap-[6px]">
+            <span className="block h-px w-7 bg-[#c9a84c]" />
+            <svg width="30" height="10" viewBox="0 0 60 16" fill="none">
+              <path d="M2 8 Q12 1 22 8 Q30 14 38 8 Q48 1 58 8" stroke="#c9a84c" strokeWidth="1.3" fill="none" strokeLinecap="round"/>
+              <circle cx="30" cy="8" r="2" fill="#c9a84c"/>
+            </svg>
+            <span className="block h-px w-7 bg-[#c9a84c]" />
+          </div>
         </motion.div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'visible'}
-          className="grid md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 max-h-[500px] md:max-h-none overflow-y-auto snap-y snap-mandatory scrollbar-hide pb-4 md:pb-0 md:overflow-visible"
-        >
-          {products.map((product) => (
-            <motion.div
-              key={product.id}
-              variants={itemVariants}
-              className="group bg-white overflow-hidden hover:shadow-xl transition-all duration-300 snap-start"
-            >
-              <div className="aspect-[4/3] sm:aspect-[4/5] md:aspect-[4/5] overflow-hidden border-2 border-aged-gold">
-                <img
-                  src={product.mainImage || product.images[0]}
-                  alt={product.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+        {/* ── Product cards ── */}
+        {products.length === 0 ? (
+          /* skeleton placeholders while loading */
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 mb-10">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="bg-[#f0ebe0]/60 animate-pulse">
+                <div className="aspect-[4/5]" />
+                <div className="px-3 py-4 border border-t-0 border-[#c9a84c]/15">
+                  <div className="h-3 bg-[#c9a84c]/15 rounded mb-2 w-3/4 mx-auto" />
+                  <div className="h-2 bg-[#c9a84c]/10 rounded w-1/2 mx-auto" />
+                </div>
               </div>
-              <div className="p-4 text-center">
-                <h3 className="font-fraunces text-lg font-semibold text-forest-green mb-1">
-                  {product.name}
-                </h3>
-                <p className="text-forest-green/70 text-xs mb-3 line-clamp-2">
-                  {product.description}
-                </p>
-                <Link
-                  href={`/products/${product.id}`}
-                  className="text-aged-gold text-sm font-medium hover:text-dark-gold transition-colors uppercase tracking-wider"
-                >
-                  EXPLORE
-                </Link>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 mb-10">
+            {products.map((product, i) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: i * 0.09, ease: 'easeOut' }}
+                className="group bg-white"
+                style={{ boxShadow: '0 1px 4px rgba(26,58,42,0.07)' }}
+              >
+                {/* Image */}
+                <div className="aspect-[4/5] overflow-hidden relative">
+                  <div className="absolute inset-[6px] border border-[#c9a84c]/35 z-10 pointer-events-none" />
+                  <img
+                    src={product.mainImage || product.images?.[0] || 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=500&q=85'}
+                    alt={product.name}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
+                  />
+                  <span className="absolute top-3 left-3 z-20 bg-[#1a3a2a]/80 text-[#c9a84c] text-[7.5px] font-bold uppercase tracking-[0.22em] px-2 py-[3px]">
+                    {product.category.replace(/_/g, ' ')}
+                  </span>
+                </div>
 
-        {/* View All Button */}
-        <div className="text-center mt-6">
+                {/* Info */}
+                <div className="px-3 pt-3 pb-4 text-center border-x border-b border-[#c9a84c]/20">
+                  <h3 className="font-fraunces text-[14px] sm:text-[15px] font-semibold text-[#1a3a2a] leading-snug mb-2">
+                    {product.name}
+                  </h3>
+                  <p className="text-[#1a3a2a]/45 text-[11px] leading-[1.55] mb-3 line-clamp-2">
+                    {product.description}
+                  </p>
+                  <div className="flex items-center justify-center gap-[5px] mb-3">
+                    <span className="block h-px w-5 bg-[#c9a84c]/40" />
+                    <span className="block w-[4px] h-[4px] rotate-45 bg-[#c9a84c]/55" />
+                    <span className="block h-px w-5 bg-[#c9a84c]/40" />
+                  </div>
+                  <Link
+                    href={`/products/${product.id}`}
+                    className="inline-flex items-center gap-[5px] text-[#1a3a2a] text-[9.5px] font-bold uppercase tracking-[0.2em] hover:text-[#c9a84c] transition-colors"
+                  >
+                    Enquire Now
+                    <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
+                      <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
+
+        {/* ── View All button ── */}
+        <div className="text-center">
           <Link
             href="/collections"
-            className="inline-flex items-center gap-2 border border-forest-green text-forest-green px-8 py-3 font-medium hover:bg-forest-green hover:text-white transition-all"
+            className="inline-flex items-center gap-2 border border-[#1a3a2a] text-[#1a3a2a] text-[11px] font-semibold uppercase tracking-[0.17em] px-8 py-[10px] hover:bg-[#1a3a2a] hover:text-white transition-all duration-250"
           >
-            VIEW ALL
-            <ArrowRight size={18} />
+            View All Collections
+            <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
+              <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </Link>
         </div>
+
       </div>
     </section>
   );

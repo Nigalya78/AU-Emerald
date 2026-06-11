@@ -1,95 +1,71 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { Gem, HandHeart, MapPin, Clock } from 'lucide-react';
+import Link from 'next/link';
 
 export default function WhyChooseUs() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
-  const features = [
-    {
-      icon: Gem,
-      title: 'Authentic South Indian Jewellery',
-      description: 'Experience genuine South Indian jewellery crafted with traditional artistry and timeless appeal.',
-    },
-    {
-      icon: HandHeart,
-      title: 'Exceptional Craftsmanship',
-      description: 'Every piece reflects authentic South Indian craftsmanship, showcasing intricate detailing and superior quality.',
-    },
-    {
-      icon: MapPin,
-      title: 'Exclusive Designs',
-      description: 'Discover unique and exclusive collections that cannot be found elsewhere.',
-    },
-    {
-      icon: Clock,
-      title: 'Perfect for Every Occasion',
-      description: 'From weddings and celebrations to cherished family moments, our jewellery is designed to be treasured for generations.',
-    },
-  ];
-
-  const containerVariants = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: 'easeOut' },
-    },
-  };
+  const isInView = useInView(ref, { once: true, margin: '-60px' });
 
   return (
-    <section id="why-choose-us" className="bg-white pt-6 sm:pt-10 lg:pt-14 pb-3 sm:pb-5 lg:pb-7 overflow-x-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+    <section id="why-choose-us" className="overflow-hidden">
+      <div ref={ref} className="flex flex-col lg:flex-row lg:min-h-[480px]">
+
+        {/* ── LEFT: artisan photo ── */}
         <motion.div
-          ref={ref}
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="text-center mb-6 sm:mb-10"
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.9 }}
+          className="relative w-full lg:w-1/2 min-h-[56vw] sm:min-h-[400px] lg:min-h-0"
         >
-          <div className="w-12 h-0.5 bg-aged-gold mx-auto mb-4 sm:mb-6"></div>
-          <p className="text-aged-gold text-xs sm:text-sm font-medium tracking-widest uppercase mb-3 sm:mb-4">
-            WHY AU EMERALD
-          </p>
-          <h2 className="font-fraunces text-2xl sm:text-4xl lg:text-5xl font-semibold text-forest-green">
-            WHY CHOOSE AU EMERALD?
-          </h2>
+          <img
+            src="/craftsmanship.png"
+            alt="Handcrafted jewellery craftsmanship"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ filter: 'brightness(0.82) saturate(0.88)' }}
+          />
         </motion.div>
 
+        {/* ── RIGHT: emerald green panel ── */}
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+          initial={{ opacity: 0, x: 20 }}
+          animate={isInView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.12, ease: 'easeOut' }}
+          className="w-full lg:w-1/2 bg-[#1a3a2a] flex items-center p-6 sm:p-10 lg:p-14 xl:p-16"
         >
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              variants={itemVariants}
-              className="group bg-white border-t-2 border-aged-gold p-8 hover:shadow-lg transition-all duration-300"
+          {/* Inner gold border */}
+          <div className="border border-[#c9a84c]/35 p-5 sm:p-7 lg:p-10 w-full">
+            <p className="text-[#c9a84c] text-[11px] font-bold uppercase tracking-[0.28em] mb-3">
+              Why AU-Emerald
+            </p>
+            <h2
+              className="font-fraunces font-semibold text-white leading-[1.18] mb-4"
+              style={{ fontSize: 'clamp(1.9rem, 3.2vw, 2.75rem)' }}
             >
-              <feature.icon className="w-8 h-8 text-aged-gold mb-6" strokeWidth={1.5} />
-              <h3 className="font-fraunces text-xl font-semibold text-forest-green mb-3">
-                {feature.title}
-              </h3>
-              <p className="text-forest-green/70 text-sm leading-relaxed">
-                {feature.description}
-              </p>
-            </motion.div>
-          ))}
+              Crafted by Hand.<br />
+              Cherished for Life.
+            </h2>
+            
+
+            {/* ornament */}
+            <div className="flex items-center gap-[6px] mb-5">
+              <span className="block h-px w-7 bg-[#c9a84c]/65" />
+              <svg width="28" height="9" viewBox="0 0 56 14" fill="none">
+                <path d="M2 7 Q10 1 20 7 Q28 13 36 7 Q46 1 54 7" stroke="#c9a84c" strokeWidth="1.2" fill="none" strokeLinecap="round"/>
+                <circle cx="28" cy="7" r="1.8" fill="#c9a84c"/>
+              </svg>
+              <span className="block h-px w-7 bg-[#c9a84c]/65" />
+            </div>
+
+            <p className="text-white/60 text-[13.5px] leading-[1.78] mb-7 max-w-[380px]">
+              Every Au Emerald piece is handcrafted by skilled artisans using
+              time-honoured techniques passed down through generations.
+              We don&apos;t just create jewellery, we preserve heritage.
+            </p>
+
+            
+          </div>
         </motion.div>
       </div>
     </section>

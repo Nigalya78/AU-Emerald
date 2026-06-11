@@ -1,78 +1,93 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import WhatsAppIcon from './WhatsAppIcon';
+
+const WA_HREF = `https://wa.me/610402399925?text=${encodeURIComponent(
+  "Hi Au Emerald team, I'm interested in your jewellery collection."
+)}`;
 
 export default function Hero() {
   return (
-    <section id="home" className="bg-white overflow-x-hidden pt-20 sm:pt-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-8 sm:py-10 lg:py-12">
-        <div className="grid lg:grid-cols-2 gap-6 sm:gap-10 lg:gap-14 items-center">
-          {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="order-1"
+    <section
+      id="home"
+      className="relative w-full overflow-hidden"
+      style={{ paddingTop: '60px', minHeight: '100vh' }}
+    >
+      {/* ── Full-bleed background image ── */}
+      <div className="absolute inset-0">
+        <img
+          src="/hero-section.png"
+          alt=""
+          aria-hidden="true"
+          className="w-full h-full object-cover object-center"
+          draggable="false"
+        />
+        {/* light cream overlay so text is legible */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(to right, rgba(255, 255, 255, 0.88) 0%, rgba(240,235,224,0.72) 38%, rgba(240,235,224,0.30) 65%, rgba(240,235,224,0.0) 100%)',
+          }}
+        />
+        {/* subtle bottom fade */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-28 pointer-events-none"
+          style={{
+            background: 'linear-gradient(to top, rgba(240,235,224,0.55), transparent)',
+          }}
+        />
+      </div>
+
+      {/* ── Content ── */}
+      <div className="relative z-10 flex items-center min-h-[calc(100vh-60px)] px-6 sm:px-12 lg:px-20 xl:px-28">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: 'easeOut', delay: 0.15 }}
+          className="max-w-[560px]"
+        >
+          {/* eyebrow */}
+          <p className="text-[#c9a84c] text-[9.5px] sm:text-[10.5px] font-bold uppercase tracking-[0.3em] mb-4 drop-shadow-none">
+            Adelaide&apos;s Finest South Indian Jewellery
+          </p>
+
+          <h1
+            className="font-fraunces font-semibold text-forest-green leading-[1.08] mb-5"
+            style={{ fontSize: 'clamp(2.4rem, 5.5vw, 5rem)' }}
           >
-            {/* Main Heading - Stacked All Caps Style */}
-            <h1 className="font-fraunces text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-forest-green leading-[1.15] tracking-wide uppercase">
-              Premium<br />
-              Gold & Emerald<br />
-              Jewellery
-            </h1>
+            Heirloom Heritage.
+            <br />
+            Timeless Beauty.
+          </h1>
 
-            {/* Gold Line Accent */}
-            <div className="w-12 h-0.5 bg-aged-gold mt-6 mb-4"></div>
+          {/* ornament */}
+          <div className="flex items-center gap-[6px] mb-6">
+            <span className="block h-px w-10 bg-[#c9a84c]" />
+            <svg width="32" height="11" viewBox="0 0 68 18" fill="none">
+              <path d="M2 9 Q12 1 22 9 Q34 18 46 9 Q56 1 66 9" stroke="#c9a84c" strokeWidth="1.4" fill="none" strokeLinecap="round"/>
+              <circle cx="34" cy="9" r="2.2" fill="#c9a84c"/>
+            </svg>
+            <span className="block h-px w-10 bg-[#c9a84c]" />
+          </div>
 
-            {/* Body Text */}
-            <p className="font-dm-sans text-forest-green/70 text-sm sm:text-base leading-relaxed max-w-md mb-6">
-              Handcrafted pieces rooted in legacy. Timeless South Indian designs for every occasion, crafted with precision in Adelaide.
-            </p>
+          <p className="text-[#1a3a2a]/65 text-[13.5px] sm:text-[15px] leading-[1.85] max-w-[380px] mb-10">
+            Au Emerald is a celebration of Indian heritage,
+            born from a grandmother&apos;s heirlooms and crafted for
+            generations to come.
+          </p>
 
-            {/* Buttons */}
-            <div className="flex flex-wrap gap-3">
-              <a
-                href={`https://wa.me/610402399925?text=${encodeURIComponent("Hi Au Emerald team,\n\nI'm interested in exploring your beautiful South Indian jewellery collection.\n\nCould you please share more details about:\n• Your latest designs\n• Available gold purity options (22K, 24K, 18K)\n• Custom jewellery services\n• Pricing and current offers\n\nThank you!").replace(/%0A/g, '%0A')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 bg-forest-green text-white px-6 py-3 font-medium text-sm border-2 border-forest-green hover:bg-transparent hover:text-forest-green transition-all duration-300"
-              >
-                <WhatsAppIcon size={18} />
-                <span>ENQUIRE ON WHATSAPP</span>
-              </a>
-              <Link
-                href="/savings"
-                className="inline-flex items-center gap-2 text-forest-green font-medium text-sm uppercase tracking-wider hover:text-aged-gold transition-colors group"
-              >
-                <span>View Schemes</span>
-                <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                </svg>
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Image */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-            className="relative order-2"
+          <a
+            href={WA_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-[9px] border border-[#1a3a2a] text-[#1a3a2a] text-[10.5px] sm:text-[11px] font-semibold uppercase tracking-[0.16em] px-6 py-[13px] hover:bg-[#1a3a2a] hover:text-white transition-all duration-300"
           >
-            <div className="relative">
-              {/* Main Image */}
-              <div className="aspect-[3/2] bg-forest-green overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&q=80"
-                  alt="Premium Gold and Emerald Jewellery"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-          </motion.div>
-        </div>
+            <WhatsAppIcon size={14} />
+            Inquire via WhatsApp
+          </a>
+        </motion.div>
       </div>
     </section>
   );
