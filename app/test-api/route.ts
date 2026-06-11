@@ -8,10 +8,10 @@ export async function GET() {
       timestamp: new Date().toISOString(),
       success: true 
     })
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json({ 
       message: 'API test failed',
-      error: error.message,
+      error: error?.message || 'Unknown error',
       success: false 
     }, { status: 500 })
   }
