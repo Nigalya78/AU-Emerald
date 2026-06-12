@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 
 interface Product {
@@ -17,10 +17,17 @@ export default function ProductsPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('')
+  const [editingCell, setEditingCell] = useState<{ id: string; field: 'name' | 'category' } | null>(null)
+  const [editValue, setEditValue] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     fetchProducts()
   }, [search, filter])
+
+  useEffect(() => {
+    if (editingCell) inputRef.current?.focus()
+  }, [editingCell])
 
   const fetchProducts = async () => {
     try {
@@ -36,6 +43,33 @@ export default function ProductsPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const startEdit = (product: Product, field: 'name' | 'category') => {
+    setEditingCell({ id: product.id, field })
+    setEditValue(product[field])
+  }
+
+  const commitEdit = async (product: Product) => {
+    if (!editingCell) return
+    const trimmed = editValue.trim()
+    if (!trimmed || trimmed === product[editingCell.field]) {
+      setEditingCell(null)
+      return
+    }
+    try {
+      await fetch('/api/products', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...product, [editingCell.field]: trimmed }),
+      })
+      setProducts((prev) =>
+        prev.map((p) => (p.id === product.id ? { ...p, [editingCell.field]: trimmed } : p))
+      )
+    } catch (error) {
+      console.error('Error updating product:', error)
+    }
+    setEditingCell(null)
   }
 
   const deleteProduct = async (id: string) => {
@@ -63,7 +97,7 @@ export default function ProductsPage() {
     }
   }
 
-  const categories = ['NECKLACES', 'EARRINGS', 'BANGLES', 'RINGS', 'SETS', 'CUSTOM_ORDERS']
+  const categories = ['NECKLACES', 'EARRINGS', 'BANGLES', 'RINGS', 'SETS', 'BRACELETS', 'CHAINS', 'PENDANTS', 'ANKLETS', 'CUSTOM_ORDERS']
 
   if (loading) {
     return (
@@ -127,19 +161,63 @@ export default function ProductsPage() {
           </thead>
           <tbody className="divide-y divide-gray-200">
             {products.map((product, index) => (
-              <tr key={product.id} className="hover:bg-gray-50">
+              <tr key={product.id} className="hover:bg-gray-50 group">
                 <td className="px-4 py-4 text-sm text-gray-500">{index + 1}</td>
+
+                {/* ── Inline-editable Name ── */}
                 <td className="px-6 py-4">
-                  <Link
-                    href={`/admin/products/${product.id}/edit`}
-                    className="text-sm font-medium text-forest-green hover:text-aged-gold"
-                  >
-                    {product.name}
-                  </Link>
+                  {editingCell?.id === product.id && editingCell.field === 'name' ? (
+                    <input
+                      ref={inputRef}
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onBlur={() => commitEdit(product)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') commitEdit(product)
+                        if (e.key === 'Escape') setEditingCell(null)
+                      }}
+                      className="w-full text-sm font-medium text-forest-green border border-aged-gold px-2 py-1 focus:outline-none focus:ring-1 focus:ring-aged-gold"
+                    />
+                  ) : (
+                    <span
+                      onClick={() => startEdit(product, 'name')}
+                      title="Click to edit"
+                      className="text-sm font-medium text-forest-green cursor-pointer hover:text-aged-gold group-hover:underline decoration-aged-gold/50 underline-offset-2"
+                    >
+                      {product.name}
+                    </span>
+                  )}
                 </td>
-                <td className="px-6 py-4 text-sm text-forest-green/70">
-                  {product.category.replace('_', ' ')}
+
+                {/* ── Inline-editable Category ── */}
+                <td className="px-6 py-4">
+                  {editingCell?.id === product.id && editingCell.field === 'category' ? (
+                    <select
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                      onBlur={() => commitEdit(product)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') commitEdit(product)
+                        if (e.key === 'Escape') setEditingCell(null)
+                      }}
+                      autoFocus
+                      className="text-sm text-forest-green border border-aged-gold px-2 py-1 focus:outline-none focus:ring-1 focus:ring-aged-gold"
+                    >
+                      {categories.map((cat) => (
+                        <option key={cat} value={cat}>{cat.replace(/_/g, ' ')}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <span
+                      onClick={() => startEdit(product, 'category')}
+                      title="Click to edit"
+                      className="text-sm text-forest-green/70 cursor-pointer hover:text-aged-gold group-hover:underline decoration-aged-gold/50 underline-offset-2"
+                    >
+                      {product.category.replace(/_/g, ' ')}
+                    </span>
+                  )}
                 </td>
+
                 <td className="px-6 py-4 text-center">
                   <button
                     onClick={() => toggleVisible(product)}
