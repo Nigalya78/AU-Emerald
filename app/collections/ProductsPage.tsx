@@ -36,7 +36,6 @@ const categories = [
 const purities = [
   { value: 'ALL', label: 'All Materials' },
   { value: 'K22_GOLD', label: '22K Gold' },
-  { value: 'K24_GOLD', label: '24K Gold' },
   { value: 'K18_GOLD', label: '18K Gold' },
   { value: 'SILVER', label: 'Silver' },
   { value: 'GOLD_PLATED', label: 'Gold Plated' },
@@ -117,7 +116,7 @@ const fallbackProducts: Product[] = [
     description: 'Elegant ruby pendant with matching earrings.',
     images: ['https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80'],
     mainImage: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=600&q=80',
-    purity: 'K24_GOLD',
+    purity: 'K22_GOLD',
     stoneType: 'RUBY',
     weight: 32.1,
   },

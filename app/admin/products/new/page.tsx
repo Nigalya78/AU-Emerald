@@ -52,7 +52,6 @@ export default function NewProductPage() {
   const categories = ['NECKLACES', 'EARRINGS', 'BANGLES', 'RINGS', 'SETS', 'BRACELETS', 'CHAINS', 'PENDANTS', 'ANKLETS', 'CUSTOM_ORDERS']
   const purities = [
     { value: 'K22_GOLD', label: '22K Gold' },
-    { value: 'K24_GOLD', label: '24K Gold' },
     { value: 'K18_GOLD', label: '18K Gold' },
     { value: 'SILVER', label: 'Silver' },
     { value: 'GOLD_PLATED', label: 'Gold Plated' },

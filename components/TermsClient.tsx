@@ -33,7 +33,7 @@ const SECTIONS = [
     content: [
       {
         heading: '2.1 Gold Purity',
-        text: 'All gold products sold are certified for their purity (22K or 24K as marked). Certificates of authenticity are provided with all purchases above $500.',
+        text: 'All gold products sold are certified for their purity (22K as marked). Certificates of authenticity are provided with all purchases above $500.',
       },
       {
         heading: '2.2 Making Charges',

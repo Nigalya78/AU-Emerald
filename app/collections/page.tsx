@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Gold & Emerald Jewellery Collections | Adelaide',
-  description: 'Explore our exquisite collection of handcrafted South Indian gold jewellery. 22K & 24K gold necklaces, earrings, bangles, rings and more. Visit our Adelaide showroom.',
+  description: 'Explore our exquisite collection of handcrafted South Indian gold jewellery. 22K gold necklaces, earrings, bangles, rings and more. Visit our Adelaide showroom.',
   keywords: [
     'gold jewellery collection Adelaide',
     'emerald necklace',
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'Gold & Emerald Jewellery Collections | Au Emerald Adelaide',
-    description: 'Discover handcrafted South Indian gold and emerald jewellery. 22K & 24K gold pieces, custom designs.',
+    description: 'Discover handcrafted South Indian gold and emerald jewellery. 22K gold pieces, custom designs.',
     images: ['/Au-logo.png'],
   },
 }

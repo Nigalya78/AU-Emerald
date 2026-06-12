@@ -14,13 +14,12 @@ export const metadata: Metadata = {
     default: 'Au Emerald | Premium Gold & Emerald Jewellery Adelaide',
     template: '%s | Au Emerald Jewellery',
   },
-  description: 'Adelaide\'s premier destination for authentic South Indian gold and emerald jewellery. Handcrafted 22K & 24K gold pieces, custom designs, and traditional craftsmanship. Visit our Northfield showroom or enquire via WhatsApp.',
+  description: 'Adelaide\'s premier destination for authentic South Indian gold and emerald jewellery. Handcrafted 22K gold pieces, custom designs, and traditional craftsmanship. Visit our Northfield showroom or enquire via WhatsApp.',
   keywords: [
     'gold jewellery Adelaide',
     'emerald jewellery Australia',
     'South Indian jewellery',
     '22K gold jewellery',
-    '24K gold jewellery',
     'custom gold jewellery Adelaide',
     'bridal jewellery Adelaide',
     'traditional Indian jewellery',
@@ -53,7 +52,7 @@ export const metadata: Metadata = {
     url: 'https://auemerald.com.au',
     siteName: 'Au Emerald',
     title: 'Au Emerald | Premium Gold & Emerald Jewellery Adelaide',
-    description: 'Adelaide\'s premier destination for authentic South Indian gold and emerald jewellery. Handcrafted 22K & 24K gold pieces.',
+    description: 'Adelaide\'s premier destination for authentic South Indian gold and emerald jewellery. Handcrafted 22K gold pieces.',
     images: [
       {
         url: '/Au-logo.png',

@@ -78,7 +78,7 @@ export default function Hero() {
               animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.6 }}
             >
-              Handcrafted 22K & 24K gold jewellery, infused with the legacy of 
+              Handcrafted 22K gold jewellery, infused with the legacy of 
               South Indian artistry.
             </motion.p>
 
@@ -173,7 +173,7 @@ export default function Hero() {
               animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.5 }}
             >
-              Handcrafted 22K & 24K gold jewellery, infused with the legacy of 
+              Handcrafted 22K gold jewellery, infused with the legacy of 
               South Indian artistry. Each piece tells a story of tradition.
             </motion.p>
 
