@@ -71,7 +71,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-full border-2 border-[#c9a84c] overflow-hidden shrink-0">
               <Image
-                src="/au_logo.jpeg"
+                src="/au-logo.jpeg"
                 alt="Au Emerald"
                 width={44}
                 height={44}
@@ -170,7 +170,7 @@ export default function Navbar() {
               <div className="h-[60px] flex items-center justify-between px-5 border-b border-gray-100">
                 <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center">
                   <div className="w-9 h-9 rounded-full border-2 border-[#c9a84c] overflow-hidden shrink-0">
-                    <Image src="/au_logo.jpeg" alt="Au Emerald" width={36} height={36} className="w-full h-full object-cover" />
+                    <Image src="/au-logo.jpeg" alt="Au Emerald" width={36} height={36} className="w-full h-full object-cover" />
                   </div>
                 </Link>
                 <button onClick={() => setMobileOpen(false)} className="text-[#1a3a2a] hover:text-[#c9a84c]"><X size={22} /></button>
