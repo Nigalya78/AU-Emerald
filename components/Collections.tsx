@@ -22,12 +22,18 @@ interface CollectionsProps {
 }
 
 export default function Collections({ products }: CollectionsProps) {
-  console.log('Collections component mounted');
   const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.1, rootMargin: '-50px' });
-  console.log('Current products state:', products);
   const { ref: sectionRef, isVisible: sectionVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.05, rootMargin: '-100px' });
   const { ref: staggerRef, visibleItems } = useStaggeredAnimation<HTMLDivElement>(products.length, { threshold: 0.1, rootMargin: '-50px' });
   const [imgLoaded, setImgLoaded] = React.useState<Record<string, boolean>>({});
+
+  const markLoaded = React.useCallback((id: string) => {
+    setImgLoaded((prev) => prev[id] ? prev : { ...prev, [id]: true });
+  }, []);
+
+  const imgRef = React.useCallback((el: HTMLImageElement | null, id: string) => {
+    if (el?.complete && el.naturalWidth > 0) markLoaded(id);
+  }, [markLoaded]);
 
   return (
     <section id="collections" ref={sectionRef} className="bg-white py-14 lg:py-[72px] overflow-hidden">
@@ -116,16 +122,17 @@ export default function Collections({ products }: CollectionsProps) {
                     transition={{ duration: 0.4, delay: i * 0.12 + 0.2 }}
                   />
                   <motion.img
+                    ref={(el) => imgRef(el, product.id)}
                     src={product.mainImage || product.images?.[0] || ''}
                     alt={product.name}
                     className="w-full h-full object-cover"
                     style={{ opacity: imgLoaded[product.id] ? 1 : 0, transition: 'opacity 0.4s ease' }}
                     initial={{ scale: 1.2 }}
-                    animate={visibleItems.has(i) ? { scale: 1 } : { scale: 1.2 }}
+                    animate={{ scale: 1 }}
                     transition={{ duration: 0.8, delay: i * 0.12 + 0.1, ease: 'easeOut' }}
                     whileHover={{ scale: 1.08, transition: { duration: 0.5, ease: 'easeOut' } }}
-                    onLoad={() => setImgLoaded((prev) => ({ ...prev, [product.id]: true }))}
-                    onError={(e) => { e.currentTarget.style.display = 'none'; setImgLoaded((prev) => ({ ...prev, [product.id]: true })); }}
+                    onLoad={() => markLoaded(product.id)}
+                    onError={(e) => { e.currentTarget.style.display = 'none'; markLoaded(product.id); }}
                   />
                   <motion.span 
                     className="absolute top-3 left-3 z-20 bg-[#1a3a2a]/80 text-[#c9a84c] text-[7.5px] font-bold uppercase tracking-[0.22em] px-2 py-[3px]"
