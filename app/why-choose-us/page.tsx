@@ -1,6 +1,26 @@
+import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import Footer from '@/components/Footer';
+
+export const metadata: Metadata = {
+  title: 'Our Craftsmanship | Why Choose Au Emerald Jewellery',
+  description: 'Experience traditional South Indian jewellery craftsmanship. Certified 22K & 24K gold, expert artisans, custom designs, and lifetime service guarantee.',
+  keywords: [
+    'jewellery craftsmanship Adelaide',
+    'certified gold jewellery',
+    '22K 24K gold purity',
+    'custom jewellery design Adelaide',
+    'South Indian artisans',
+    'jewellery quality guarantee',
+    'handcrafted gold jewellery',
+  ],
+  openGraph: {
+    title: 'Our Craftsmanship | Why Choose Au Emerald Jewellery Adelaide',
+    description: 'Traditional South Indian jewellery craftsmanship with certified 22K & 24K gold, expert artisans, and custom designs.',
+    images: ['/Au-logo.png'],
+  },
+}
 
 export default function WhyChooseUsPage() {
   return (

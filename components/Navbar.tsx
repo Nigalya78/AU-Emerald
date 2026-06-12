@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Menu } from 'lucide-react';
 import Image from 'next/image';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 
@@ -70,7 +70,7 @@ export default function Navbar() {
         >
           <Link href="/" className="flex items-center">
             <Image 
-              src="/logo-removebg-preview.png" 
+              src="/Au-logo.png" 
               alt="Au Emerald" 
               width={96} 
               height={96} 
@@ -151,22 +151,11 @@ export default function Navbar() {
         <motion.button
           aria-label="Toggle menu"
           onClick={() => setMobileOpen((v) => !v)}
-          className="lg:hidden ml-auto flex flex-col gap-[5px] p-1"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+          className="lg:hidden ml-auto w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#1a3a2a]/5 transition-colors duration-200"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          <motion.span 
-            className={`block w-[22px] h-[1.5px] bg-[#1a3a2a] transition-all duration-300 ${mobileOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`}
-            animate={mobileOpen ? { rotate: 45, y: 6.5 } : { rotate: 0, y: 0 }}
-          />
-          <motion.span 
-            className={`block w-[22px] h-[1.5px] bg-[#1a3a2a] transition-all duration-300 ${mobileOpen ? 'opacity-0' : ''}`}
-            animate={mobileOpen ? { opacity: 0 } : { opacity: 1 }}
-          />
-          <motion.span 
-            className={`block w-[22px] h-[1.5px] bg-[#1a3a2a] transition-all duration-300 ${mobileOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`}
-            animate={mobileOpen ? { rotate: -45, y: -6.5 } : { rotate: 0, y: 0 }}
-          />
+          <Menu className="w-6 h-6 text-[#1a3a2a]" strokeWidth={1.5} />
         </motion.button>
       </div>
 
@@ -181,7 +170,7 @@ export default function Navbar() {
               className="fixed top-0 right-0 z-50 h-full w-[300px] bg-white shadow-2xl flex flex-col">
               <div className="h-[60px] flex items-center justify-between px-5 border-b border-gray-100">
                 <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center">
-                  <Image src="/logo-removebg-preview.png" alt="Au Emerald" width={40} height={40} className="w-10 h-10 object-contain" />
+                  <Image src="/Au-logo.png" alt="Au Emerald" width={40} height={40} className="w-10 h-10 object-contain" />
                 </Link>
                 <button onClick={() => setMobileOpen(false)} className="text-[#1a3a2a] hover:text-[#c9a84c]"><X size={22} /></button>
               </div>

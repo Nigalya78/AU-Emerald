@@ -1,6 +1,26 @@
+import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
 import HomeSavings from '@/components/HomeSavings';
 import Footer from '@/components/Footer';
+
+export const metadata: Metadata = {
+  title: 'Gold Savings Scheme | Save & Buy Jewellery | Au Emerald',
+  description: 'Join our Gold Savings Scheme - save monthly from $50 and redeem against any gold jewellery purchase. Flexible plans, no interest, instant redemption. Enquire now!',
+  keywords: [
+    'gold savings scheme Adelaide',
+    'jewellery savings plan',
+    'gold investment plan',
+    'monthly gold savings',
+    'jewellery layby Adelaide',
+    'save for gold jewellery',
+    'gold chit fund Adelaide',
+  ],
+  openGraph: {
+    title: 'Gold Savings Scheme | Save Monthly & Buy Jewellery | Au Emerald',
+    description: 'Save monthly from $50 and redeem against any gold jewellery purchase. Flexible plans with instant redemption at Au Emerald.',
+    images: ['/Au-logo.png'],
+  },
+}
 
 export default function SavingsPage() {
   return (

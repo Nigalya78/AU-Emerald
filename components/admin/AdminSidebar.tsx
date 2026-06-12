@@ -19,7 +19,7 @@ export default function AdminSidebar() {
       <div className="p-6 border-b border-white/20">
         <Link href="/" className="flex items-center">
           <Image
-            src="/logo-removebg-preview.png"
+            src="/Au-logo.png"
             alt="Au Emerald"
             width={200}
             height={70}

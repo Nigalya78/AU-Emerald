@@ -1,9 +1,29 @@
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { prisma } from '@/lib/prisma';
 import Navbar from '@/components/Navbar';
 import ProductsPage from './ProductsPage';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
+
+export const metadata: Metadata = {
+  title: 'Gold & Emerald Jewellery Collections | Adelaide',
+  description: 'Explore our exquisite collection of handcrafted South Indian gold jewellery. 22K & 24K gold necklaces, earrings, bangles, rings and more. Visit our Adelaide showroom.',
+  keywords: [
+    'gold jewellery collection Adelaide',
+    'emerald necklace',
+    'gold earrings Australia',
+    '22K gold bangles',
+    'bridal jewellery Adelaide',
+    'South Indian jewellery collection',
+    'custom gold designs',
+  ],
+  openGraph: {
+    title: 'Gold & Emerald Jewellery Collections | Au Emerald Adelaide',
+    description: 'Discover handcrafted South Indian gold and emerald jewellery. 22K & 24K gold pieces, custom designs.',
+    images: ['/Au-logo.png'],
+  },
+}
 
 export default async function CollectionsPage() {
   const rawProducts = await prisma.product.findMany({

@@ -151,6 +151,11 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
   const [loading] = useState(false)
   
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [itemsPerPage, setItemsPerPage] = useState(12)
+  const itemsPerPageOptions = [8, 12, 16, 24, 48]
+  
   // Applied filters (used for filtering products)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [selectedPurities, setSelectedPurities] = useState<string[]>([])
@@ -199,7 +204,25 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
 
   useEffect(() => {
     filterProducts()
+    setCurrentPage(1) // Reset to first page when filters change
   }, [products, selectedCategories, selectedPurities, selectedStones, selectedWeightRanges, searchQuery])
+
+  // Calculate paginated products
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage)
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const handleItemsPerPageChange = (value: number) => {
+    setItemsPerPage(value)
+    setCurrentPage(1)
+  }
 
   const filterProducts = () => {
     let filtered = [...products]
@@ -291,14 +314,15 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
     setPendingWeightRanges([])
     setPendingSearchQuery('')
     setFiltersApplied(false)
+    setCurrentPage(1)
   }
 
   /* ── Shared dropdown component ── */
   const FilterDropdown = ({
     label, count, children,
   }: { label: string; count: number; children: React.ReactNode }) => (
-    <div className="relative group pb-2">
-      <button className="h-9 px-4 bg-white/8 border border-[#c9a84c]/30 text-white/85 text-[11px] font-semibold uppercase tracking-[0.14em] hover:border-[#c9a84c]/70 hover:text-white transition-all flex items-center gap-2 min-w-[130px]">
+    <div className="relative group flex-shrink-0">
+      <button className="h-9 px-3 sm:px-4 bg-white/8 border border-[#c9a84c]/30 text-white/85 text-[11px] font-semibold uppercase tracking-[0.14em] hover:border-[#c9a84c]/70 hover:text-white transition-all flex items-center gap-2 min-w-[110px] sm:min-w-[130px] whitespace-nowrap">
         <span className="truncate">{count > 0 ? `${count} ${label}${count > 1 ? 's' : ''}` : `All ${label}s`}</span>
         <svg className="w-3 h-3 ml-auto shrink-0 opacity-60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
@@ -389,12 +413,12 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
         animate={filterVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         transition={{ duration: 0.6, ease: 'easeOut' }}
       >
-        <div className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-16">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 flex-wrap">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-10 xl:px-16">
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
 
             {/* Search */}
             <motion.div 
-              className="relative w-full sm:w-52"
+              className="relative w-full lg:w-52"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={filterVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.5, ease: 'easeOut', delay: 0.1 }}
@@ -427,9 +451,9 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
               </AnimatePresence>
             </motion.div>
 
-            {/* Dropdowns */}
+            {/* Dropdowns - Scrollable on mobile, wrap on desktop */}
             <motion.div 
-              className="flex flex-wrap items-center gap-2"
+              className="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide lg:flex-wrap lg:overflow-visible"
               initial={{ opacity: 0, x: -20 }}
               animate={filterVisible ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
               transition={{ duration: 0.5, ease: 'easeOut', delay: 0.2 }}
@@ -492,17 +516,22 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
 
           {/* Results count */}
           <AnimatePresence>
-            {hasFiltersApplied && (
-              <motion.p 
-                className="text-white/40 text-[11px] uppercase tracking-[0.14em] mt-3"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3, ease: 'easeOut' }}
-              >
-                Showing {filteredProducts.length} of {products.length} pieces
-              </motion.p>
-            )}
+            <motion.p 
+              className="text-white/40 text-[11px] uppercase tracking-[0.14em] mt-3"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+            >
+              {filteredProducts.length > 0 ? (
+                <>
+                  Showing {((currentPage - 1) * itemsPerPage) + 1}-{Math.min(currentPage * itemsPerPage, filteredProducts.length)} of {filteredProducts.length} pieces
+                  {hasFiltersApplied && ` (filtered from ${products.length} total)`}
+                </>
+              ) : (
+                `No pieces found (total: ${products.length})`
+              )}
+            </motion.p>
           </AnimatePresence>
         </div>
       </motion.section>
@@ -567,13 +596,13 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
           ) : (
             <motion.div 
               key="product-grid"
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"
+              className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3, staggerChildren: 0.1 }}
             >
-              {filteredProducts.map((product, index) => (
+              {paginatedProducts.map((product, index) => (
                 <motion.div
                   key={product.id}
                   initial={{ opacity: 0, y: 30, scale: 0.95 }}
@@ -617,9 +646,9 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
                   </div>
 
                   {/* ── Info ── */}
-                  <div className="px-4 pt-4 pb-5 text-center border-x border-b border-[#c9a84c]/20 bg-white">
+                  <div className="px-3 sm:px-4 pt-3 sm:pt-4 pb-4 sm:pb-5 text-center border-x border-b border-[#c9a84c]/20 bg-white">
                     <motion.h3 
-                      className="font-fraunces text-[15px] sm:text-[16px] font-semibold text-[#1a3a2a] leading-snug mb-2"
+                      className="font-fraunces text-[13px] sm:text-[15px] lg:text-[16px] font-semibold text-[#1a3a2a] leading-snug mb-1.5 sm:mb-2"
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: 0.5 }}
@@ -627,7 +656,7 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
                       {product.name}
                     </motion.h3>
                     <motion.p 
-                      className="text-[#1a3a2a]/45 text-[11px] leading-[1.6] mb-4 line-clamp-2"
+                      className="text-[#1a3a2a]/45 text-[10px] sm:text-[11px] leading-[1.5] sm:leading-[1.6] mb-3 sm:mb-4 line-clamp-2"
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: 0.6 }}
@@ -637,23 +666,23 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
 
                     {/* meta pills */}
                     <motion.div 
-                      className="flex items-center justify-center gap-2 flex-wrap mb-4"
+                      className="flex items-center justify-center gap-1.5 sm:gap-2 flex-wrap mb-3 sm:mb-4"
                       initial={{ opacity: 0, y: 8 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: 0.7 }}
                     >
                       {product.purity && (
-                        <span className="text-[#1a3a2a]/50 text-[9.5px] uppercase tracking-[0.16em] border border-[#c9a84c]/30 px-2 py-[2px] bg-[#f8f6f0] rounded-sm">
+                        <span className="text-[#1a3a2a]/50 text-[8px] sm:text-[9.5px] uppercase tracking-[0.14em] sm:tracking-[0.16em] border border-[#c9a84c]/30 px-1.5 sm:px-2 py-[2px] bg-[#f8f6f0] rounded-sm">
                           {product.purity.replace(/_/g, ' ')}
                         </span>
                       )}
                       {product.stoneType && product.stoneType !== 'NO_STONE' && (
-                        <span className="text-[#1a3a2a]/50 text-[9.5px] uppercase tracking-[0.16em] border border-[#c9a84c]/30 px-2 py-[2px] bg-[#f8f6f0] rounded-sm">
+                        <span className="text-[#1a3a2a]/50 text-[8px] sm:text-[9.5px] uppercase tracking-[0.14em] sm:tracking-[0.16em] border border-[#c9a84c]/30 px-1.5 sm:px-2 py-[2px] bg-[#f8f6f0] rounded-sm">
                           {product.stoneType.replace(/_/g, ' ')}
                         </span>
                       )}
                       {product.weight && (
-                        <span className="text-[#1a3a2a]/50 text-[9.5px] uppercase tracking-[0.16em] border border-[#c9a84c]/30 px-2 py-[2px] bg-[#f8f6f0] rounded-sm">
+                        <span className="text-[#1a3a2a]/50 text-[8px] sm:text-[9.5px] uppercase tracking-[0.14em] sm:tracking-[0.16em] border border-[#c9a84c]/30 px-1.5 sm:px-2 py-[2px] bg-[#f8f6f0] rounded-sm">
                           {product.weight}g
                         </span>
                       )}
@@ -661,14 +690,14 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
 
                     {/* ornament + CTA */}
                     <motion.div 
-                      className="flex items-center justify-center gap-[5px] mb-3"
+                      className="flex items-center justify-center gap-[5px] mb-2 sm:mb-3"
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.4, delay: 0.8 }}
                     >
-                      <span className="block h-px w-6 bg-[#c9a84c]/40" />
-                      <span className="block w-[4px] h-[4px] rotate-45 bg-[#c9a84c]/55" />
-                      <span className="block h-px w-6 bg-[#c9a84c]/40" />
+                      <span className="block h-px w-4 sm:w-6 bg-[#c9a84c]/40" />
+                      <span className="block w-[3px] h-[3px] sm:w-[4px] sm:h-[4px] rotate-45 bg-[#c9a84c]/55" />
+                      <span className="block h-px w-4 sm:w-6 bg-[#c9a84c]/40" />
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
@@ -677,7 +706,7 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
                     >
                       <Link
                         href={`/products/${product.id}`}
-                        className="inline-flex items-center gap-[6px] text-[#1a3a2a] text-[9.5px] font-bold uppercase tracking-[0.22em] hover:text-[#c9a84c] transition-all duration-300 group-hover:scale-105"
+                        className="inline-flex items-center gap-[6px] text-[#1a3a2a] text-[8px] sm:text-[9.5px] font-bold uppercase tracking-[0.18em] sm:tracking-[0.22em] hover:text-[#c9a84c] transition-all duration-300 group-hover:scale-105"
                       >
                         <motion.span
                           initial={{ x: 0 }}
@@ -687,8 +716,7 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
                           Enquire Now
                         </motion.span>
                         <motion.svg 
-                          width="10" 
-                          height="10" 
+                          className="w-2.5 h-2.5 sm:w-[10px] sm:h-[10px]"
                           viewBox="0 0 12 12" 
                           fill="none"
                           initial={{ x: 0 }}
@@ -705,6 +733,173 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* ── PAGINATION ── */}
+        {filteredProducts.length > 0 && totalPages > 1 && (
+          <motion.div 
+            className="mt-12 sm:mt-16"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            {/* Items per page selector - Mobile: horizontal scroll, Desktop: flex */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+              <div className="flex items-center gap-3">
+                <span className="text-[#1a3a2a]/60 text-[12px] uppercase tracking-[0.12em]">Show</span>
+                <div className="flex items-center gap-1 bg-white border border-[#c9a84c]/30 rounded-sm overflow-hidden">
+                  {itemsPerPageOptions.map((option) => (
+                    <button
+                      key={option}
+                      onClick={() => handleItemsPerPageChange(option)}
+                      className={`px-3 py-1.5 text-[11px] font-semibold transition-all duration-200 ${
+                        itemsPerPage === option 
+                          ? 'bg-[#1a3a2a] text-[#c9a84c]' 
+                          : 'text-[#1a3a2a]/60 hover:bg-[#f8f6f0] hover:text-[#1a3a2a]'
+                      }`}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+                <span className="text-[#1a3a2a]/60 text-[12px] uppercase tracking-[0.12em]">per page</span>
+              </div>
+
+              <p className="text-[#1a3a2a]/50 text-[11px] tracking-wide">
+                Page {currentPage} of {totalPages}
+              </p>
+            </div>
+
+            {/* Pagination controls */}
+            <div className="flex items-center justify-center gap-2 flex-wrap">
+              {/* Previous button */}
+              <motion.button
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+                className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-white border border-[#c9a84c]/30 text-[#1a3a2a] text-[11px] font-semibold uppercase tracking-[0.12em] hover:border-[#c9a84c] hover:bg-[#f8f6f0] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[#c9a84c]/30 disabled:hover:bg-white"
+                whileHover={currentPage !== 1 ? { scale: 1.02 } : {}}
+                whileTap={currentPage !== 1 ? { scale: 0.98 } : {}}
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 19l-7-7 7-7" />
+                </svg>
+                <span className="hidden sm:inline">Prev</span>
+              </motion.button>
+
+              {/* Page numbers - Hidden on mobile, show on sm+ */}
+              <div className="hidden sm:flex items-center gap-1">
+                {/* First page */}
+                {currentPage > 3 && (
+                  <>
+                    <button
+                      onClick={() => handlePageChange(1)}
+                      className="w-9 h-9 flex items-center justify-center text-[12px] font-semibold text-[#1a3a2a]/70 hover:bg-[#f8f6f0] hover:text-[#1a3a2a] border border-transparent hover:border-[#c9a84c]/30 rounded-sm transition-all duration-200"
+                    >
+                      1
+                    </button>
+                    {currentPage > 4 && (
+                      <span className="px-1 text-[#1a3a2a]/40 text-[12px]">...</span>
+                    )}
+                  </>
+                )}
+
+                {/* Page range */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1)
+                  .filter(page => {
+                    if (totalPages <= 5) return true
+                    if (page === 1 || page === totalPages) return false
+                    return page >= currentPage - 1 && page <= currentPage + 1
+                  })
+                  .map((page) => (
+                    <motion.button
+                      key={page}
+                      onClick={() => handlePageChange(page)}
+                      className={`w-9 h-9 flex items-center justify-center text-[12px] font-semibold rounded-sm transition-all duration-200 ${
+                        currentPage === page
+                          ? 'bg-[#1a3a2a] text-[#c9a84c] border border-[#1a3a2a]'
+                          : 'text-[#1a3a2a]/70 hover:bg-[#f8f6f0] hover:text-[#1a3a2a] border border-transparent hover:border-[#c9a84c]/30'
+                      }`}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {page}
+                    </motion.button>
+                  ))}
+
+                {/* Last page */}
+                {currentPage < totalPages - 2 && (
+                  <>
+                    {currentPage < totalPages - 3 && (
+                      <span className="px-1 text-[#1a3a2a]/40 text-[12px]">...</span>
+                    )}
+                    <button
+                      onClick={() => handlePageChange(totalPages)}
+                      className="w-9 h-9 flex items-center justify-center text-[12px] font-semibold text-[#1a3a2a]/70 hover:bg-[#f8f6f0] hover:text-[#1a3a2a] border border-transparent hover:border-[#c9a84c]/30 rounded-sm transition-all duration-200"
+                    >
+                      {totalPages}
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {/* Mobile: Simple page indicator */}
+              <div className="flex sm:hidden items-center gap-2 px-3">
+                {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                  let pageNum
+                  if (totalPages <= 5) {
+                    pageNum = i + 1
+                  } else if (currentPage <= 3) {
+                    pageNum = i + 1
+                  } else if (currentPage >= totalPages - 2) {
+                    pageNum = totalPages - 4 + i
+                  } else {
+                    pageNum = currentPage - 2 + i
+                  }
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => handlePageChange(pageNum)}
+                      className={`w-8 h-8 flex items-center justify-center text-[11px] font-semibold rounded-sm transition-all duration-200 ${
+                        currentPage === pageNum
+                          ? 'bg-[#1a3a2a] text-[#c9a84c]'
+                          : 'text-[#1a3a2a]/60 hover:bg-[#f8f6f0]'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  )
+                })}
+              </div>
+
+              {/* Next button */}
+              <motion.button
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className="flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-white border border-[#c9a84c]/30 text-[#1a3a2a] text-[11px] font-semibold uppercase tracking-[0.12em] hover:border-[#c9a84c] hover:bg-[#f8f6f0] transition-all duration-300 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-[#c9a84c]/30 disabled:hover:bg-white"
+                whileHover={currentPage !== totalPages ? { scale: 1.02 } : {}}
+                whileTap={currentPage !== totalPages ? { scale: 0.98 } : {}}
+              >
+                <span className="hidden sm:inline">Next</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Show all results indicator when no pagination needed */}
+        {filteredProducts.length > 0 && totalPages === 1 && filteredProducts.length > 8 && (
+          <motion.div 
+            className="mt-10 text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <p className="text-[#1a3a2a]/50 text-[12px] tracking-wide">
+              Showing all {filteredProducts.length} pieces
+            </p>
+          </motion.div>
+        )}
       </motion.div>
     </div>
   )

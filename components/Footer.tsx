@@ -23,6 +23,7 @@ const QUICK_LINKS = [
   { label: 'Collections', href: '/collections' },
   { label: 'Savings Scheme', href: '/savings' },
   { label: 'Contact', href: '/contact' },
+  { label: 'Terms & Conditions', href: '/terms' },
 ];
 
 const COLLECTIONS = [
@@ -64,7 +65,7 @@ export default function Footer() {
           <div className="flex flex-col gap-4">
             <Link href="/">
               <Image
-                src="/logo-removebg-preview.png"
+                src="/Au-logo.png"
                 alt="Au Emerald"
                 width={72}
                 height={72}
@@ -173,7 +174,7 @@ export default function Footer() {
           </p>
           <div className="flex items-center gap-5">
             <a href="#" className="text-white/22 text-[9.5px] uppercase tracking-[0.16em] hover:text-[#c9a84c]/60 transition-colors">Privacy Policy</a>
-            <a href="#" className="text-white/22 text-[9.5px] uppercase tracking-[0.16em] hover:text-[#c9a84c]/60 transition-colors">Terms of Service</a>
+            <Link href="/terms" className="text-white/22 text-[9.5px] uppercase tracking-[0.16em] hover:text-[#c9a84c]/60 transition-colors">Terms & Conditions</Link>
             <a href="#" className="text-white/22 text-[9.5px] uppercase tracking-[0.16em] hover:text-[#c9a84c]/60 transition-colors">Sitemap</a>
           </div>
         </div>

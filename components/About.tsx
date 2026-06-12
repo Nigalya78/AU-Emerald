@@ -46,8 +46,48 @@ export default function About() {
         <GoldCorner pos="br" />
       </motion.div>
 
-      <div ref={ref} className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-20 py-12 sm:py-16 lg:py-[72px]">
-        <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-center">
+      <div ref={ref} className="max-w-[1200px] mx-auto px-6 sm:px-10 lg:px-20 py-20 sm:py-24 lg:py-32">
+        {/* Section Header */}
+        <motion.div 
+          className="text-center mb-16 lg:mb-20"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        >
+          <motion.p 
+            className="text-[#c9a84c] text-[12px] font-bold uppercase tracking-[0.3em] mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
+          >
+            Our Legacy
+          </motion.p>
+          <motion.h2
+            className="font-fraunces font-semibold text-[#1a3a2a] leading-[1.15] mb-6"
+            style={{ fontSize: 'clamp(2.2rem, 4vw, 3.5rem)' }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
+          >
+            A Legacy Inherited.<br />
+            <span className="text-[#c9a84c] italic">A Story Continued.</span>
+          </motion.h2>
+          <motion.div 
+            className="flex items-center justify-center gap-[6px]"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.6, ease: 'easeOut', delay: 0.4 }}
+          >
+            <span className="block h-px w-12 bg-[#c9a84c]" />
+            <svg width="32" height="11" viewBox="0 0 60 16" fill="none">
+              <path d="M2 8 Q12 1 22 8 Q30 14 38 8 Q48 1 58 8" stroke="#c9a84c" strokeWidth="1.3" fill="none" strokeLinecap="round"/>
+              <circle cx="30" cy="8" r="2" fill="#c9a84c"/>
+            </svg>
+            <span className="block h-px w-12 bg-[#c9a84c]" />
+          </motion.div>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
           {/* ── Left: Text ── */}
           <motion.div
@@ -55,52 +95,51 @@ export default function About() {
             initial={{ opacity: 0, y: 40 }}
             animate={textVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
             transition={{ duration: 0.9, ease: 'easeOut' }}
+            className="space-y-8"
           >
             <motion.p 
-              className="text-[#c9a84c] text-[11px] font-bold uppercase tracking-[0.28em] mb-3"
+              className="text-[#1a3a2a]/70 text-[16px] sm:text-[17px] leading-[1.9]"
               initial={{ opacity: 0, y: 20 }}
               animate={textVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-              transition={{ duration: 0.7, ease: 'easeOut', delay: 0.2 }}
-            >
-              Our Legacy
-            </motion.p>
-            <motion.h2
-              className="font-fraunces font-semibold text-[#1a3a2a] leading-[1.18] mb-4"
-              style={{ fontSize: 'clamp(1.9rem, 3.2vw, 2.75rem)' }}
-              initial={{ opacity: 0, y: 30 }}
-              animate={textVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
             >
-              A Legacy Inherited.<br />
-              A Story Continued.
-            </motion.h2>
-
-            {/* ornament */}
-            <motion.div 
-              className="flex items-center gap-[6px] mb-5"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={textVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.6, ease: 'easeOut', delay: 0.4 }}
-            >
-              <span className="block h-px w-7 bg-[#c9a84c]" />
-              <svg width="30" height="10" viewBox="0 0 60 16" fill="none">
-                <path d="M2 8 Q12 1 22 8 Q30 14 38 8 Q48 1 58 8" stroke="#c9a84c" strokeWidth="1.3" fill="none" strokeLinecap="round"/>
-                <circle cx="30" cy="8" r="2" fill="#c9a84c"/>
-              </svg>
-              <span className="block h-px w-7 bg-[#c9a84c]" />
-            </motion.div>
+              Rooted in tradition and nourished by love, Au Emerald brings forth rare 
+              antique jewellery that carries memories, blessings, and history. Each piece 
+              is a link between the past and the future, crafted with the same devotion 
+              that our grandmothers poured into their own treasured collections.
+            </motion.p>
 
             <motion.p 
-              className="text-[#1a3a2a]/60 text-[13.5px] leading-[1.8] max-w-[380px]"
+              className="text-[#1a3a2a]/70 text-[16px] sm:text-[17px] leading-[1.9]"
+              initial={{ opacity: 0, y: 20 }}
+              animate={textVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+              transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
+            >
+              Since 2015, we have been Adelaide&apos;s trusted destination for authentic 
+              South Indian gold jewellery. Our commitment to quality and tradition has 
+              earned us the loyalty of over 5,000 customers who understand that true 
+              luxury lies in heritage.
+            </motion.p>
+
+            {/* Values Grid */}
+            <motion.div 
+              className="grid grid-cols-3 gap-4 sm:gap-6 pt-6"
               initial={{ opacity: 0, y: 20 }}
               animate={textVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.8, ease: 'easeOut', delay: 0.5 }}
             >
-              Rooted in tradition and nourished by love,
-              Au Emerald brings forth rare antique jewellery
-              that carries memories, blessings, and history.
-              Each piece is a link between the past and the future.
-            </motion.p>
+              {[
+                { icon: '✦', label: 'Authentic', desc: 'Pure 22K & 24K Gold' },
+                { icon: '◈', label: 'Handcrafted', desc: 'Skilled Artisans' },
+                { icon: '◉', label: 'Trusted', desc: 'Since 2015' },
+              ].map((item, i) => (
+                <div key={item.label} className="text-center">
+                  <div className="text-[#c9a84c] text-[24px] mb-2">{item.icon}</div>
+                  <p className="text-[#1a3a2a] text-[13px] font-semibold uppercase tracking-[0.12em] mb-1">{item.label}</p>
+                  <p className="text-[#1a3a2a]/50 text-[11px]">{item.desc}</p>
+                </div>
+              ))}
+            </motion.div>
           </motion.div>
 
           {/* ── Right: Antique picture frame ── */}
