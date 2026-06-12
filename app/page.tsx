@@ -9,6 +9,8 @@ import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const rawProducts = await prisma.product.findMany({
     where: { status: 'ACTIVE' },

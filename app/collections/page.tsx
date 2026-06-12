@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { prisma } from '@/lib/prisma';
+
 import Navbar from '@/components/Navbar';
 import ProductsPage from './ProductsPage';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Gold & Emerald Jewellery Collections | Adelaide',
