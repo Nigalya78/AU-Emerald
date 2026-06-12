@@ -68,7 +68,7 @@ export default function Navbar() {
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
         >
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-full border-2 border-[#c9a84c] overflow-hidden shrink-0">
               <Image
                 src="/au_logo.jpeg"
@@ -79,6 +79,9 @@ export default function Navbar() {
                 priority
               />
             </div>
+            <span className="font-fraunces font-semibold text-[#1a3a2a] tracking-[0.08em] text-[1.1rem] sm:text-[1.25rem] leading-none">
+              Au Emerald
+            </span>
           </Link>
         </motion.div>
 
