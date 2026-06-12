@@ -69,14 +69,16 @@ export default function Navbar() {
           transition={{ duration: 0.2, ease: 'easeOut' }}
         >
           <Link href="/" className="flex items-center">
-            <Image 
-              src="/Au-logo.png" 
-              alt="Au Emerald" 
-              width={96} 
-              height={96} 
-              className="object-contain lg:w-[76px] lg:h-[76px] xl:w-[96px] xl:h-[96px] transition-transform duration-300" 
-              priority 
-            />
+            <div className="w-11 h-11 rounded-full border-2 border-[#1a3a2a] overflow-hidden shrink-0">
+              <Image
+                src="/au_logo.jpeg"
+                alt="Au Emerald"
+                width={44}
+                height={44}
+                className="w-full h-full object-cover"
+                priority
+              />
+            </div>
           </Link>
         </motion.div>
 
@@ -164,7 +166,9 @@ export default function Navbar() {
               className="fixed top-0 right-0 z-50 h-full w-[300px] bg-white shadow-2xl flex flex-col">
               <div className="h-[60px] flex items-center justify-between px-5 border-b border-gray-100">
                 <Link href="/" onClick={() => setMobileOpen(false)} className="flex items-center">
-                  <Image src="/Au-logo.png" alt="Au Emerald" width={40} height={40} className="w-10 h-10 object-contain" />
+                  <div className="w-9 h-9 rounded-full border-2 border-[#1a3a2a] overflow-hidden shrink-0">
+                    <Image src="/au_logo.jpeg" alt="Au Emerald" width={36} height={36} className="w-full h-full object-cover" />
+                  </div>
                 </Link>
                 <button onClick={() => setMobileOpen(false)} className="text-[#1a3a2a] hover:text-[#c9a84c]"><X size={22} /></button>
               </div>
