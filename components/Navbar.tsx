@@ -87,16 +87,14 @@ export default function Navbar() {
               <motion.button
                 key={l.label}
                 onClick={() => handleScrollLink(l.scrollTo!)}
-                className="text-[9.5px] xl:text-[10.5px] font-semibold uppercase tracking-[0.10em] xl:tracking-[0.13em] transition-colors relative group text-[#1a3a2a] hover:text-[#c9a84c]"
+                className="text-[9.5px] xl:text-[10.5px] font-semibold uppercase tracking-[0.10em] xl:tracking-[0.13em] transition-colors relative group text-[#1a3a2a] hover:text-[#c9a84c] py-1"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.08, ease: 'easeOut' }}
-                whileHover={{ y: -2 }}
               >
                 {l.label}
-                <motion.span 
+                <span 
                   className="absolute -bottom-[2px] left-0 h-[1.5px] bg-[#c9a84c] transition-all duration-300 w-0 group-hover:w-full"
-                  layoutId="navbar-underline"
                 />
               </motion.button>
             ) : (
@@ -105,23 +103,19 @@ export default function Navbar() {
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.08, ease: 'easeOut' }}
+                className="flex items-center"
               >
-                <motion.div
-                  whileHover={{ y: -2 }}
+                <Link
+                  href={l.href}
+                  className={`text-[9.5px] xl:text-[10.5px] font-semibold uppercase tracking-[0.10em] xl:tracking-[0.13em] transition-colors relative group py-1 ${
+                    active(l.href) ? 'text-[#c9a84c]' : 'text-[#1a3a2a] hover:text-[#c9a84c]'
+                  }`}
                 >
-                  <Link
-                    href={l.href}
-                    className={`text-[9.5px] xl:text-[10.5px] font-semibold uppercase tracking-[0.10em] xl:tracking-[0.13em] transition-colors relative group ${
-                      active(l.href) ? 'text-[#c9a84c]' : 'text-[#1a3a2a] hover:text-[#c9a84c]'
-                    }`}
-                  >
-                    {l.label}
-                    <motion.span 
-                      className={`absolute -bottom-[2px] left-0 h-[1.5px] bg-[#c9a84c] transition-all duration-300 ${active(l.href) ? 'w-full' : 'w-0 group-hover:w-full'}`}
-                      layoutId={active(l.href) ? 'navbar-underline' : undefined}
-                    />
-                  </Link>
-                </motion.div>
+                  {l.label}
+                  <span 
+                    className={`absolute -bottom-[2px] left-0 h-[1.5px] bg-[#c9a84c] transition-all duration-300 ${active(l.href) ? 'w-full' : 'w-0 group-hover:w-full'}`}
+                  />
+                </Link>
               </motion.div>
             )
           )}

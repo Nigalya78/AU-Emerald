@@ -3,13 +3,13 @@ import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import ProductDetail from './ProductDetail'
 
-interface Props {
-  params: { id: string }
-}
+type Params = Promise<{ id: string }>
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+  const { id } = await params
+  
   const product = await prisma.product.findUnique({
-    where: { id: params.id },
+    where: { id },
     select: {
       name: true,
       description: true,
@@ -50,10 +50,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-export default async function ProductPage({ params }: Props) {
+export default async function ProductPage({ params }: { params: Params }) {
+  const { id } = await params
+  
   // Verify product exists
   const product = await prisma.product.findUnique({
-    where: { id: params.id, status: 'ACTIVE' },
+    where: { id, status: 'ACTIVE' },
     select: { id: true },
   })
 
@@ -61,5 +63,5 @@ export default async function ProductPage({ params }: Props) {
     notFound()
   }
 
-  return <ProductDetail productId={params.id} />
+  return <ProductDetail productId={id} />
 }
