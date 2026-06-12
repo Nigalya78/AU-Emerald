@@ -10,40 +10,7 @@ export default function NewProductPage() {
   const [newImageUrl, setNewImageUrl] = useState('')
   const [imageInputMode, setImageInputMode] = useState<'upload' | 'url'>('upload')
 
-  // Compress image before converting to base64
-  const compressImage = (file: File, maxWidth: number = 1200, quality: number = 0.7): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const img = new Image()
-      img.onload = () => {
-        const canvas = document.createElement('canvas')
-        const ctx = canvas.getContext('2d')
-        
-        // Calculate new dimensions
-        let width = img.width
-        let height = img.height
-        
-        if (width > maxWidth) {
-          height = (height * maxWidth) / width
-          width = maxWidth
-        }
-        
-        canvas.width = width
-        canvas.height = height
-        ctx?.drawImage(img, 0, 0, width, height)
-        
-        // Convert to compressed base64
-        const compressedBase64 = canvas.toDataURL('image/jpeg', quality)
-        resolve(compressedBase64)
-      }
-      img.onerror = reject
-      
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        img.src = e.target?.result as string
-      }
-      reader.readAsDataURL(file)
-    })
-  }
+  const [uploading, setUploading] = useState(false)
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -55,16 +22,31 @@ export default function NewProductPage() {
       return
     }
 
+    setUploading(true)
     try {
-      // Compress image before adding
-      const compressedBase64 = await compressImage(file, 1200, 0.7)
-      setImages([...images, compressedBase64])
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await response.json()
+
+      if (data.success) {
+        setImages([...images, data.path])
+      } else {
+        alert(data.error || 'Failed to upload image')
+      }
     } catch (err) {
-      alert('Error processing image. Please try another image.')
+      console.error('Upload error:', err)
+      alert('Error uploading image. Please try again.')
+    } finally {
+      setUploading(false)
+      // Reset input
+      e.target.value = ''
     }
-    
-    // Reset input
-    e.target.value = ''
   }
 
   const categories = ['NECKLACES', 'EARRINGS', 'BANGLES', 'RINGS', 'SETS', 'BRACELETS', 'CHAINS', 'PENDANTS', 'ANKLETS', 'CUSTOM_ORDERS']
@@ -305,17 +287,29 @@ export default function NewProductPage() {
                   type="file"
                   accept="image/*"
                   onChange={handleFileUpload}
+                  disabled={uploading}
                   className="hidden"
                   id="image-upload"
                 />
                 <label
                   htmlFor="image-upload"
-                  className="flex items-center justify-center gap-2 w-full px-4 py-3 border-2 border-dashed border-forest-green/30 hover:border-aged-gold cursor-pointer transition-colors"
+                  className={`flex items-center justify-center gap-2 w-full px-4 py-3 border-2 border-dashed border-forest-green/30 hover:border-aged-gold cursor-pointer transition-colors ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 >
-                  <svg className="w-5 h-5 text-forest-green/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  <span className="text-forest-green/70">Click to upload image</span>
+                  {uploading ? (
+                    <>
+                      <svg className="animate-spin w-5 h-5 text-forest-green/70" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="60" strokeDashoffset="20" />
+                      </svg>
+                      <span className="text-forest-green/70">Uploading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-5 h-5 text-forest-green/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <span className="text-forest-green/70">Click to upload image</span>
+                    </>
+                  )}
                 </label>
               </div>
               <p className="text-xs text-forest-green/50 mt-2">Supports JPG, PNG, WebP (max 5MB)</p>
