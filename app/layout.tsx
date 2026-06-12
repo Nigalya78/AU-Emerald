@@ -108,7 +108,7 @@ export default function RootLayout({
               image: 'https://auemerald.com.au/Au-logo.png',
               description: 'Adelaide\'s premier destination for authentic South Indian gold and emerald jewellery.',
               url: 'https://auemerald.com.au',
-              telephone: ['+61402399925', '+61430464545'],
+              telephone: ['+61 402 399 925', '+61 430 464 545'],
               address: {
                 '@type': 'PostalAddress',
                 streetAddress: '466 Grand Junction Road',
@@ -146,7 +146,7 @@ export default function RootLayout({
                 },
               },
               sameAs: [
-                'https://wa.me/610402399925',
+                'https://wa.me/61402399925',
               ],
             }),
           }}

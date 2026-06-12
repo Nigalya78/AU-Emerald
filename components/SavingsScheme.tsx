@@ -19,7 +19,7 @@ export default function SavingsScheme() {
         'Redeem against any jewellery purchase',
         '10% OFF on making charges',
       ],
-      link: 'https://wa.me/610402399925?text=Hi, I\'d like to join the 6 Month Gold Savings Scheme',
+      link: 'https://wa.me/61402399925?text=Hi, I\'d like to join the 6 Month Gold Savings Scheme',
     },
     {
       duration: '12 Month Plan',
@@ -30,7 +30,7 @@ export default function SavingsScheme() {
         '10% OFF on making charges',
         'Priority access to new collections',
       ],
-      link: 'https://wa.me/610402399925?text=Hi, I\'d like to join the 12 Month Gold Savings Scheme',
+      link: 'https://wa.me/61402399925?text=Hi, I\'d like to join the 12 Month Gold Savings Scheme',
     },
   ];
 

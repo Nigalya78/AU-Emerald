@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
@@ -704,8 +703,12 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: 0.9 }}
                     >
-                      <Link
-                        href={`/products/${product.id}`}
+                      <a
+                        href={`https://wa.me/61402399925?text=${encodeURIComponent(
+                          `Hi Au Emerald team, I'm interested in this piece:\n\nName: ${product.name}\nCategory: ${product.category.replace(/_/g, ' ')}${product.purity ? `\nPurity: ${product.purity.replace(/_/g, ' ')}` : ''}${product.stoneType && product.stoneType !== 'NO_STONE' ? `\nStone: ${product.stoneType.replace(/_/g, ' ')}` : ''}${product.weight ? `\nWeight: ${product.weight}g` : ''}\n\nPlease provide more details.`
+                        )}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="inline-flex items-center gap-[6px] text-[#1a3a2a] text-[8px] sm:text-[9.5px] font-bold uppercase tracking-[0.18em] sm:tracking-[0.22em] hover:text-[#c9a84c] transition-all duration-300 group-hover:scale-105"
                       >
                         <motion.span
@@ -725,7 +728,7 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
                         >
                           <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                         </motion.svg>
-                      </Link>
+                      </a>
                     </motion.div>
                   </div>
                 </motion.div>

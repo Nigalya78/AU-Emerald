@@ -205,7 +205,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
 
               {/* CTA */}
               <a
-                href={`https://wa.me/610402399925?text=${getWhatsAppMessage()}`}
+                href={`https://wa.me/61402399925?text=${getWhatsAppMessage()}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-3 bg-[#1a3a2a] text-white text-[11px] font-bold uppercase tracking-[0.18em] px-8 py-[14px] hover:bg-[#152d21] transition-colors duration-250 mb-3"

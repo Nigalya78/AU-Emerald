@@ -17,7 +17,7 @@ const NAV_LINKS = [
   { label: 'Contact', href: '/contact' },
 ];
 
-const WA_HREF = `https://wa.me/610402399925?text=${encodeURIComponent("Hi Au Emerald team, I'm interested in your jewellery collection.")}`;
+const WA_HREF = `https://wa.me/61402399925?text=${encodeURIComponent("Hi Au Emerald team, I'm interested in your jewellery collection.")}`;
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);

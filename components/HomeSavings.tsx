@@ -14,7 +14,7 @@ const PLANS = [
       'Redeem against any jewellery purchase',
       '10% OFF on making charges',
     ],
-    href: "https://wa.me/610402399925?text=Hi, I'd like to join the 6 Month Gold Savings Scheme",
+    href: "https://wa.me/61402399925?text=Hi, I'd like to join the 6 Month Gold Savings Scheme",
   },
   {
     duration: '12 Month Plan',
@@ -26,7 +26,7 @@ const PLANS = [
       '10% OFF on making charges',
       'Priority access to new collections',
     ],
-    href: "https://wa.me/610402399925?text=Hi, I'd like to join the 12 Month Gold Savings Scheme",
+    href: "https://wa.me/61402399925?text=Hi, I'd like to join the 12 Month Gold Savings Scheme",
   },
 ];
 

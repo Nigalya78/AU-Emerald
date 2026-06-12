@@ -6,7 +6,7 @@ import WhatsAppIcon from '@/components/WhatsAppIcon';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const WA_HREF = `https://wa.me/610402399925?text=${encodeURIComponent("Hi Au Emerald team, I'm interested in your jewellery collection.")}`;
+const WA_HREF = `https://wa.me/61402399925?text=${encodeURIComponent("Hi Au Emerald team, I'm interested in your jewellery collection.")}`;
 
 function InstagramIcon({ size = 13 }: { size?: number }) {
   return (

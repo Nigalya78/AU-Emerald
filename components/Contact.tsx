@@ -4,7 +4,7 @@ import { motion, useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 
-const WA_HREF = `https://wa.me/610402399925?text=${encodeURIComponent("Hi Au Emerald team, I'm interested in your jewellery collection.")}`;
+const WA_HREF = `https://wa.me/61402399925?text=${encodeURIComponent("Hi Au Emerald team, I'm interested in your jewellery collection.")}`;
 
 /* Reusable wave ornament */
 function WaveOrnament({ className = '' }: { className?: string }) {
@@ -36,7 +36,7 @@ const CONTACT_INFO = [
       <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
     ),
     label: 'Call Us',
-    value: '0402 399 925\n0430 464 545',
+    value: '+61 402 399 925\n+61 430 464 545',
   },
   {
     icon: (
@@ -157,7 +157,7 @@ export default function Contact() {
                   Enquire on WhatsApp
                 </a>
                 <a
-                  href="tel:0402399925"
+                  href="tel:+61402399925"
                   className="inline-flex items-center justify-center gap-2 border-2 border-[#1a3a2a] text-[#1a3a2a] text-[12px] font-bold uppercase tracking-[0.14em] px-8 py-4 hover:bg-[#1a3a2a] hover:text-white transition-all duration-300 whitespace-nowrap"
                 >
                   Call Us Now
