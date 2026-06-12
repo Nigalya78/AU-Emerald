@@ -27,6 +27,7 @@ export default function Collections({ products }: CollectionsProps) {
   console.log('Current products state:', products);
   const { ref: sectionRef, isVisible: sectionVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.05, rootMargin: '-100px' });
   const { ref: staggerRef, visibleItems } = useStaggeredAnimation<HTMLDivElement>(products.length, { threshold: 0.1, rootMargin: '-50px' });
+  const [imgLoaded, setImgLoaded] = React.useState<Record<string, boolean>>({});
 
   return (
     <section id="collections" ref={sectionRef} className="bg-white py-14 lg:py-[72px] overflow-hidden">
@@ -103,7 +104,11 @@ export default function Collections({ products }: CollectionsProps) {
                 }}
               >
                 {/* Image */}
-                <div className="aspect-[4/5] overflow-hidden relative">
+                <div className="aspect-[4/5] overflow-hidden relative bg-[#f0ebe0]">
+                  {/* shimmer skeleton */}
+                  {!imgLoaded[product.id] && (
+                    <div className="absolute inset-0 z-20 bg-gradient-to-r from-[#f0ebe0] via-[#e8e0d0] to-[#f0ebe0] animate-shimmer bg-[length:200%_100%]" />
+                  )}
                   <motion.div 
                     className="absolute inset-[6px] border border-[#c9a84c]/35 z-10 pointer-events-none"
                     initial={{ opacity: 0 }}
@@ -111,16 +116,16 @@ export default function Collections({ products }: CollectionsProps) {
                     transition={{ duration: 0.4, delay: i * 0.12 + 0.2 }}
                   />
                   <motion.img
-                    src={product.mainImage || product.images?.[0] || 'https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=800'}
+                    src={product.mainImage || product.images?.[0] || ''}
                     alt={product.name}
                     className="w-full h-full object-cover"
+                    style={{ opacity: imgLoaded[product.id] ? 1 : 0, transition: 'opacity 0.4s ease' }}
                     initial={{ scale: 1.2 }}
                     animate={visibleItems.has(i) ? { scale: 1 } : { scale: 1.2 }}
                     transition={{ duration: 0.8, delay: i * 0.12 + 0.1, ease: 'easeOut' }}
                     whileHover={{ scale: 1.08, transition: { duration: 0.5, ease: 'easeOut' } }}
-                    onError={(e) => {
-                      e.currentTarget.src = 'https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=800';
-                    }}
+                    onLoad={() => setImgLoaded((prev) => ({ ...prev, [product.id]: true }))}
+                    onError={(e) => { e.currentTarget.style.display = 'none'; setImgLoaded((prev) => ({ ...prev, [product.id]: true })); }}
                   />
                   <motion.span 
                     className="absolute top-3 left-3 z-20 bg-[#1a3a2a]/80 text-[#c9a84c] text-[7.5px] font-bold uppercase tracking-[0.22em] px-2 py-[3px]"

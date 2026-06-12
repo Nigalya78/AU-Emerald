@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
@@ -144,6 +144,8 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
   const { ref: heroRef, isVisible: heroVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.1, rootMargin: '-50px' });
   const { ref: filterRef, isVisible: filterVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.1, rootMargin: '-50px', delay: 200 });
   const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation<HTMLDivElement>({ threshold: 0.1, rootMargin: '-50px', delay: 400 });
+  const [imgLoaded, setImgLoaded] = useState<Record<string, boolean>>({});
+  const markLoaded = useCallback((id: string) => setImgLoaded((prev) => ({ ...prev, [id]: true })), []);
   
   const [products] = useState<Product[]>(initialProducts)
   console.log('ProductsPage products state:', products);
@@ -613,6 +615,10 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
                 >
                   {/* ── Image ── */}
                   <div className="aspect-[4/5] overflow-hidden relative bg-gradient-to-br from-[#f8f6f0] to-[#f0ebe0]">
+                    {/* shimmer skeleton */}
+                    {!imgLoaded[product.id] && (
+                      <div className="absolute inset-0 z-20 bg-gradient-to-r from-[#f0ebe0] via-[#e8e0d0] to-[#f0ebe0] animate-shimmer bg-[length:200%_100%]" />
+                    )}
                     {/* outer gold border frame */}
                     <motion.div 
                       className="absolute inset-[6px] border border-[#c9a84c]/35 z-10 pointer-events-none"
@@ -621,17 +627,16 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
                       transition={{ duration: 0.4, delay: 0.3 }}
                     />
                     <motion.img
-                      src={product.mainImage || product.images[0] || 'https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=800'}
+                      src={product.mainImage || product.images[0] || ''}
                       alt={product.name}
                       className="w-full h-full object-cover"
+                      style={{ opacity: imgLoaded[product.id] ? 1 : 0, transition: 'opacity 0.4s ease', transformOrigin: 'center center' }}
                       initial={{ scale: 1.1 }}
                       animate={{ scale: 1 }}
                       transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
                       whileHover={{ scale: 1.08 }}
-                      style={{ transformOrigin: 'center center' }}
-                      onError={(e) => {
-                        e.currentTarget.src = 'https://images.pexels.com/photos/1266808/pexels-photo-1266808.jpeg?auto=compress&cs=tinysrgb&w=800';
-                      }}
+                      onLoad={() => markLoaded(product.id)}
+                      onError={() => markLoaded(product.id)}
                     />
                     {/* category badge top-left */}
                     <motion.span 

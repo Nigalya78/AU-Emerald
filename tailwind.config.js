@@ -20,6 +20,15 @@ module.exports = {
       scale: {
         '108': '1.08',
       },
+      keyframes: {
+        shimmer: {
+          '0%': { backgroundPosition: '200% 0' },
+          '100%': { backgroundPosition: '-200% 0' },
+        },
+      },
+      animation: {
+        shimmer: 'shimmer 1.6s linear infinite',
+      },
     },
   },
   plugins: [
