@@ -62,7 +62,7 @@ export default function Motto() {
             className="mt-4"
           >
             <p className="text-forest-green/70 text-sm sm:text-base tracking-[0.25em] uppercase font-medium">
-              Crafting Heirlooms Since 2015
+              Only at Au Emerald
             </p>
           </motion.div>
 

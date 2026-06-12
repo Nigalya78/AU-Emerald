@@ -60,7 +60,7 @@ export default function About() {
             animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.6, ease: 'easeOut', delay: 0.2 }}
           >
-            Our Legacy
+            About Au Emerald
           </motion.p>
           <motion.h2
             className="font-fraunces font-semibold text-[#1a3a2a] leading-[1.15] mb-6"
@@ -69,8 +69,8 @@ export default function About() {
             animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
           >
-            A Legacy Inherited.<br />
-            <span className="text-[#c9a84c] italic">A Story Continued.</span>
+            First South Indian<br />
+            <span className="text-[#c9a84c] italic">Jewellery in Adelaide.</span>
           </motion.h2>
           <motion.div 
             className="flex items-center justify-center gap-[6px]"
@@ -103,10 +103,8 @@ export default function About() {
               animate={textVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.8, ease: 'easeOut', delay: 0.3 }}
             >
-              Rooted in tradition and nourished by love, Au Emerald brings forth rare 
-              antique jewellery that carries memories, blessings, and history. Each piece 
-              is a link between the past and the future, crafted with the same devotion 
-              that our grandmothers poured into their own treasured collections.
+              We are the first South Indian based jewellery store in Adelaide, bringing you 
+              evergreen South Indian jewellery with unique designs you won&apos;t find anywhere else.
             </motion.p>
 
             <motion.p 
@@ -115,10 +113,8 @@ export default function About() {
               animate={textVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
             >
-              Since 2015, we have been Adelaide&apos;s trusted destination for authentic 
-              South Indian gold jewellery. Our commitment to quality and tradition has 
-              earned us the loyalty of over 5,000 customers who understand that true 
-              luxury lies in heritage.
+              If you are South Indian and looking for a jewellery experience just like home — 
+              just walk in to our shop. You will never regret.
             </motion.p>
 
             {/* Values Grid */}
@@ -129,9 +125,9 @@ export default function About() {
               transition={{ duration: 0.8, ease: 'easeOut', delay: 0.5 }}
             >
               {[
-                { icon: '✦', label: 'Authentic', desc: 'Pure 22K & 24K Gold' },
-                { icon: '◈', label: 'Handcrafted', desc: 'Skilled Artisans' },
-                { icon: '◉', label: 'Trusted', desc: 'Since 2015' },
+                { icon: '✦', label: 'Premium Quality', desc: 'Finest South Indian Gold' },
+                { icon: '◈', label: 'Unique Designs', desc: 'Exclusive to Au Emerald' },
+                { icon: '◉', label: 'Feel at Home', desc: 'Walk In & Experience' },
               ].map((item, i) => (
                 <div key={item.label} className="text-center">
                   <div className="text-[#c9a84c] text-[24px] mb-2">{item.icon}</div>

@@ -24,12 +24,12 @@ const FEATURES = [
   {
     number: '1',
     title: 'Premium Quality',
-    desc: 'Carefully selected jewellery crafted to meet the highest standards of quality and beauty.',
+    desc: 'First South Indian based jewellery with evergreen South Indian jewellery.',
   },
   {
     number: '2',
     title: 'Unique Designs',
-    desc: 'Exclusive collections inspired by South Indian heritage and artistry.',
+    desc: 'All designs are unique — exclusive collections you won\'t find anywhere else.',
   },
   {
     number: '3',
@@ -39,7 +39,7 @@ const FEATURES = [
   {
     number: '4',
     title: 'Trust & Satisfaction',
-    desc: 'Committed to providing a trustworthy and satisfying jewellery-buying experience.',
+    desc: 'Walk in to our shop and experience the beauty of South Indian heritage. You will never regret.',
   },
 ];
 

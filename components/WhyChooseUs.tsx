@@ -8,23 +8,23 @@ const FEATURES = [
   {
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M12 6v6l4 2"/>
-      </svg>
-    ),
-    title: 'Decades of Experience',
-    desc: 'Over 10 years of bringing authentic South Indian jewellery to Adelaide families.',
-  },
-  {
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M12 2L2 7l10 5 10-5-10-5z"/>
         <path d="M2 17l10 5 10-5"/>
         <path d="M2 12l10 5 10-5"/>
       </svg>
     ),
-    title: 'Pure Gold Assurance',
-    desc: 'Every piece certified for 22K & 24K purity. Guaranteed authenticity.',
+    title: 'Premium Quality',
+    desc: 'First South Indian based jewellery store with evergreen South Indian jewellery.',
+  },
+  {
+    icon: (
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M8 12l2.5 2.5L16 9"/>
+      </svg>
+    ),
+    title: 'Unique Designs',
+    desc: 'Authentic South Indian craftsmanship — unique & exclusive designs you won\'t find anywhere else.',
   },
   {
     icon: (
@@ -32,8 +32,8 @@ const FEATURES = [
         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
       </svg>
     ),
-    title: 'Crafted with Love',
-    desc: 'Handmade by skilled artisans using time-honoured techniques.',
+    title: 'South Indian Tradition',
+    desc: 'Made for every occasion, cherished for generations. A jewellery experience just like home.',
   },
   {
     icon: (
@@ -42,8 +42,8 @@ const FEATURES = [
         <path d="M20 21a8 8 0 10-16 0"/>
       </svg>
     ),
-    title: 'Personal Service',
-    desc: 'Private consultations to help you find or create your perfect piece.',
+    title: 'Trust & Satisfaction',
+    desc: 'Warm, friendly service that feels like home. Walk in and you will never regret.',
   },
 ];
 
@@ -77,7 +77,7 @@ export default function WhyChooseUs() {
             transition={{ duration: 0.8, delay: 0.8 }}
           >
             <p className="font-fraunces text-[#1a3a2a] text-[18px] italic leading-[1.5] mb-3">
-              &ldquo;We don&apos;t just create jewellery, we preserve heritage.&rdquo;
+              &ldquo;Come in. Feel at home. Leave happy.&rdquo;
             </p>
             <p className="text-[#c9a84c] text-[11px] font-semibold uppercase tracking-[0.15em]">
               — The Au Emerald Promise
@@ -98,12 +98,12 @@ export default function WhyChooseUs() {
             transition={{ duration: 0.7, ease: 'easeOut', delay: 0.4 }}
           >
             <p className="text-[#c9a84c] text-[12px] font-bold uppercase tracking-[0.3em] mb-4">
-              Why AU-Emerald
+              Why Choose Au Emerald?
             </p>
             <h2 className="font-fraunces font-semibold text-white leading-[1.12] mb-6"
               style={{ fontSize: 'clamp(2.2rem, 3.5vw, 3rem)' }}>
-              Crafted by Hand.<br />
-              <span className="text-[#c9a84c] italic">Cherished for Life.</span>
+              Timeless Beauty.<br />
+              <span className="text-[#c9a84c] italic">Evergreen Elegance.</span>
             </h2>
             <div className="flex items-center gap-[6px]">
               <span className="block h-px w-10 bg-[#c9a84c]/60" />
@@ -122,9 +122,9 @@ export default function WhyChooseUs() {
             animate={rightVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, ease: 'easeOut', delay: 0.5 }}
           >
-            Every Au Emerald piece tells a story. Handcrafted by skilled artisans 
-            using techniques passed down through generations, our jewellery embodies 
-            the rich heritage of South Indian craftsmanship.
+            Only at Au Emerald — Adelaide&apos;s first South Indian jewellery store. 
+            Walk in and experience the beauty of South Indian heritage. 
+            You will never regret.
           </motion.p>
 
           {/* Features Grid */}
