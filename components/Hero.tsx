@@ -184,7 +184,7 @@ export default function Hero() {
               animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
               transition={{ duration: 0.6, ease: 'easeOut', delay: 0.6 }}
             >
-              {['Certified Gold', 'Custom Designs', 'Lifetime Service'].map((item, i) => (
+              {['Certified Gold', 'Custom Designs'].map((item, i) => (
                 <span
                   key={item}
                   className="text-[#1a3a2a]/50 text-[11px] uppercase tracking-[0.12em] border border-[#c9a84c]/25 px-3 py-1.5 bg-white/50"
