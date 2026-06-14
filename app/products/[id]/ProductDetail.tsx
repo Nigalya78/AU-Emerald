@@ -271,34 +271,49 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
                 {relatedProducts.map((rp, i) => (
                   <motion.div
                     key={rp.id}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: i * 0.08 }}
+                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ duration: 0.6, delay: i * 0.08, ease: 'easeOut' }}
                     className="group bg-white"
-                    style={{ boxShadow: '0 1px 4px rgba(26,58,42,0.07)' }}
+                    style={{ boxShadow: '0 2px 8px rgba(26,58,42,0.08)' }}
+                    whileHover={{ y: -8, scale: 1.02, boxShadow: '0 12px 24px rgba(26,58,42,0.15)', transition: { duration: 0.3, ease: 'easeOut' } }}
                   >
                     <Link href={`/products/${rp.id}`} className="block">
-                      <div className="aspect-[4/5] relative bg-[#f0ebe0] p-[6px]">
+                      <div className="aspect-[4/5] relative bg-gradient-to-br from-[#f8f6f0] to-[#f0ebe0] p-[6px]">
                         {/* shimmer */}
                         {!relatedImgLoaded[rp.id] && (
                           <div className="absolute inset-0 z-20 bg-gradient-to-r from-[#f0ebe0] via-[#e8e0d0] to-[#f0ebe0] animate-shimmer bg-[length:200%_100%]" />
                         )}
                         {/* gold border */}
-                        <div className="absolute inset-[6px] border border-[#c9a84c]/35 z-10 pointer-events-none" />
+                        <motion.div
+                          className="absolute inset-[6px] border border-[#c9a84c]/35 z-10 pointer-events-none"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.4, delay: i * 0.08 + 0.3 }}
+                        />
                         {/* image sits inside the border */}
                         <div className="w-full h-full overflow-hidden">
-                          <img
+                          <motion.img
                             src={rp.mainImage || rp.images[0]}
                             alt={rp.name}
-                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
-                            style={{ opacity: relatedImgLoaded[rp.id] ? 1 : 0, transition: 'opacity 0.4s ease' }}
+                            className="w-full h-full object-cover"
+                            style={{ opacity: relatedImgLoaded[rp.id] ? 1 : 0, transition: 'opacity 0.4s ease', transformOrigin: 'center center' }}
+                            initial={{ scale: 1.1 }}
+                            animate={{ scale: 1 }}
+                            transition={{ duration: 0.8, delay: i * 0.08 + 0.2, ease: 'easeOut' }}
+                            whileHover={{ scale: 1.08 }}
                             onLoad={() => setRelatedImgLoaded((prev) => ({ ...prev, [rp.id]: true }))}
                             onError={() => setRelatedImgLoaded((prev) => ({ ...prev, [rp.id]: true }))}
                           />
                         </div>
-                        <span className="absolute top-3 left-3 z-20 bg-[#1a3a2a]/80 text-[#c9a84c] text-[7.5px] font-bold uppercase tracking-[0.22em] px-2 py-[3px]">
+                        <motion.span
+                          className="absolute top-3 left-3 z-20 bg-[#1a3a2a]/80 text-[#c9a84c] text-[7.5px] font-bold uppercase tracking-[0.22em] px-2 py-[3px]"
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ duration: 0.5, delay: i * 0.08 + 0.4 }}
+                        >
                           {rp.category.replace(/_/g, ' ')}
-                        </span>
+                        </motion.span>
                       </div>
                       <div className="px-3 pt-3 pb-4 text-center border-x border-b border-[#c9a84c]/20">
                         <h3 className="font-fraunces text-[14px] font-semibold text-[#1a3a2a] leading-snug mb-3 line-clamp-2">
