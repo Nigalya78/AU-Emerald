@@ -74,7 +74,15 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error('Upload error:', error)
     return NextResponse.json(
-      { error: 'Failed to upload file', details: error.message },
+      {
+        error: 'Failed to upload file',
+        details: error.message,
+        code: error.Code || error.code || error.name,
+        endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+        bucket: process.env.R2_BUCKET_NAME,
+        hasKey: !!process.env.R2_ACCESS_KEY_ID,
+        hasSecret: !!process.env.R2_SECRET_ACCESS_KEY,
+      },
       { status: 500 }
     )
   }
