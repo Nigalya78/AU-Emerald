@@ -3,6 +3,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
+  },
   // Enable strict mode for production
   reactStrictMode: true,
   // Disable x-powered-by header for security

@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server'
-import { writeFile } from 'fs/promises'
-import { mkdir } from 'fs/promises'
+import { writeFile, mkdir } from 'fs/promises'
 import { existsSync } from 'fs'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}
 
 // Maximum file size: 5MB
 const MAX_FILE_SIZE = 5 * 1024 * 1024
@@ -46,7 +51,13 @@ export async function POST(request: Request) {
     }
 
     // Generate unique filename
-    const fileExtension = file.type.split('/')[1] || 'jpg'
+    const mimeToExt: Record<string, string> = {
+      'image/jpeg': 'jpg',
+      'image/jpg': 'jpg',
+      'image/png': 'png',
+      'image/webp': 'webp',
+    }
+    const fileExtension = mimeToExt[file.type] || 'jpg'
     const fileName = `${randomUUID()}.${fileExtension}`
     const filePath = join(uploadDir, fileName)
 
