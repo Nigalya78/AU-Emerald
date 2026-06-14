@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 import { useScrollAnimation } from '@/hooks/useScrollAnimation';
 
 interface Product {
@@ -710,12 +711,8 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: 0.9 }}
                     >
-                      <a
-                        href={`https://wa.me/61402399925?text=${encodeURIComponent(
-                          `Hi Au Emerald team, I'm interested in this piece:\n\nName: ${product.name}\nCategory: ${product.category.replace(/_/g, ' ')}${product.purity ? `\nPurity: ${product.purity.replace(/_/g, ' ')}` : ''}${product.stoneType && product.stoneType !== 'NO_STONE' ? `\nStone: ${product.stoneType.replace(/_/g, ' ')}` : ''}${product.weight ? `\nWeight: ${product.weight}g` : ''}\n\nPlease provide more details.`
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <Link
+                        href={`/products/${product.id}`}
                         className="inline-flex items-center gap-[6px] text-[#1a3a2a] text-[8px] sm:text-[9.5px] font-bold uppercase tracking-[0.18em] sm:tracking-[0.22em] hover:text-[#c9a84c] transition-all duration-300 group-hover:scale-105"
                       >
                         <motion.span
@@ -723,7 +720,7 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
                           whileHover={{ x: 2 }}
                           transition={{ duration: 0.2 }}
                         >
-                          Enquire Now
+                          View Details
                         </motion.span>
                         <motion.svg 
                           className="w-2.5 h-2.5 sm:w-[10px] sm:h-[10px]"
@@ -735,7 +732,7 @@ export default function ProductsPage({ initialProducts }: ProductsPageProps) {
                         >
                           <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                         </motion.svg>
-                      </a>
+                      </Link>
                     </motion.div>
                   </div>
                 </motion.div>

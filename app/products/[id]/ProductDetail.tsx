@@ -56,10 +56,25 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
 
   const fetchRelated = async (currentProduct: Product) => {
     try {
+      // First try same category
       const res = await fetch(`/api/products?category=${currentProduct.category}`)
       if (res.ok) {
         const data: Product[] = await res.json()
-        setRelatedProducts(data.filter(p => p.id !== currentProduct.id).slice(0, 4))
+        let filtered = data.filter(p => p.id !== currentProduct.id).slice(0, 4)
+
+        // If fewer than 4, top up from all products
+        if (filtered.length < 4) {
+          const allRes = await fetch(`/api/products`)
+          if (allRes.ok) {
+            const allData: Product[] = await allRes.json()
+            const existing = new Set(filtered.map(p => p.id))
+            const extras = allData
+              .filter(p => p.id !== currentProduct.id && !existing.has(p.id))
+              .slice(0, 4 - filtered.length)
+            filtered = [...filtered, ...extras]
+          }
+        }
+        setRelatedProducts(filtered)
       }
     } catch (e) {
       console.error(e)
@@ -295,7 +310,7 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
                           <span className="block h-px w-5 bg-[#c9a84c]/40" />
                         </div>
                         <span className="inline-flex items-center gap-[5px] text-[#1a3a2a] text-[9.5px] font-bold uppercase tracking-[0.2em] group-hover:text-[#c9a84c] transition-colors">
-                          Enquire Now
+                          View Details
                           <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
                             <path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>

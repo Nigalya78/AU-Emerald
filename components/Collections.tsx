@@ -175,7 +175,7 @@ export default function Collections({ products }: CollectionsProps) {
                       href={`/products/${product.id}`}
                       className="inline-flex items-center gap-[5px] text-[#1a3a2a] text-[9.5px] font-bold uppercase tracking-[0.2em] hover:text-[#c9a84c] transition-colors group-hover:gap-2"
                     >
-                      Enquire Now
+                      View Details
                       <motion.svg 
                         width="9" 
                         height="9" 
