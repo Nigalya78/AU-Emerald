@@ -4,34 +4,43 @@ import { existsSync } from 'fs'
 import { join } from 'path'
 import { randomUUID } from 'crypto'
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
+// Maximum file size: 10MB
+const MAX_FILE_SIZE = 10 * 1024 * 1024
+
+const EXT_TO_MIME: Record<string, string> = {
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  png: 'image/png',
+  webp: 'image/webp',
 }
 
-// Maximum file size: 5MB
-const MAX_FILE_SIZE = 5 * 1024 * 1024
-
-// Allowed MIME types
-const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg']
+const MIME_TO_EXT: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/jpg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+}
 
 export async function POST(request: Request) {
   try {
     const formData = await request.formData()
     const file = formData.get('file') as File
 
-    if (!file) {
+    if (!file || typeof file === 'string') {
       return NextResponse.json(
         { error: 'No file provided' },
         { status: 400 }
       )
     }
 
+    // Resolve MIME type — browser may send empty string on some OS/browsers
+    const fileExt = (file.name?.split('.').pop() || '').toLowerCase()
+    const mimeType = file.type || EXT_TO_MIME[fileExt] || ''
+
     // Validate file type
-    if (!ALLOWED_TYPES.includes(file.type)) {
+    if (!MIME_TO_EXT[mimeType]) {
       return NextResponse.json(
-        { error: 'Invalid file type. Only JPG, PNG, and WebP are allowed.' },
+        { error: `Invalid file type "${mimeType || fileExt}". Only JPG, PNG, and WebP are allowed.` },
         { status: 400 }
       )
     }
@@ -39,7 +48,7 @@ export async function POST(request: Request) {
     // Validate file size
     if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
-        { error: 'File size exceeds 5MB limit' },
+        { error: 'File size exceeds 10MB limit' },
         { status: 400 }
       )
     }
@@ -51,13 +60,7 @@ export async function POST(request: Request) {
     }
 
     // Generate unique filename
-    const mimeToExt: Record<string, string> = {
-      'image/jpeg': 'jpg',
-      'image/jpg': 'jpg',
-      'image/png': 'png',
-      'image/webp': 'webp',
-    }
-    const fileExtension = mimeToExt[file.type] || 'jpg'
+    const fileExtension = MIME_TO_EXT[mimeType] || fileExt || 'jpg'
     const fileName = `${randomUUID()}.${fileExtension}`
     const filePath = join(uploadDir, fileName)
 

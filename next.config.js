@@ -7,6 +7,7 @@ const nextConfig = {
     serverActions: {
       bodySizeLimit: '10mb',
     },
+    bodySizeLimit: '10mb',
   },
   // Enable strict mode for production
   reactStrictMode: true,
