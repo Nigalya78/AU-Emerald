@@ -144,21 +144,24 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
               transition={{ duration: 0.7, ease: 'easeOut' }}
               className="relative"
             >
-              <div className="relative aspect-[4/5] overflow-hidden bg-[#f0ebe0]" style={{ boxShadow: '0 2px 20px rgba(26,58,42,0.08)' }}>
+              <div className="relative aspect-[4/5] bg-[#f0ebe0] p-[8px]" style={{ boxShadow: '0 2px 20px rgba(26,58,42,0.08)' }}>
                 {/* shimmer */}
                 {!mainImgLoaded && (
                   <div className="absolute inset-0 z-20 bg-gradient-to-r from-[#f0ebe0] via-[#e8e0d0] to-[#f0ebe0] animate-shimmer bg-[length:200%_100%]" />
                 )}
                 {/* inner gold hairline frame */}
                 <div className="absolute inset-[8px] border border-[#c9a84c]/40 z-10 pointer-events-none" />
-                <img
-                  src={product.mainImage || product.images[0]}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                  style={{ opacity: mainImgLoaded ? 1 : 0, transition: 'opacity 0.4s ease' }}
-                  onLoad={() => setMainImgLoaded(true)}
-                  onError={() => setMainImgLoaded(true)}
-                />
+                {/* image sits inside the border */}
+                <div className="w-full h-full overflow-hidden">
+                  <img
+                    src={product.mainImage || product.images[0]}
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                    style={{ opacity: mainImgLoaded ? 1 : 0, transition: 'opacity 0.4s ease' }}
+                    onLoad={() => setMainImgLoaded(true)}
+                    onError={() => setMainImgLoaded(true)}
+                  />
+                </div>
               </div>
             </motion.div>
 
@@ -260,20 +263,24 @@ export default function ProductDetail({ productId }: ProductDetailProps) {
                     style={{ boxShadow: '0 1px 4px rgba(26,58,42,0.07)' }}
                   >
                     <Link href={`/products/${rp.id}`} className="block">
-                      <div className="aspect-[4/5] overflow-hidden relative bg-[#f0ebe0]">
+                      <div className="aspect-[4/5] relative bg-[#f0ebe0] p-[6px]">
                         {/* shimmer */}
                         {!relatedImgLoaded[rp.id] && (
                           <div className="absolute inset-0 z-20 bg-gradient-to-r from-[#f0ebe0] via-[#e8e0d0] to-[#f0ebe0] animate-shimmer bg-[length:200%_100%]" />
                         )}
+                        {/* gold border */}
                         <div className="absolute inset-[6px] border border-[#c9a84c]/35 z-10 pointer-events-none" />
-                        <img
-                          src={rp.mainImage || rp.images[0]}
-                          alt={rp.name}
-                          className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
-                          style={{ opacity: relatedImgLoaded[rp.id] ? 1 : 0, transition: 'opacity 0.4s ease' }}
-                          onLoad={() => setRelatedImgLoaded((prev) => ({ ...prev, [rp.id]: true }))}
-                          onError={() => setRelatedImgLoaded((prev) => ({ ...prev, [rp.id]: true }))}
-                        />
+                        {/* image sits inside the border */}
+                        <div className="w-full h-full overflow-hidden">
+                          <img
+                            src={rp.mainImage || rp.images[0]}
+                            alt={rp.name}
+                            className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
+                            style={{ opacity: relatedImgLoaded[rp.id] ? 1 : 0, transition: 'opacity 0.4s ease' }}
+                            onLoad={() => setRelatedImgLoaded((prev) => ({ ...prev, [rp.id]: true }))}
+                            onError={() => setRelatedImgLoaded((prev) => ({ ...prev, [rp.id]: true }))}
+                          />
+                        </div>
                         <span className="absolute top-3 left-3 z-20 bg-[#1a3a2a]/80 text-[#c9a84c] text-[7.5px] font-bold uppercase tracking-[0.22em] px-2 py-[3px]">
                           {rp.category.replace(/_/g, ' ')}
                         </span>
