@@ -110,30 +110,34 @@ export default function Collections({ products }: CollectionsProps) {
                 }}
               >
                 {/* Image */}
-                <div className="aspect-[4/5] overflow-hidden relative bg-[#f0ebe0]">
+                <div className="aspect-[4/5] relative bg-[#f0ebe0] p-[6px]">
                   {/* shimmer skeleton */}
                   {!imgLoaded[product.id] && (
                     <div className="absolute inset-0 z-20 bg-gradient-to-r from-[#f0ebe0] via-[#e8e0d0] to-[#f0ebe0] animate-shimmer bg-[length:200%_100%]" />
                   )}
+                  {/* gold border */}
                   <motion.div 
                     className="absolute inset-[6px] border border-[#c9a84c]/35 z-10 pointer-events-none"
                     initial={{ opacity: 0 }}
                     animate={visibleItems.has(i) ? { opacity: 1 } : { opacity: 0 }}
                     transition={{ duration: 0.4, delay: i * 0.12 + 0.2 }}
                   />
-                  <motion.img
-                    ref={(el) => imgRef(el, product.id)}
-                    src={product.mainImage || product.images?.[0] || ''}
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                    style={{ opacity: imgLoaded[product.id] ? 1 : 0, transition: 'opacity 0.4s ease' }}
-                    initial={{ scale: 1.2 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 0.8, delay: i * 0.12 + 0.1, ease: 'easeOut' }}
-                    whileHover={{ scale: 1.08, transition: { duration: 0.5, ease: 'easeOut' } }}
-                    onLoad={() => markLoaded(product.id)}
-                    onError={(e) => { e.currentTarget.style.display = 'none'; markLoaded(product.id); }}
-                  />
+                  {/* image sits inside the border */}
+                  <div className="w-full h-full overflow-hidden">
+                    <motion.img
+                      ref={(el) => imgRef(el, product.id)}
+                      src={product.mainImage || product.images?.[0] || ''}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                      style={{ opacity: imgLoaded[product.id] ? 1 : 0, transition: 'opacity 0.4s ease' }}
+                      initial={{ scale: 1.2 }}
+                      animate={{ scale: 1 }}
+                      transition={{ duration: 0.8, delay: i * 0.12 + 0.1, ease: 'easeOut' }}
+                      whileHover={{ scale: 1.08, transition: { duration: 0.5, ease: 'easeOut' } }}
+                      onLoad={() => markLoaded(product.id)}
+                      onError={(e) => { e.currentTarget.style.display = 'none'; markLoaded(product.id); }}
+                    />
+                  </div>
                   <motion.span 
                     className="absolute top-3 left-3 z-20 bg-[#1a3a2a]/80 text-[#c9a84c] text-[7.5px] font-bold uppercase tracking-[0.22em] px-2 py-[3px]"
                     initial={{ opacity: 0, x: -10 }}
