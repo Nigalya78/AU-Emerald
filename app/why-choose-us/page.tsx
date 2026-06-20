@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Navbar from '@/components/Navbar';
+import WhyChooseUsContent from '@/components/whychooseus-content';
 import WhyChooseUs from '@/components/WhyChooseUs';
 import Footer from '@/components/Footer';
 
@@ -50,8 +51,8 @@ export default function WhyChooseUsPage() {
           Every piece handcrafted by skilled artisans using time-honoured techniques
         </p>
       </section>
-
-      <WhyChooseUs />
+      
+      <WhyChooseUsContent />
       <Footer />
     </main>
   );

@@ -48,12 +48,13 @@ export default function Preloader() {
               initial={{ opacity: 0 }}
               animate={{
                 opacity: 1,
-                boxShadow: ['0 0 0px rgba(201,168,76,0.2)', '0 0 28px rgba(201,168,76,0.45)', '0 0 0px rgba(201,168,76,0.2)'],
+                scale: [1, 1.02, 1],
               }}
               transition={{
-                opacity: { duration: 0.5, ease: 'easeOut' },
-                boxShadow: { duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.5 },
+                opacity: { duration: 0.5 },
+                scale: { duration: 2, repeat: Infinity, ease: 'easeInOut' },
               }}
+              
             >
               <Image
                 src="/Au-logo.png"
