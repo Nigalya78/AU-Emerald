@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
 export default function Preloader() {
@@ -9,102 +8,115 @@ export default function Preloader() {
   const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden';
     const leaveTimer = setTimeout(() => setLeaving(true), 2200);
-    const hideTimer = setTimeout(() => setVisible(false), 3000);
+    const hideTimer = setTimeout(() => {
+      setVisible(false);
+      document.body.style.overflow = '';
+    }, 3000);
     return () => {
       clearTimeout(leaveTimer);
       clearTimeout(hideTimer);
+      document.body.style.overflow = '';
     };
   }, []);
 
+  if (!visible) return null;
+
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          key="preloader"
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white"
-          initial={{ opacity: 1 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.7, ease: 'easeInOut' } }}
-        >
-          {/* Logo with pulse rings */}
-          <div className="relative flex items-center justify-center mb-6 sm:mb-8" style={{ width: 96, height: 96 }}>
-            {/* outer ring — absolutely centered, independent of logo */}
-            <motion.span
-              className="absolute rounded-full border border-[#c9a84c]/30 pointer-events-none"
-              style={{ width: 96, height: 96, top: 0, left: 0, willChange: 'transform, opacity' }}
-              initial={{ opacity: 0.7, scale: 1 }}
-              animate={{ opacity: 0, scale: 1.9 }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut' }}
+    <>
+      <style>{`
+        @keyframes ring-outer {
+          0% { transform: scale(1); opacity: 0.7; }
+          100% { transform: scale(1.9); opacity: 0; }
+        }
+        @keyframes ring-middle {
+          0% { transform: scale(1); opacity: 0.7; }
+          100% { transform: scale(1.5); opacity: 0; }
+        }
+        @keyframes fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes bar-slide {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        @keyframes fade-out {
+          from { opacity: 1; }
+          to { opacity: 0; }
+        }
+        .preloader-ring-outer {
+          animation: ring-outer 1.8s ease-out infinite;
+        }
+        .preloader-ring-middle {
+          animation: ring-middle 1.8s ease-out 0.5s infinite;
+        }
+        .preloader-logo {
+          animation: fade-in 0.5s ease-out forwards;
+        }
+        .preloader-text {
+          animation: fade-in 0.5s ease-out 0.3s both;
+        }
+        .preloader-tagline {
+          animation: fade-in 0.5s ease-out 0.5s both;
+        }
+        .preloader-bar-wrap {
+          animation: fade-in 0.5s ease-out 0.6s both;
+        }
+        .preloader-bar {
+          animation: bar-slide 1.4s linear infinite;
+        }
+        .preloader-leaving {
+          animation: fade-out 0.7s ease-in-out forwards;
+          pointer-events: none;
+        }
+      `}</style>
+
+      <div
+        className={`fixed z-[9999] flex flex-col items-center justify-center bg-white${leaving ? ' preloader-leaving' : ''}`}
+        style={{ top: 0, left: 0, width: '100dvw', height: '100dvh' }}
+      >
+        {/* Logo + rings */}
+        <div className="relative flex items-center justify-center mb-6" style={{ width: 96, height: 96 }}>
+          <span
+            className="preloader-ring-outer absolute rounded-full border border-[#c9a84c]/30 pointer-events-none"
+            style={{ width: 96, height: 96, top: '50%', left: '50%', marginTop: -48, marginLeft: -48 }}
+          />
+          <span
+            className="preloader-ring-middle absolute rounded-full border border-[#c9a84c]/50 pointer-events-none"
+            style={{ width: 96, height: 96, top: '50%', left: '50%', marginTop: -48, marginLeft: -48 }}
+          />
+          <div className="preloader-logo w-24 h-24 rounded-full border-2 border-[#c9a84c] overflow-hidden bg-white shadow-lg" style={{ opacity: 0 }}>
+            <Image
+              src="/Au-logo.png"
+              alt="Au Emerald"
+              width={96}
+              height={96}
+              className="w-full h-full object-contain"
+              priority
             />
-            {/* middle ring */}
-            <motion.span
-              className="absolute rounded-full border border-[#c9a84c]/50 pointer-events-none"
-              style={{ width: 96, height: 96, top: 0, left: 0, willChange: 'transform, opacity' }}
-              initial={{ opacity: 0.7, scale: 1 }}
-              animate={{ opacity: 0, scale: 1.5 }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut', delay: 0.5 }}
-            />
-            {/* logo circle — static, no scale animation */}
-            <motion.div
-              className="w-24 h-24 rounded-full border-2 border-[#c9a84c] overflow-hidden bg-white shadow-lg"
-              style={{ willChange: 'opacity', flexShrink: 0 }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-            >
-              <Image
-                src="/Au-logo.png"
-                alt="Au Emerald"
-                width={96}
-                height={96}
-                className="w-full h-full object-contain"
-                priority
-              />
-            </motion.div>
           </div>
+        </div>
 
-          {/* Brand name */}
-          <motion.p
-            className="font-fraunces text-[#1a3a2a] text-2xl sm:text-[1.6rem] font-semibold tracking-[0.12em] mb-1 text-center"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut' }}
-          >
-            Au Emerald
-          </motion.p>
+        <p
+          className="preloader-text font-fraunces text-[#1a3a2a] text-2xl font-semibold tracking-[0.12em] mb-1 text-center"
+          style={{ opacity: 0 }}
+        >
+          Au Emerald
+        </p>
 
-          {/* Tagline */}
-          <motion.p
-            className="text-[#c9a84c] text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.18em] sm:tracking-[0.3em] mb-6 sm:mb-8 text-center px-6"
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5, ease: 'easeOut' }}
-          >
-            Premium Quality · Timeless Connection
-          </motion.p>
+        <p
+          className="preloader-tagline text-[#c9a84c] text-[9px] font-bold uppercase tracking-[0.18em] mb-6 text-center px-6"
+          style={{ opacity: 0 }}
+        >
+          Premium Quality · Timeless Connection
+        </p>
 
-          {/* Loading bar */}
-          <motion.div
-            className="w-32 sm:w-40 h-[2px] bg-[#c9a84c]/15 overflow-hidden rounded-full"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            <motion.div
-              className="h-full bg-gradient-to-r from-[#c9a84c]/60 via-[#c9a84c] to-[#c9a84c]/60 rounded-full"
-              style={{ willChange: 'transform' }}
-              initial={{ x: '-100%' }}
-              animate={{ x: leaving ? '100%' : ['-100%', '100%'] }}
-              transition={
-                leaving
-                  ? { duration: 0.4, ease: 'easeIn' }
-                  : { duration: 1.4, repeat: Infinity, ease: 'linear' }
-              }
-            />
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        <div className="preloader-bar-wrap w-32 h-[2px] bg-[#c9a84c]/15 overflow-hidden rounded-full" style={{ opacity: 0 }}>
+          <div className="preloader-bar h-full bg-gradient-to-r from-[#c9a84c]/60 via-[#c9a84c] to-[#c9a84c]/60 rounded-full" />
+        </div>
+      </div>
+    </>
   );
 }
