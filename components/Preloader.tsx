@@ -27,28 +27,28 @@ export default function Preloader() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.7, ease: 'easeInOut' } }}
         >
-          {/* Logo with pulse rings — wrapper has fixed size so rings never shift layout */}
-          <div className="relative w-24 h-24 flex items-center justify-center mb-6 sm:mb-8">
-            {/* outer ring */}
+          {/* Logo with pulse rings */}
+          <div className="relative flex items-center justify-center mb-6 sm:mb-8" style={{ width: 96, height: 96 }}>
+            {/* outer ring — absolutely centered, independent of logo */}
             <motion.span
-              className="absolute inset-0 rounded-full border border-[#c9a84c]/30 pointer-events-none"
-              style={{ willChange: 'transform, opacity' }}
+              className="absolute rounded-full border border-[#c9a84c]/30 pointer-events-none"
+              style={{ width: 96, height: 96, top: 0, left: 0, willChange: 'transform, opacity' }}
               initial={{ opacity: 0.7, scale: 1 }}
               animate={{ opacity: 0, scale: 1.9 }}
               transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut' }}
             />
             {/* middle ring */}
             <motion.span
-              className="absolute inset-0 rounded-full border border-[#c9a84c]/50 pointer-events-none"
-              style={{ willChange: 'transform, opacity' }}
+              className="absolute rounded-full border border-[#c9a84c]/50 pointer-events-none"
+              style={{ width: 96, height: 96, top: 0, left: 0, willChange: 'transform, opacity' }}
               initial={{ opacity: 0.7, scale: 1 }}
               animate={{ opacity: 0, scale: 1.5 }}
               transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut', delay: 0.5 }}
             />
-            {/* logo circle */}
+            {/* logo circle — static, no scale animation */}
             <motion.div
-              className="relative w-24 h-24 rounded-full border-2 border-[#c9a84c] overflow-hidden bg-white shadow-lg"
-              style={{ willChange: 'opacity' }}
+              className="w-24 h-24 rounded-full border-2 border-[#c9a84c] overflow-hidden bg-white shadow-lg"
+              style={{ willChange: 'opacity', flexShrink: 0 }}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
