@@ -9,11 +9,12 @@ export default function Preloader() {
   const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLeaving(true);
-      setTimeout(() => setVisible(false), 800);
-    }, 2200);
-    return () => clearTimeout(timer);
+    const leaveTimer = setTimeout(() => setLeaving(true), 2200);
+    const hideTimer = setTimeout(() => setVisible(false), 3000);
+    return () => {
+      clearTimeout(leaveTimer);
+      clearTimeout(hideTimer);
+    };
   }, []);
 
   return (
@@ -31,30 +32,26 @@ export default function Preloader() {
             {/* outer ring */}
             <motion.span
               className="absolute inset-0 rounded-full border border-[#c9a84c]/30 pointer-events-none"
+              style={{ willChange: 'transform, opacity' }}
               initial={{ opacity: 0.7, scale: 1 }}
               animate={{ opacity: 0, scale: 1.9 }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeOut' }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut' }}
             />
             {/* middle ring */}
             <motion.span
               className="absolute inset-0 rounded-full border border-[#c9a84c]/50 pointer-events-none"
+              style={{ willChange: 'transform, opacity' }}
               initial={{ opacity: 0.7, scale: 1 }}
               animate={{ opacity: 0, scale: 1.5 }}
-              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeOut', delay: 0.4 }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut', delay: 0.5 }}
             />
             {/* logo circle */}
             <motion.div
               className="relative w-24 h-24 rounded-full border-2 border-[#c9a84c] overflow-hidden bg-white shadow-lg"
+              style={{ willChange: 'opacity' }}
               initial={{ opacity: 0 }}
-              animate={{
-                opacity: 1,
-                scale: [1, 1.02, 1],
-              }}
-              transition={{
-                opacity: { duration: 0.5 },
-                scale: { duration: 2, repeat: Infinity, ease: 'easeInOut' },
-              }}
-              
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
             >
               <Image
                 src="/Au-logo.png"
@@ -96,12 +93,13 @@ export default function Preloader() {
           >
             <motion.div
               className="h-full bg-gradient-to-r from-[#c9a84c]/60 via-[#c9a84c] to-[#c9a84c]/60 rounded-full"
+              style={{ willChange: 'transform' }}
               initial={{ x: '-100%' }}
               animate={{ x: leaving ? '100%' : ['-100%', '100%'] }}
               transition={
                 leaving
                   ? { duration: 0.4, ease: 'easeIn' }
-                  : { duration: 1.2, repeat: Infinity, ease: 'easeInOut' }
+                  : { duration: 1.4, repeat: Infinity, ease: 'linear' }
               }
             />
           </motion.div>
