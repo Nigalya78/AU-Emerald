@@ -85,10 +85,7 @@ export default function Footer() {
                 className="w-8 h-8 rounded-full border border-[#c9a84c]/35 flex items-center justify-center text-[#c9a84c]/70 hover:border-[#c9a84c] hover:text-[#c9a84c] transition-colors">
                 <FacebookIcon size={14} />
               </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
-                className="w-8 h-8 rounded-full border border-[#c9a84c]/35 flex items-center justify-center text-[#c9a84c]/70 hover:border-[#c9a84c] hover:text-[#c9a84c] transition-colors">
-                <InstagramIcon size={14} />
-              </a>
+              
             </div>
           </div>
 
